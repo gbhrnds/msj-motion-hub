@@ -1,5 +1,11 @@
 # Redação Vinheta MSJ - Novembro 2025
 
+TELA 00
+(Inicio da Contagem regressiva)
+10:00
+[logo-msj-negative]
+[ usar morphing shape decorativo ]
+
 TELA 01
 (Tela de aguarde)
 O Momento Sempre Juntos começa já já...
