@@ -1,0 +1,224 @@
+{
+  "projeto": "2025-11_abertura",
+  "geradoEm": "2026-11-14T02:19:56Z",
+  "fasePreLive": {
+    "contentLoopMinutes": 10,
+    "bufferOnlyLogoMinutes": 5
+  },
+  "telas": [
+    {
+      "id": "tela_01",
+      "tipo": "tela_aguarde",
+      "duracaoSegundos": 10,
+      "textos": {
+        "titulo": "O Momento Sempre Juntos começa já já...",
+        "corpo": null,
+        "bullets": []
+      },
+      "midia": {
+        "foto": null,
+        "logo": null,
+        "gridNomes": null
+      },
+      "flags": {
+        "midiaPendente": false,
+        "dadoPendente": false,
+        "requerComposicaoExtra": false
+      },
+      "fundoHex": "#0064F5",
+      "observacoesOriginais": "[ usar morphing shape decorativo ] — sem logo: intencional (confirmado pelo usuário), o nome do evento já está na frase, fundo azul Agibank"
+    },
+    {
+      "id": "tela_02",
+      "tipo": "tela_destaques",
+      "duracaoSegundos": 18,
+      "textos": {
+        "titulo": null,
+        "corpo": "Quem luta pelo nosso propósito com o Jeito Agi de verdade, se destaca!\n\nParabéns, Destaques do Ciclo",
+        "bullets": []
+      },
+      "midia": {
+        "foto": null,
+        "logo": ["logo_destaques", "logo_jeito_agi"],
+        "icone": "icone_coracao",
+        "gridNomes": [
+          "ADRIANA FONSECA", "ANA GAMA", "ANA PEREIRA", "ANA SOUZA", "BARBARA LIMA",
+          "BEATRIZ SOUZA", "BIANCA ROMA", "BRUNO SOUZA", "CARINE ASSUNCAO", "DAIANE FERREIRA",
+          "DANIELLY MARTINS", "DOUGLAS SANTOS", "EMANOEL SILVA", "EMILLY LOPES", "ENZO BONAZZI",
+          "FABIO SILVA", "FELIPE SILVA", "GABRIEL HERNANDES", "GABRIEL OLIVEIRA", "GABRIELA CARDOSO",
+          "GABRIELLY FREITAS", "GISELE SOUZA", "HERYCLIS BARBOSA", "HUMBERTO SALGADO", "JANECLEDCIA SOARES",
+          "JAQUELLINE BARBOSA", "JENNYFER NOLETO", "JOAO SOUSA", "JOCEMAR GARCIA", "JOELMA CAMPOS",
+          "JONAS DEUSDARA", "JULIANA BEZERRA", "JULIANA GASPAR", "KAREN SILVA", "LAURA ALCANTARA",
+          "LEANDRO OLIVEIRA", "LEDICKSON BATISTA", "LEILA SEVERO", "LEONARDO RODRIGUES", "LIVIA MALACOSKI",
+          "LORENA RIBEIRO", "LUCAS REGINATO", "LUCAS SANTOS", "MARCELO SILVA", "MARIA CARVALHO",
+          "MARY NUNES", "PATRICIA FREITAS", "PATRICIA REIS", "PATRIK CAMARGO", "PAULA PAULO",
+          "RENAN NOGUEIRA", "ROGERIO SOUZA", "SAMILA SILVA", "SARA SILVA", "SILVANA HURMANN",
+          "SUELEN MIRANDA", "TAIS MOTA", "THIAGO MAGNUSSON", "THIAGO SANTIAGO", "VANESSA CARVALHAES",
+          "VICTOR BERTHO SILVA", "VINICIUS VIEL", "VITOR LENSO", "VITORIA AMANCIO", "VITORIA SOARES SILVA",
+          "WALDILENE SILVA", "YASMIN CORREA", "ZELIA CEZARIO"
+        ]
+      },
+      "flags": {
+        "midiaPendente": false,
+        "dadoPendente": false,
+        "requerComposicaoExtra": false
+      },
+      "observacoesOriginais": "[ logo destaques do ciclo ] [ logo o jeito agi - crescer na jornada ] [ criar grid com o nome das pessoas - lista abaixo ] [ icone coracao ] — 68 nomes na lista; duração ampliada de 15s para 18s (pedido do usuário) para dar tempo de leitura ao scroll vertical contínuo em 4 colunas"
+    },
+    {
+      "id": "tela_03",
+      "tipo": "tela_aguarde",
+      "duracaoSegundos": 10,
+      "textos": {
+        "titulo": "Falta pouco para estarmos juntos...",
+        "corpo": null,
+        "bullets": []
+      },
+      "midia": {
+        "foto": null,
+        "logo": "logo_msj_positivo",
+        "gridNomes": null
+      },
+      "flags": {
+        "midiaPendente": false,
+        "dadoPendente": false,
+        "requerComposicaoExtra": false
+      },
+      "fundoHex": "#F3F3F3",
+      "observacoesOriginais": "[ logo MSJ ] [ usar morphing shape decorativo ] — confirmado pelo usuário: fundo cinza claro (#F3F3F3) + logo_msj_positivo"
+    },
+    {
+      "id": "tela_04",
+      "tipo": "tela_indicacao_metricas",
+      "duracaoSegundos": 15,
+      "textos": {
+        "titulo": null,
+        "corpo": "Juntos, encontramos os melhores caminhos e novos Agilizados para crescer com a gente.",
+        "bullets": [
+          "10 ganhadores no 2º trimestre",
+          "XX indicados",
+          "XX% indicações contratadas"
+        ]
+      },
+      "midia": {
+        "foto": "projects/2025-11_abertura/fotos/PI_A0001-22.jpg",
+        "logo": "logo_programa",
+        "gridNomes": null
+      },
+      "flags": {
+        "midiaPendente": false,
+        "dadoPendente": true,
+        "requerComposicaoExtra": false
+      },
+      "observacoesOriginais": "[ foto do programa de indicacao ] [ logo programa de indicacao ]"
+    },
+    {
+      "id": "tela_05",
+      "tipo": "tela_aguarde",
+      "duracaoSegundos": 10,
+      "textos": {
+        "titulo": "O Momento Sempre Juntos começa já já...",
+        "corpo": null,
+        "bullets": []
+      },
+      "midia": {
+        "foto": null,
+        "logo": null,
+        "gridNomes": null
+      },
+      "flags": {
+        "midiaPendente": false,
+        "dadoPendente": false,
+        "requerComposicaoExtra": false
+      },
+      "fundoHex": "#0064F5",
+      "observacoesOriginais": "[ usar morphing shape decorativo ] — sem logo: intencional (confirmado pelo usuário), o nome do evento já está na frase, fundo azul Agibank"
+    },
+    {
+      "id": "tela_06",
+      "tipo": "tela_conteudo",
+      "duracaoSegundos": 14,
+      "textos": {
+        "titulo": null,
+        "corpo": "Só garantimos a perenidade do negócio quando desenvolvemos quem constrói ele com a gente.\n\nNovos cursos obrigatórios na área:",
+        "bullets": [
+          "Risco Operacional e Controle Interno",
+          "Prevenção à Lavagem de Dinheiro",
+          "Privacidade e Proteção de Dados",
+          "Segurança da Informação",
+          "SOX"
+        ]
+      },
+      "midia": {
+        "foto": null,
+        "logo": "logo_uni_agi",
+        "gridNomes": null
+      },
+      "flags": {
+        "midiaPendente": false,
+        "dadoPendente": false,
+        "requerComposicaoExtra": false
+      },
+      "observacoesOriginais": "[ logo uni agi ] [ layout dividido em diagonal azul e branco ] — confirmado pelo usuário: manter esse layout para consistência com a campanha de cursos obrigatórios"
+    },
+    {
+      "id": "tela_07",
+      "tipo": "tela_aguarde",
+      "duracaoSegundos": 10,
+      "textos": {
+        "titulo": "Falta pouco para estarmos juntos...",
+        "corpo": null,
+        "bullets": []
+      },
+      "midia": {
+        "foto": null,
+        "logo": "logo_msj_positivo",
+        "gridNomes": null
+      },
+      "flags": {
+        "midiaPendente": false,
+        "dadoPendente": false,
+        "requerComposicaoExtra": false
+      },
+      "fundoHex": "#F3F3F3",
+      "observacoesOriginais": "[ logo MSJ ] [ usar morphing shape decorativo ] — confirmado pelo usuário: fundo cinza claro (#F3F3F3) + logo_msj_positivo"
+    },
+    {
+      "id": "tela_08",
+      "tipo": "tela_campanha",
+      "duracaoSegundos": 12,
+      "textos": {
+        "titulo": null,
+        "corpo": "Ei, homens, se cuidar também faz parte da jornada.\n\nTem histórico na família? Faça o teste PSA sem coparticipação ainda este mês!",
+        "bullets": []
+      },
+      "midia": {
+        "foto": null,
+        "logo": null,
+        "gridNomes": null
+      },
+      "flags": {
+        "midiaPendente": false,
+        "dadoPendente": false,
+        "requerComposicaoExtra": false
+      },
+      "observacoesOriginais": "Novembro Azul — nenhuma foto/logo de campanha pedida na redação, nenhum colchete nesta tela"
+    }
+  ],
+  "resumoParaRevisao": {
+    "midiasPendentes": [],
+    "dadosPendentes": [
+      "tela_04: 'XX indicados' e 'XX% indicações contratadas' — placeholder intencional confirmado pelo usuário, substituir pelos dados oficiais antes do render final"
+    ],
+    "telasQueRequerComposicaoExtra": [],
+    "telasAcimaDe20Segundos": [],
+    "decisoesAprovadasPeloUsuario": {
+      "data": "2026-11-14",
+      "logoMsjTelas03e07": "logo_msj_positivo sobre fundo #F3F3F3",
+      "semLogoTelas01e05": "intencional, fundo azul Agibank (#0064F5), nome do evento já está na frase",
+      "schemaTela02": "adaptado para array de logos + campo icone, aprovado",
+      "layoutTela06": "manter diagonal azul/branco conforme redação",
+      "duracaoTela02": "ampliada de 15s para 18s para comportar scroll de 68 nomes"
+    }
+  }
+}

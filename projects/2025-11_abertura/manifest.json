@@ -1,0 +1,18 @@
+{
+  "geral": {
+    "logo_msj_positivo": "brand/logos/logo-msj-positive.svg",
+    "logo_msj_negativo": "brand/logos/logo-msj-negative.svg"
+  },
+  "tela_02": {
+    "logo_destaques": "brand/logos/destaques-do-ciclo-positive.svg",
+    "logo_jeito_agi": "brand/logos/crescer_na_jornada_positivo.svg",
+    "icone_coracao": "brand/icons/heart.svg"
+  },
+  "tela_04": {
+    "foto": "projects/2025-11_abertura/fotos/PI_A0001-22.jpg",
+    "logo_programa": "brand/logos/programa-de-indicacao-positive.svg"
+  },
+  "tela_06": {
+    "logo_uni_agi": "brand/logos/uni-agi-positive.svg"
+  }
+}
