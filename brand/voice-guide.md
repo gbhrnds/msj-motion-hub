@@ -1,6 +1,6 @@
 # Guia de Voz e Expressão Verbal — Agibank
 
-Este guia deve ser consultado sempre que for necessário gerar, adaptar ou revisar textos para as vinhetas do Momento Sempre Juntos.
+Este guia serve para **revisar** os textos das vinhetas do Momento Sempre Juntos e sinalizar ao usuário possíveis desvios de tom. Os agentes **não geram nem reescrevem** texto: todo o copy (inclusive das telas de respiro) vem da redação e é preservado 100%. Se algo parecer fora do tom, aponte no resumo e deixe a decisão para o usuário/redatora.
 
 ## Nossa Personalidade (4 Pilares)
 1. **Inconformado:** Questionamos o status quo. Trazemos soluções em vez de focar no problema. Discurso voltado para o presente/agora ("Sua vez é agora. É pra hoje").
