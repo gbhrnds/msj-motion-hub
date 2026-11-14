@@ -3,6 +3,7 @@ import { Composition } from "remotion";
 import { MSJComposition } from "./Composition";
 import { CatalogoFormas } from "./components/CatalogoFormas";
 import { ChecaFormas } from "./components/ChecaFormas";
+import { ExportaFigma } from "./export/ExportaFigma";
 import tokens from "../brand/tokens.json";
 
 const fps = tokens.video.fps;
@@ -36,6 +37,16 @@ export const RemotionRoot: React.FC = () => {
         fps={fps}
         width={tokens.video.resolution.width}
         height={tokens.video.resolution.height}
+      />
+      {/* Só para exportar telas ao Figma (npm run figma:exporta) */}
+      <Composition
+        id="ExportaFigma"
+        component={ExportaFigma}
+        durationInFrames={Math.round(durationInSeconds * fps)}
+        fps={fps}
+        width={tokens.video.resolution.width}
+        height={tokens.video.resolution.height}
+        defaultProps={{ frame: 0, tela: "tela", coletor: "http://localhost:4599" }}
       />
     </>
   );

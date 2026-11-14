@@ -43,6 +43,7 @@ export const CamadaGrafismos: React.FC<Props> = ({
           fase={g.fase ?? 0}
           wiggle={g.desenhar ? false : (g.wiggle ?? true)}
         >
+          <div data-camada={`forma ${g.id} · ${g.nome}`} style={{ display: "contents" }}>
           {g.desenhar ? (
             <OutlineDesenhado
               nome={g.nome}
@@ -62,6 +63,7 @@ export const CamadaGrafismos: React.FC<Props> = ({
               espelhar={g.espelhar}
             />
           )}
+          </div>
         </Grafismo>
       ))}
     </AbsoluteFill>

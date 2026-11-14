@@ -54,7 +54,7 @@ export const CountdownOverlay: React.FC<CountdownOverlayProps> = ({
 
   return (
     <AbsoluteFill style={{ pointerEvents: "none" }}>
-      <div style={{ position: "absolute", left: -96, top: -92 }}>
+      <div data-camada="moldura do contador" style={{ position: "absolute", left: -96, top: -92 }}>
         <BrandShape
           nome="quadrilateral-01"
           largura={470}
