@@ -2,6 +2,7 @@ import React from "react";
 import { Composition } from "remotion";
 import { MSJComposition } from "./Composition";
 import { CatalogoFormas } from "./components/CatalogoFormas";
+import { ChecaFormas } from "./components/ChecaFormas";
 import tokens from "../brand/tokens.json";
 
 const fps = tokens.video.fps;
@@ -23,6 +24,14 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="CatalogoFormas"
         component={CatalogoFormas}
+        durationInFrames={1}
+        fps={fps}
+        width={tokens.video.resolution.width}
+        height={tokens.video.resolution.height}
+      />
+      <Composition
+        id="ChecaFormas"
+        component={ChecaFormas}
         durationInFrames={1}
         fps={fps}
         width={tokens.video.resolution.width}

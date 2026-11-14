@@ -34,6 +34,10 @@ type P = [number, number];
 
 /** Folga mínima entre formas (cobre o wiggle de ±3° / ±4px do tokens). */
 const FOLGA = 18;
+/** "Máscara" ao redor de texto/logo: respiro mínimo entre forma e conteúdo. */
+export const RESPIRO_CONTEUDO = 40;
+/** Formas ficam inteiras dentro do quadro (decisão do usuário: sem corte na borda). */
+export const MARGEM_QUADRO = 48;
 
 const alturaDe = (g: GrafismoSpec) => {
   const f = shapesData[g.nome];
@@ -61,11 +65,11 @@ const cantos = (g: GrafismoSpec, folga: number): P[] => {
   ]);
 };
 
-const retangulo = (z: ZonaLivre): P[] => [
-  [z.x, z.y],
-  [z.x + z.largura, z.y],
-  [z.x + z.largura, z.y + z.altura],
-  [z.x, z.y + z.altura],
+const retangulo = (z: ZonaLivre, r = 0): P[] => [
+  [z.x - r, z.y - r],
+  [z.x + z.largura + r, z.y - r],
+  [z.x + z.largura + r, z.y + z.altura + r],
+  [z.x - r, z.y + z.altura + r],
 ];
 
 /** Teste de eixo separador (SAT) entre dois polígonos convexos. */
@@ -113,12 +117,25 @@ export const conflitos = (
   const out: string[] = [];
   formas.forEach((a, i) => {
     const ca = cantos(a, FOLGA);
+    const fora = cantos(a, 0).some(
+      ([x, y]) =>
+        x < MARGEM_QUADRO ||
+        y < MARGEM_QUADRO ||
+        x > tela.largura - MARGEM_QUADRO ||
+        y > tela.altura - MARGEM_QUADRO,
+    );
+    if (fora) out.push(`${a.id} cortada pela borda do quadro`);
     formas.slice(i + 1).forEach((b) => {
       if (intersecta(ca, cantos(b, 0))) out.push(`${a.id} × ${b.id}`);
     });
     if (a.moldura) return;
     todasZonas.forEach((z) => {
-      if (intersecta(cantos(a, FOLGA), retangulo(z)))
+      if (
+        intersecta(
+          cantos(a, FOLGA),
+          retangulo(z, z.id === "contador" ? 0 : RESPIRO_CONTEUDO),
+        )
+      )
         out.push(`${a.id} × zona ${z.id}`);
     });
   });

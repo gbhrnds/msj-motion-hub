@@ -29,13 +29,13 @@ const MODULO: [number, number][] = [
 ];
 const STAGGER = [0, 4, 7, 10, 12, 14];
 
-const FORMAS: GrafismoSpec[] = [
+export const FORMAS: GrafismoSpec[] = [
   {
     id: "o1",
     nome: "quadrilateral-21",
     x: 1660,
-    y: 900,
-    largura: 200,
+    y: 870,
+    largura: 140,
     cor: cor.azul,
     modo: "outline",
     rotacao: -14,
@@ -45,8 +45,8 @@ const FORMAS: GrafismoSpec[] = [
   {
     id: "o2",
     nome: "triangle-03",
-    x: 1130,
-    y: 920,
+    x: 1180,
+    y: 900,
     largura: 80,
     cor: cor.verde,
     rotacao: 18,
@@ -66,9 +66,9 @@ const FORMAS: GrafismoSpec[] = [
   },
 ];
 // Módulo azul inteiro + bloco da lista
-const ZONAS: ZonaLivre[] = [
+export const ZONAS: ZonaLivre[] = [
   { id: "modulo", x: 80, y: 80, largura: 1000, altura: 920 },
-  { id: "lista", x: 1090, y: 290, largura: 720, altura: 560 },
+  { id: "lista", x: 1090, y: 290, largura: 720, altura: 500 },
 ];
 
 /** Conteúdo com layout dividido em diagonal azul/branco (pedido da redação). */

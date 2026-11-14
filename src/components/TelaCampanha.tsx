@@ -13,13 +13,13 @@ type TelaCampanhaProps = {
 };
 
 // "Formas ao redor do título" (Brandbook p.48): tamanhos variados, sem sobreposição.
-const FORMAS: GrafismoSpec[] = [
+export const FORMAS: GrafismoSpec[] = [
   {
     id: "c1",
     nome: "pentagon-05",
-    x: 1380,
-    y: 300,
-    largura: 380,
+    x: 1420,
+    y: 330,
+    largura: 300,
     cor: cor.azulMedio,
     rotacao: -10,
     delayFrames: 2,
@@ -28,9 +28,9 @@ const FORMAS: GrafismoSpec[] = [
   {
     id: "c2",
     nome: "quadrilateral-14",
-    x: 1500,
-    y: 740,
-    largura: 220,
+    x: 1540,
+    y: 760,
+    largura: 160,
     cor: cor.verde,
     modo: "outline",
     rotacao: 16,
@@ -40,9 +40,9 @@ const FORMAS: GrafismoSpec[] = [
   {
     id: "c3",
     nome: "triangle-10",
-    x: 1240,
-    y: 150,
-    largura: 110,
+    x: 1300,
+    y: 140,
+    largura: 90,
     cor: cor.branco,
     rotacao: -24,
     delayFrames: 9,
@@ -51,9 +51,9 @@ const FORMAS: GrafismoSpec[] = [
   {
     id: "c4",
     nome: "triangle-02",
-    x: 1790,
-    y: 70,
-    largura: 150,
+    x: 1720,
+    y: 100,
+    largura: 100,
     cor: cor.azulMedio,
     rotacao: 14,
     delayFrames: 4,
@@ -62,9 +62,9 @@ const FORMAS: GrafismoSpec[] = [
   {
     id: "c5",
     nome: "quadrilateral-16",
-    x: 1240,
-    y: 860,
-    largura: 80,
+    x: 1300,
+    y: 880,
+    largura: 64,
     cor: cor.verde,
     rotacao: -6,
     delayFrames: 11,
@@ -73,16 +73,16 @@ const FORMAS: GrafismoSpec[] = [
   {
     id: "c6",
     nome: "quadrilateral-05",
-    x: 700,
-    y: 930,
-    largura: 56,
+    x: 720,
+    y: 920,
+    largura: 44,
     cor: cor.branco,
     rotacao: 28,
     delayFrames: 12,
     fase: 4.8,
   },
 ];
-const ZONAS: ZonaLivre[] = [
+export const ZONAS: ZonaLivre[] = [
   { id: "texto", x: 140, y: 290, largura: 1060, altura: 520 },
 ];
 

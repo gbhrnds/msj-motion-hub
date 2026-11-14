@@ -32,14 +32,14 @@ const moldura = (c: string): GrafismoSpec => ({
   moldura: true,
 });
 
-const FORMAS_AZUL: GrafismoSpec[] = [
+export const FORMAS_AZUL: GrafismoSpec[] = [
   moldura(cor.verde),
   {
     id: "a1",
     nome: "pentagon-03",
-    x: 1700,
-    y: 500,
-    largura: 280,
+    x: 1660,
+    y: 560,
+    largura: 150,
     cor: cor.azulMedio,
     rotacao: 12,
     delayFrames: 2,
@@ -49,8 +49,8 @@ const FORMAS_AZUL: GrafismoSpec[] = [
     id: "a2",
     nome: "triangle-02",
     x: 1700,
-    y: 330,
-    largura: 80,
+    y: 260,
+    largura: 70,
     cor: cor.branco,
     rotacao: -10,
     delayFrames: 8,
@@ -59,9 +59,9 @@ const FORMAS_AZUL: GrafismoSpec[] = [
   {
     id: "a3",
     nome: "quadrilateral-05",
-    x: 420,
-    y: 900,
-    largura: 60,
+    x: 520,
+    y: 880,
+    largura: 50,
     cor: cor.verde,
     rotacao: 20,
     delayFrames: 10,
@@ -70,9 +70,9 @@ const FORMAS_AZUL: GrafismoSpec[] = [
   {
     id: "a4",
     nome: "triangle-05",
-    x: -60,
-    y: 380,
-    largura: 170,
+    x: 110,
+    y: 420,
+    largura: 110,
     cor: cor.azulMedio,
     rotacao: 8,
     delayFrames: 4,
@@ -80,14 +80,14 @@ const FORMAS_AZUL: GrafismoSpec[] = [
   },
 ];
 
-const FORMAS_CINZA: GrafismoSpec[] = [
+export const FORMAS_CINZA: GrafismoSpec[] = [
   moldura(cor.verde),
   {
     id: "c1",
     nome: "pentagon-06",
-    x: -80,
-    y: 820,
-    largura: 300,
+    x: 120,
+    y: 790,
+    largura: 170,
     cor: cor.azul,
     rotacao: -10,
     delayFrames: 2,
@@ -96,9 +96,9 @@ const FORMAS_CINZA: GrafismoSpec[] = [
   {
     id: "c2",
     nome: "quadrilateral-17",
-    x: 1690,
-    y: 260,
-    largura: 120,
+    x: 1700,
+    y: 280,
+    largura: 80,
     cor: cor.azulMedio,
     rotacao: 14,
     delayFrames: 6,
@@ -107,14 +107,21 @@ const FORMAS_CINZA: GrafismoSpec[] = [
   {
     id: "c3",
     nome: "triangle-09",
-    x: 1760,
-    y: 560,
-    largura: 90,
+    x: 1740,
+    y: 600,
+    largura: 60,
     cor: cor.azul,
     rotacao: -18,
     delayFrames: 10,
     fase: 2.6,
   },
+];
+
+export const zonasAguarde = (comLogo: boolean): ZonaLivre[] => [
+  { id: "frase", x: 360, y: 490, largura: 1200, altura: 100 },
+  ...(comLogo
+    ? [{ id: "logo", x: 960 - 150, y: 616, largura: 300, altura: LOGO_ALT }]
+    : []),
 ];
 
 /** Últimas 2 palavras em Bold (pesos misturados, padrão Outubro). Texto intacto. */
@@ -138,12 +145,7 @@ export const TelaAguarde: React.FC<TelaAguardeProps> = ({
   const azul = variante === "azul";
   const base = azul ? FORMAS_AZUL : FORMAS_CINZA;
   const formas = girarGrafismos ? base.map(girar180) : base;
-  const zonas: ZonaLivre[] = [
-    { id: "frase", x: 360, y: 490, largura: 1200, altura: 100 },
-    ...(logoMsj
-      ? [{ id: "logo", x: 960 - 150, y: 616, largura: 300, altura: LOGO_ALT }]
-      : []),
-  ];
+  const zonas = zonasAguarde(Boolean(logoMsj));
   const [inicio, destaque] = comDestaque(titulo);
 
   return (

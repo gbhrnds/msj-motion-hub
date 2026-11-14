@@ -19,7 +19,7 @@ export const formatarTempo = (s: number) =>
   `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 
 const LOGO_ALT = 92;
-const ZONAS: ZonaLivre[] = [
+export const ZONAS: ZonaLivre[] = [
   { id: "numero", x: 960 - 290, y: 540 - 100, largura: 580, altura: 200 },
   {
     id: "logo",
@@ -29,7 +29,7 @@ const ZONAS: ZonaLivre[] = [
     altura: LOGO_ALT,
   },
 ];
-const FORMAS: GrafismoSpec[] = [
+export const FORMAS: GrafismoSpec[] = [
   // outline fino que se desenha em volta do número (Outubro/2026)
   {
     id: "moldura",

@@ -39,7 +39,7 @@ const T = {
 // ---- Layout -----------------------------------------------------------------
 const COLUNAS = 4;
 const LINHA = 56;
-const JANELA = { x: 160, y: 250, largura: 1600, altura: 710 };
+const JANELA = { x: 260, y: 250, largura: 1400, altura: 710 };
 const FADE_BORDA = 70;
 const CANTO_Y = 118;
 const JEITO = {
@@ -55,13 +55,13 @@ const DESTAQUES = {
 
 // Fundo cinza + azul e amarelo, amarelo predominante (exceção aprovada).
 // Todas as formas ficam nas bordas, fora de logos, frases e da janela de nomes.
-const FORMAS: GrafismoSpec[] = [
+export const FORMAS: GrafismoSpec[] = [
   {
     id: "y1",
-    nome: "triangle-06",
-    x: -70,
-    y: 880,
-    largura: 200,
+    nome: "triangle-02",
+    x: 110,
+    y: 330,
+    largura: 80,
     cor: cor.amarelo,
     rotacao: 10,
     delayFrames: 2,
@@ -69,74 +69,52 @@ const FORMAS: GrafismoSpec[] = [
   },
   {
     id: "b1",
-    nome: "quadrilateral-20",
-    x: 1800,
-    y: 760,
-    largura: 120,
+    nome: "quadrilateral-16",
+    x: 130,
+    y: 690,
+    largura: 64,
     cor: cor.azul,
-    rotacao: -8,
+    rotacao: -12,
     delayFrames: 6,
     fase: 1.1,
   },
   {
     id: "y2",
-    nome: "quadrilateral-07",
-    x: 620,
-    y: -40,
-    largura: 220,
+    nome: "quadrilateral-05",
+    x: 1760,
+    y: 300,
+    largura: 52,
     cor: cor.amarelo,
-    rotacao: 6,
+    rotacao: 14,
     delayFrames: 4,
     fase: 2.0,
   },
   {
     id: "y3",
-    nome: "triangle-03",
-    x: 1810,
-    y: 360,
+    nome: "pentagon-05",
+    x: 1730,
+    y: 720,
     largura: 90,
     cor: cor.amarelo,
-    rotacao: 16,
+    rotacao: -8,
     delayFrames: 9,
     fase: 2.9,
   },
   {
     id: "y4",
-    nome: "pentagon-02",
-    x: 30,
-    y: 400,
-    largura: 90,
+    nome: "triangle-09",
+    x: 720,
+    y: 90,
+    largura: 60,
     cor: cor.amarelo,
     modo: "outline",
-    rotacao: -12,
+    rotacao: 20,
     delayFrames: 11,
     fase: 3.6,
   },
-  {
-    id: "b2",
-    nome: "triangle-10",
-    x: 980,
-    y: 990,
-    largura: 110,
-    cor: cor.azul,
-    rotacao: -12,
-    delayFrames: 8,
-    fase: 4.4,
-  },
-  {
-    id: "y5",
-    nome: "pentagon-07",
-    x: 1500,
-    y: 985,
-    largura: 260,
-    cor: cor.amarelo,
-    rotacao: 4,
-    delayFrames: 12,
-    fase: 5.2,
-  },
 ];
 
-const ZONAS: ZonaLivre[] = [
+export const ZONAS: ZonaLivre[] = [
   { id: "nomes", ...JANELA },
   { id: "logos-canto", x: 1250, y: 60, largura: 560, altura: 120 },
 ];
@@ -327,7 +305,7 @@ export const TelaDestaques: React.FC<TelaDestaquesProps> = ({
                   justifyContent: "center",
                   fontFamily,
                   fontWeight: 600,
-                  fontSize: 30,
+                  fontSize: 28,
                   color: cor.azul,
                   whiteSpace: "nowrap",
                   opacity: op,

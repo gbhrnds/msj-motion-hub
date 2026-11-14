@@ -8,19 +8,28 @@ que está escrito) e do que a vinheta de Outubro/2026 faz. Complementa o
 
 - **Nunca se sobrepõem.** Nenhuma forma encosta ou passa por cima de outra
   (preenchida ou outline). Sempre há respiro entre elas. Checagem automática:
-  `npm run checa:formas`.
-- **Nunca passam por trás/por cima de texto ou logo.** Elas *contornam* o
-  bloco de texto, deixando uma zona livre ao redor.
-- **Composição "ao redor do título" (p.48):** 4 a 7 formas de tamanhos bem
+  `npm run checa:formas` (gera `out/checa-formas.png` com OK/FALHA por tela) e o
+  próprio render falha se houver conflito.
+- **Nunca passam por trás/por cima de texto, logo ou foto.** Elas *contornam*
+  o conteúdo, com uma "máscara" de respiro de 40px em volta (nada de forma
+  "recortando" um texto ou o canto de uma foto).
+- **Inteiras dentro do quadro** (decisão do usuário, 2026-11-14): nenhuma forma
+  é cortada pela borda; margem mínima de 48px. Isso substitui o "sangrar pela
+  borda" que aparece em algumas aplicações do Brandbook e na vinheta de Outubro.
+- **Poucas e pequenas:** formas de apoio do porte do texto ao lado (≈40–120px em
+  telas com texto pequeno; até ~300px só em telas com pouco texto). No máximo
+  ~5–6 por tela — mais que isso polui.
+- **Composição "ao redor do título" (p.48):** 4 a 6 formas de tamanhos bem
   diferentes (a maior ~3–4x a menor), rotações variadas, espalhadas em volta do
-  texto, várias **cortadas pela borda do quadro**.
+  texto, todas inteiras dentro do quadro.
 - **Tamanho:** formas de apoio são pequenas/médias em relação ao quadro. Formas
   gigantes só como "palco" de um elemento (ex.: buffer de Outubro, forma azul que
   segura o logo MSJ).
 - **Mistura preenchida + outline**, com o outline fino (traço do tokens) e do
   mesmo porte das preenchidas.
-- **Outline interagindo:** pode cruzar uma foto ou emoldurar um texto curto
-  (citação p.48) — nunca riscar por cima de letras.
+- **Outline emoldurando:** pode envolver um texto curto ou o número do relógio
+  (citação p.48, contagem de Outubro), sempre com folga — nunca riscar por cima
+  de letras nem cruzar foto.
 - **Transformações:** só rotacionar, espelhar, escalonar (p.46). Morph proibido.
 - **Cores (p.47):** monocromático azul ou verde sobre branco; duas/três cores
   sobre branco ou azul; amarelo sempre em menor proporção (ver exceção §6).

@@ -6,7 +6,8 @@
     "dev": "remotion studio",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
-    "lint": "eslint src && tsc"
+    "lint": "eslint src && tsc",
+    "checa:formas": "remotion still src/index.ts ChecaFormas out/checa-formas.png"
   },
   "repository": {},
   "license": "UNLICENSED",
