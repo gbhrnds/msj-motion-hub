@@ -59,7 +59,7 @@
     {
       "id": "tela_02",
       "tipo": "tela_destaques",
-      "duracaoSegundos": 28,
+      "duracaoSegundos": 18,
       "textos": {
         "titulo": null,
         "corpo": "Quem luta pelo nosso propósito com o Jeito Agi de verdade, se destaca!\n\nParabéns, Destaques do Ciclo",
@@ -148,7 +148,7 @@
         "dadoPendente": false,
         "requerComposicaoExtra": false
       },
-      "observacoesOriginais": "[ logo destaques do ciclo ] [ logo o jeito agi - crescer na jornada ] [ criar grid com o nome das pessoas - lista abaixo ] [ icone coracao ] — nova sequência pedida pelo usuário em 2026-11-14 (logo Jeito Agi + frase → logo Destaques → logos para o canto + créditos → fechamento com coração). Duração 28s (exceção aprovada pelo usuário em 2026-11-14: Destaques pode ir até 30s por causa da animação dos nomes) — créditos a ~92px/s, cada nome ~7,7s visível."
+      "observacoesOriginais": "[ logo destaques do ciclo ] [ logo o jeito agi - crescer na jornada ] [ criar grid com o nome das pessoas - lista abaixo ] [ icone coracao ] — nova sequência pedida pelo usuário em 2026-11-14 (logo Jeito Agi + frase → logo Destaques → logos para o canto + créditos → fechamento com coração). Duração 18s: cada nome fica ~3,6s visível (créditos a ~200px/s), pedido do usuário em 2026-11-14 (3–4s por nome; o loop repete a lista)."
     },
     {
       "id": "tela_03",
@@ -311,16 +311,14 @@
       "tela_04: 'XX indicados' e 'XX% indicações contratadas' — placeholder intencional confirmado pelo usuário, substituir pelos dados oficiais antes do render final"
     ],
     "telasQueRequerComposicaoExtra": [],
-    "telasAcimaDe20Segundos": [
-      "tela_02 (28s) — aprovado: tela de Destaques pode ir até 30s por causa dos créditos"
-    ],
+    "telasAcimaDe20Segundos": [],
     "decisoesAprovadasPeloUsuario": {
       "data": "2026-11-14",
       "logoMsjTelas03e07": "logo_msj_positivo sobre fundo #F3F3F3",
       "semLogoTelas01e05": "intencional; fundo alterado para cinza claro (#F3F3F3) no ajuste do Figma",
       "schemaTela02": "adaptado para array de logos + campo icone, aprovado",
       "layoutTela06": "dois módulos (azul + azul médio) com divisão diagonal, ajuste do Figma",
-      "duracaoTela02": "28s (limite aprovado: até 30s para a tela de Destaques)",
+      "duracaoTela02": "18s — cada nome ~3,6s na tela (pedido: 3–4s); limite aprovado para telas com nomes: até 30s",
       "quebrasDeLinha": "sem artigo/preposição no fim da linha e sem viúva (src/brand/quebraDeLinha.ts)"
     },
     "assuncoesParaConfirmar": [

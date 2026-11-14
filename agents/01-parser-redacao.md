@@ -81,7 +81,8 @@ duracao_base = 10 segundos
 máximo = 20 segundos (se ultrapassar, sinalizar ao usuário que o texto
          pode estar longo demais para o padrão da vinheta)
 exceção = telas com grid/créditos de nomes vão até 30 segundos (aprovado em
-          2026-11-14): calcule para os nomes subirem a ~80–100px/s)
+          2026-11-14): calcule para cada nome ficar 3–4s visível na janela
+          (≈180–240px/s; o loop repete a lista, então não precisa ser mais lento)
 ```
 
 ### Telas de respiro
