@@ -44,6 +44,10 @@ agente nunca escreve frase de respiro por conta própria.
 
 ## Linguagem visual (resumo — fonte completa em `brand/tokens.json`)
 - Minimalista, fundos sólidos (uma cor de cada vez, sem gradientes)
+- Fundos permitidos: azul Agibank, branco, azul médio, azul escuro e **cinza claro
+  (#F3F3F3)** — este último é exceção aprovada para o MSJ (o Brandbook o restringe
+  a Design System); texto sobre cinza claro sempre em azul escuro
+- Logo Agibank no MSJ: versão reduzida "agi" (comunicação interna/eventos institucionais)
 - Formas irregulares do Agibank, em outline e/ou preenchidas, como grafismo
   decorativo (nunca como elemento de leitura)
 - Tipografia: Agibank Sans (fallback restrito: Arial, só em emergência)
