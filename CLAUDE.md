@@ -39,9 +39,15 @@ a lógica documentada em `agents/01-parser-redacao.md`.
 
 Periodicamente, entre telas de conteúdo, entram **telas de respiro** (tela de
 aguarde, só com frase curta + logo MSJ) para quebrar a repetição do loop.
+O texto das telas de respiro **vem da redação**, como qualquer outra tela: o
+agente nunca escreve frase de respiro por conta própria.
 
 ## Linguagem visual (resumo — fonte completa em `brand/tokens.json`)
 - Minimalista, fundos sólidos (uma cor de cada vez, sem gradientes)
+- Fundos permitidos: azul Agibank, branco, azul médio, azul escuro e **cinza claro
+  (#F3F3F3)** — este último é exceção aprovada para o MSJ (o Brandbook o restringe
+  a Design System); texto sobre cinza claro sempre em azul escuro
+- Logo Agibank no MSJ: versão reduzida "agi" (comunicação interna/eventos institucionais)
 - Formas irregulares do Agibank, em outline e/ou preenchidas, como grafismo
   decorativo (nunca como elemento de leitura)
 - Tipografia: Agibank Sans (fallback restrito: Arial, só em emergência)
@@ -76,12 +82,29 @@ aguarde, só com frase curta + logo MSJ) para quebrar a repetição do loop.
 
 Nunca pule a etapa 3 (storyboard estático) para economizar tempo — é nela que
 erros de layout são pegos antes de gastar tempo/tokens com animação.
+O storyboard é sempre **estático** (PNGs + PDF); não existe animatic em vídeo.
+
+## Skills do projeto (`.claude/skills/`)
+Instaladas dentro do repositório para valer em qualquer sessão. Cada agente diz
+quando carregar cada uma.
+
+| Skill | Origem | Usada em |
+|---|---|---|
+| `remotion-best-practices` | remotion-dev/skills | 02, 03, 05, 06 |
+| `choreograph` | emilkowalski/skills | 05 (papéis e ordem dos elementos) |
+| `animate` | emilkowalski/skills | 05 (curvas e propriedades) |
+
+Regra de precedência: as skills são genéricas (web/UI). Quando uma skill
+conflitar com este arquivo ou com `brand/tokens.json`, vale o projeto. Skills
+de direção estética (frontend-design, taste-skill, ui-ux-pro-max,
+theme-factory etc.) **não** são usadas: a direção visual é o Brandbook.
 
 ## Estrutura de pastas do projeto
 
 ```
 msj-motion-hub/
 ├── CLAUDE.md
+├── .claude/skills/     → skills de apoio (Remotion + motion), ver seção acima
 ├── brand/              → tokens, shapes SVG, fontes (fonte única da verdade visual)
 ├── agents/             → instruções de cada etapa do pipeline
 ├── src/                → código Remotion (componentes, motion, composição)

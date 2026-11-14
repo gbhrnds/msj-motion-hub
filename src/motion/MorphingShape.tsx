@@ -56,7 +56,7 @@ export const MorphingShape: React.FC<MorphingShapeProps> = ({
   const interpolator = useMemo(() => {
     try {
       return interpolate(currentPath, nextPath, { maxSegmentLength: 2 });
-    } catch (e) {
+    } catch {
       return () => currentPath;
     }
   }, [currentPath, nextPath]);
