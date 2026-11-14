@@ -1,11 +1,34 @@
 {
   "projeto": "2025-11_abertura",
-  "geradoEm": "2026-11-14T03:31:09Z",
+  "geradoEm": "2026-11-14T03:41:44Z",
   "fasePreLive": {
     "contentLoopMinutes": 10,
     "bufferOnlyLogoMinutes": 5
   },
   "telas": [
+    {
+      "id": "tela_00",
+      "tipo": "tela_inicio_contagem",
+      "duracaoSegundos": 10,
+      "textos": {
+        "titulo": "10:00",
+        "corpo": null,
+        "bullets": []
+      },
+      "midia": {
+        "foto": null,
+        "logo": "logo_msj_negativo",
+        "gridNomes": null
+      },
+      "flags": {
+        "midiaPendente": false,
+        "dadoPendente": false,
+        "requerComposicaoExtra": false
+      },
+      "exibicao": "uma_vez",
+      "fundoHex": "#0064F5",
+      "observacoesOriginais": "(Inicio da Contagem regressiva) [logo-msj-negative] [ usar morphing shape decorativo ] — tipo novo criado pelo parser. Assumido: o '10:00' é o próprio relógio (começa em 10:00 e corre), tela exibida uma única vez antes do loop, duração base 10s. Morphing substituído por troca de formas oficiais (Brandbook p.46)."
+    },
     {
       "id": "tela_01",
       "tipo": "tela_aguarde",
@@ -276,6 +299,9 @@
       "schemaTela02": "adaptado para array de logos + campo icone, aprovado",
       "layoutTela06": "manter diagonal azul/branco conforme redação",
       "duracaoTela02": "ampliada de 15s para 18s para comportar scroll de 68 nomes"
-    }
+    },
+    "assuncoesParaConfirmar": [
+      "tela_00: tipo novo 'tela_inicio_contagem', exibida 1x fora do loop, 10s, relógio vivo a partir de 10:00"
+    ]
   }
 }

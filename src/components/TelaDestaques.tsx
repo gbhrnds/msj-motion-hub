@@ -1,189 +1,171 @@
 import React from "react";
-import { AbsoluteFill, Img, interpolate } from "remotion";
-import { useCurrentFrame } from "remotion";
+import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { TextReveal } from "../motion/TextReveal";
-import { WiggleShape } from "../motion/WiggleShape";
+import { Grafismo } from "../motion/Grafismo";
+import { BrandShape } from "../brand/BrandShape";
+import { Logo } from "../brand/Logo";
+import { Icone } from "../brand/Icone";
+import { cor, motionTokens, raio } from "../brand/theme";
 import { fontFamily } from "../fonts";
-import tokens from "../../brand/tokens.json";
 
 type TelaDestaquesProps = {
-  subtitulo: string;
+  chamada: string;
+  fechamento?: string;
   nomes: string[];
-  fechamento: string;
   logos: string[];
   icone?: string;
   duracaoFrames: number;
 };
 
 const COLUNAS = 4;
-const ITEM_HEIGHT = 56;
-const ITEM_GAP = 16;
-const ROW_HEIGHT = ITEM_HEIGHT + ITEM_GAP;
-const HEADER_HEIGHT = 220;
-const FOOTER_HEIGHT = 110;
-const PADDING = tokens.video.safeMarginPx.value;
-const SCROLL_START_FRAME = 12;
-const SCROLL_END_BUFFER_FRAMES = 40;
+const ALTURA_LINHA = 60;
+// Módulo branco que segura os nomes (margens dentro da safe area)
+const LINHAS_VISIVEIS = 8;
+// Janela = múltiplo exato da linha: no início e no fim nenhum nome aparece cortado.
+const JANELA = LINHAS_VISIVEIS * ALTURA_LINHA;
+const MOD = { x: 140, y: 386, largura: 1640, padX: 48, padY: 24, altura: JANELA + 48 };
 
 /**
- * Tela de Destaques: ~68 nomes não cabem lidos em 1 tela estática no tempo
- * padrão, então o grid vira 4 colunas em scroll vertical contínuo (créditos
- * de filme), do início ao fim da tela — a única exceção deliberada à regra
- * "nunca motion contínuo em texto" do tokens.json, combinada com o usuário.
+ * Destaques do Ciclo: os nomes correm como créditos de filme em 4 colunas,
+ * dentro de um módulo branco. Ordem alfabética lida linha a linha.
+ * Começa com o módulo cheio, pausa, rola com ease-in-out e termina cheio com
+ * a última linha visível — todos os nomes ficam vários segundos na tela.
  */
 export const TelaDestaques: React.FC<TelaDestaquesProps> = ({
-  subtitulo,
-  nomes,
+  chamada,
   fechamento,
+  nomes,
   logos,
   icone,
   duracaoFrames,
 }) => {
   const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const sc = motionTokens.scrollCreditos;
 
-  const namesPerCol = Math.ceil(nomes.length / COLUNAS);
-  const columns = Array.from({ length: COLUNAS }, (_, i) =>
-    nomes.slice(i * namesPerCol, (i + 1) * namesPerCol)
-  );
-
-  const scrollAreaHeight =
-    tokens.video.resolution.height - PADDING * 2 - HEADER_HEIGHT - FOOTER_HEIGHT;
-  const contentHeight = namesPerCol * ROW_HEIGHT;
-  const scrollEndFrame = duracaoFrames - SCROLL_END_BUFFER_FRAMES;
-
-  const translateY = interpolate(
-    frame,
-    [SCROLL_START_FRAME, scrollEndFrame],
-    [scrollAreaHeight, -contentHeight],
-    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
-  );
+  const linhas = Math.ceil(nomes.length / COLUNAS);
+  const alturaLista = linhas * ALTURA_LINHA;
+  const percurso = Math.max(0, alturaLista - JANELA);
+  const inicio = Math.round(sc.pausaInicialSegundos * fps);
+  const fim = duracaoFrames - Math.round(sc.pausaFinalSegundos * fps);
+  const scrollY = interpolate(frame, [inicio, fim], [0, -percurso], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.inOut(Easing.cubic),
+  });
 
   return (
-    <AbsoluteFill
-      style={{
-        backgroundColor: tokens.colors.branco.hex,
-        padding: PADDING,
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <TextReveal>
-        <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
-          {logos.map((src) => (
-            <Img key={src} src={src} style={{ height: 56 }} />
-          ))}
-        </div>
-      </TextReveal>
+    <AbsoluteFill style={{ backgroundColor: cor.azul }}>
+      {/* decoration */}
+      <Grafismo x={1600} y={780} delayFrames={6} fase={0.8}>
+        <BrandShape nome="pentagon-04" largura={460} cor={cor.azulMedio} rotacao={-18} />
+      </Grafismo>
+      <Grafismo x={1330} y={250} delayFrames={10} fase={2.2}>
+        <BrandShape nome="triangle-09" largura={70} cor={cor.verde} rotacao={24} />
+      </Grafismo>
 
-      <TextReveal delayFrames={6}>
-        <p
-          style={{
-            fontFamily,
-            fontWeight: 500,
-            fontSize: tokens.typography.typeScaleVideo.subtitulo.sizePx,
-            color: tokens.colors.azulEscuro.hex,
-            maxWidth: "70%",
-            margin: "16px 0 0",
-          }}
-        >
-          {subtitulo}
-        </p>
-      </TextReveal>
-
+      {/* static: logos do programa, canto superior direito */}
       <div
         style={{
-          position: "relative",
-          height: scrollAreaHeight,
-          marginTop: 24,
-          overflow: "hidden",
+          position: "absolute",
+          top: 84,
+          right: 140,
+          display: "flex",
+          alignItems: "center",
+          gap: 56,
         }}
       >
-        <div
+        {logos.map((l, i) => (
+          <TextReveal key={l} delayFrames={i * 3} distancia={0}>
+            <Logo arquivo={l} versao="negativa" altura={i === 0 ? 112 : 92} />
+          </TextReveal>
+        ))}
+      </div>
+
+      {/* lead: chamada */}
+      <TextReveal
+        delayFrames={4}
+        distancia={28}
+        style={{ position: "absolute", left: 140, top: 228, width: 1120 }}
+      >
+        <h1
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            display: "flex",
-            flexDirection: "row",
-            gap: 32,
-            transform: `translateY(${translateY}px)`,
+            fontFamily,
+            fontWeight: 700,
+            fontSize: 54,
+            lineHeight: 1.12,
+            color: cor.branco,
+            margin: 0,
           }}
         >
-          {columns.map((coluna, i) => (
+          {chamada}
+        </h1>
+      </TextReveal>
+
+      {/* support: módulo de nomes (uma entrada para o container inteiro) */}
+      <Grafismo x={MOD.x} y={MOD.y} delayFrames={12} wiggle={false}>
+        <div
+          style={{
+            width: MOD.largura,
+            height: MOD.altura,
+            backgroundColor: cor.branco,
+            borderRadius: raio,
+            padding: `${MOD.padY}px ${MOD.padX}px`,
+            boxSizing: "border-box",
+          }}
+        >
+          <div style={{ height: JANELA, overflow: "hidden" }}>
             <div
-              key={i}
               style={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                gap: ITEM_GAP,
+                translate: `0px ${scrollY}px`,
+                display: "grid",
+                gridTemplateColumns: `repeat(${COLUNAS}, 1fr)`,
+                gridAutoRows: ALTURA_LINHA,
+                alignItems: "center",
+                columnGap: 32,
               }}
             >
-              {coluna.map((nome) => (
+              {nomes.map((n) => (
                 <div
-                  key={nome}
+                  key={n}
                   style={{
-                    height: ITEM_HEIGHT,
-                    display: "flex",
-                    alignItems: "center",
-                    background: tokens.colors.azulAgibank.hex,
-                    color: tokens.colors.branco.hex,
-                    borderRadius: tokens.shapes.cornerRadiusPxRange.default,
-                    padding: "0 20px",
                     fontFamily,
-                    fontWeight: 400,
-                    fontSize: 24,
+                    fontWeight: 600,
+                    fontSize: 30,
+                    color: cor.azul,
                     whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
                   }}
                 >
-                  {nome}
+                  {n}
                 </div>
               ))}
             </div>
-          ))}
+          </div>
         </div>
-      </div>
+      </Grafismo>
 
-      <TextReveal delayFrames={scrollEndFrame}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 16,
-            marginTop: 16,
-          }}
-        >
-          <p
-            style={{
-              fontFamily,
-              fontWeight: 700,
-              fontSize: 32,
-              color: tokens.colors.azulAgibank.hex,
-              margin: 0,
-            }}
-          >
-            {fechamento}
-          </p>
-          {icone && <Img src={icone} style={{ height: 32 }} />}
-        </div>
-      </TextReveal>
-
-      <WiggleShape>
-        <div
+      {/* support: fechamento + ícone */}
+      {fechamento && (
+        <TextReveal
+          delayFrames={20}
+          distancia={16}
           style={{
             position: "absolute",
-            bottom: 60,
-            right: 80,
-            width: 100,
-            height: 100,
-            background: tokens.colors.amarelo.hex,
-            clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)",
+            left: 140,
+            top: 930,
+            display: "flex",
+            alignItems: "center",
+            gap: 20,
           }}
-        />
-      </WiggleShape>
+        >
+          <span
+            style={{ fontFamily, fontWeight: 700, fontSize: 44, color: cor.branco }}
+          >
+            {fechamento}
+          </span>
+          {icone && <Icone arquivo={icone} cor={cor.verde} tamanho={46} />}
+        </TextReveal>
+      )}
     </AbsoluteFill>
   );
 };

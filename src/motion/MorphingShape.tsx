@@ -3,7 +3,11 @@ import { useCurrentFrame, random } from "remotion";
 import { interpolate } from "flubber";
 import shapesDataRaw from "../shapesData.json";
 
-const shapesData: Record<string, string> = shapesDataRaw;
+// Mantido só por compatibilidade: deforma as formas oficiais (Brandbook p.46).
+// Use TrocaDeForma no lugar.
+const shapesData: Record<string, string> = Object.fromEntries(
+  Object.entries(shapesDataRaw).map(([k, v]) => [k, v.d]),
+);
 
 type MorphingShapeProps = {
   color: string;

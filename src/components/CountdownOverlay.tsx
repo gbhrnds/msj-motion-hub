@@ -2,14 +2,17 @@ import React from "react";
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 import { fontFamily } from "../fonts";
 import tokens from "../../brand/tokens.json";
-import { MorphingShape } from "../motion/MorphingShape";
+import { TrocaDeForma } from "../motion/TrocaDeForma";
 
 type CountdownOverlayProps = {
   durationInSeconds: number; // Tempo total da fase de conteudo (ex: 600s para 10min)
+  /** Frames iniciais em que o overlay não aparece (a tela de abertura já mostra o relógio). */
+  ocultarAteFrame?: number;
 };
 
 export const CountdownOverlay: React.FC<CountdownOverlayProps> = ({
   durationInSeconds,
+  ocultarAteFrame = 0,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -26,6 +29,8 @@ export const CountdownOverlay: React.FC<CountdownOverlayProps> = ({
   // Logica do Relatorio: nos ultimos 10s, o relogio vira "Hero" (gigante no centro)
   const isHero = remainingSeconds <= 10;
 
+  if (frame < ocultarAteFrame) return null;
+
   if (isHero) {
     return (
       <AbsoluteFill
@@ -37,12 +42,11 @@ export const CountdownOverlay: React.FC<CountdownOverlayProps> = ({
         }}
       >
         {/* Forma decorativa fina atras do numero (conforme relatorio) */}
-        <div style={{ position: "absolute", opacity: 0.5 }}>
-          <MorphingShape
-            color={tokens.colors.verde.hex}
-            width={800}
-            height={800}
-            framesPerMorph={15}
+        <div style={{ position: "absolute" }}>
+          <TrocaDeForma
+            formas={["pentagon-01", "quadrilateral-04", "pentagon-05"]}
+            largura={900}
+            cor={tokens.colors.verde.hex}
           />
         </div>
 

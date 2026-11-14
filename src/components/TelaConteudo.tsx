@@ -1,113 +1,126 @@
 import React from "react";
-import { AbsoluteFill, Img } from "remotion";
+import { AbsoluteFill } from "remotion";
 import { TextReveal } from "../motion/TextReveal";
+import { Grafismo } from "../motion/Grafismo";
+import { BrandShape } from "../brand/BrandShape";
+import { Logo } from "../brand/Logo";
+import { roundedPolygon } from "../brand/roundedPolygon";
+import { cor, raio } from "../brand/theme";
 import { fontFamily } from "../fonts";
-import tokens from "../../brand/tokens.json";
 
 type TelaConteudoProps = {
+  /** Parágrafo principal (lado azul). */
   corpo: string;
+  /** Linha que abre a lista (lado branco). */
+  chamadaLista?: string;
   bullets: string[];
   logo?: string;
 };
 
-/**
- * Layout em diagonal azul/branco, pedido pela redação para manter
- * consistência visual com a campanha de cursos obrigatórios.
- */
-export const TelaConteudo: React.FC<TelaConteudoProps> = ({ corpo, bullets, logo }) => {
-  const PADDING = tokens.video.safeMarginPx.value;
-  const [introLinha, ...restoLinhas] = corpo.split("\n\n");
+// Módulo azul: bordas externas retas, divisão interna diagonal (Brandbook p.49),
+// margem de respiro de 80px e cantos de 14px.
+const MODULO: [number, number][] = [
+  [80, 80],
+  [1080, 80],
+  [820, 1000],
+  [80, 1000],
+];
+const STAGGER = [0, 4, 7, 10, 12, 14];
 
+/** Conteúdo com layout dividido em diagonal azul/branco (pedido da redação). */
+export const TelaConteudo: React.FC<TelaConteudoProps> = ({
+  corpo,
+  chamadaLista,
+  bullets,
+  logo,
+}) => {
   return (
-    <AbsoluteFill style={{ backgroundColor: tokens.colors.branco.hex }}>
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: tokens.colors.azulAgibank.hex,
-          clipPath: "polygon(0 0, 58% 0, 32% 100%, 0% 100%)",
-        }}
-      />
+    <AbsoluteFill style={{ backgroundColor: cor.branco }}>
+      <Grafismo x={0} y={0} wiggle={false}>
+        <svg width={1920} height={1080}>
+          <path d={roundedPolygon(MODULO, raio)} fill={cor.azul} />
+        </svg>
+      </Grafismo>
 
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "42%",
-          height: "100%",
-          padding: PADDING,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
-      >
-        {logo && (
-          <TextReveal>
-            <Img src={logo} style={{ height: 56, marginBottom: 24 }} />
+      {/* decoration */}
+      <Grafismo x={1640} y={850} delayFrames={8} fase={1}>
+        <BrandShape nome="quadrilateral-21" largura={260} cor={cor.azul} modo="outline" rotacao={-14} />
+      </Grafismo>
+      <Grafismo x={900} y={880} delayFrames={12} fase={2.5}>
+        <BrandShape nome="triangle-03" largura={96} cor={cor.verde} rotacao={18} />
+      </Grafismo>
+
+      {/* lado azul */}
+      {logo && (
+        <div style={{ position: "absolute", left: 160, top: 268 }}>
+          <TextReveal distancia={0}>
+            <Logo arquivo={logo} versao="negativa" altura={104} />
           </TextReveal>
-        )}
-        <TextReveal delayFrames={6}>
-          <p
-            style={{
-              fontFamily,
-              fontWeight: 500,
-              fontSize: tokens.typography.typeScaleVideo.subtitulo.sizePx,
-              color: tokens.colors.branco.hex,
-              margin: 0,
-            }}
-          >
-            {introLinha}
-          </p>
-        </TextReveal>
-      </div>
-
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          right: 0,
-          width: "55%",
-          height: "100%",
-          padding: PADDING,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
+        </div>
+      )}
+      <TextReveal
+        delayFrames={6}
+        distancia={28}
+        style={{ position: "absolute", left: 160, top: 430, width: 620 }}
       >
-        {restoLinhas.map((linha, i) => (
-          <TextReveal key={linha} delayFrames={12 + i * 6}>
-            <p
+        <p
+          style={{
+            fontFamily,
+            fontWeight: 500,
+            fontSize: 46,
+            lineHeight: 1.2,
+            color: cor.branco,
+            margin: 0,
+          }}
+        >
+          {corpo}
+        </p>
+      </TextReveal>
+
+      {/* lado branco */}
+      <div style={{ position: "absolute", left: 1090, top: 300, width: 720 }}>
+        {chamadaLista && (
+          <TextReveal delayFrames={12} distancia={20}>
+            <h2
               style={{
                 fontFamily,
-                fontWeight: 700,
-                fontSize: tokens.typography.typeScaleVideo.corpo.sizePx,
-                color: tokens.colors.azulAgibank.hex,
-                margin: "0 0 16px",
+                fontWeight: 800,
+                fontSize: 48,
+                lineHeight: 1.1,
+                color: cor.azul,
+                margin: "0 0 40px",
+                textWrap: "balance",
               }}
             >
-              {linha}
-            </p>
+              {chamadaLista}
+            </h2>
           </TextReveal>
-        ))}
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          {bullets.map((bullet, i) => (
-            <TextReveal key={bullet} delayFrames={18 + i * 6}>
-              <p
+        )}
+        {bullets.map((b, i) => (
+          <TextReveal key={b} delayFrames={18 + STAGGER[Math.min(i, STAGGER.length - 1)]} distancia={14}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 22,
+                marginBottom: 26,
+              }}
+            >
+              <BrandShape nome="triangle-06" largura={24} cor={cor.verde} rotacao={-90} />
+              <span
                 style={{
                   fontFamily,
                   fontWeight: 400,
-                  fontSize: tokens.typography.typeScaleVideo.corpo.sizePx,
-                  color: tokens.colors.azulEscuro.hex,
-                  margin: 0,
+                  fontSize: 38,
+                  lineHeight: 1.2,
+                  color: cor.azulEscuro,
                 }}
               >
-                {bullet}
-              </p>
-            </TextReveal>
-          ))}
-        </div>
+                {b}
+              </span>
+            </div>
+          </TextReveal>
+        ))}
       </div>
     </AbsoluteFill>
   );

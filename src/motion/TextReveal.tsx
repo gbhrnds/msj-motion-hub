@@ -1,10 +1,14 @@
 import React from "react";
 import { useCurrentFrame, spring, useVideoConfig } from "remotion";
+import { motionTokens } from "../brand/theme";
 
 type TextRevealProps = {
   children: React.ReactNode;
   delayFrames?: number;
   durationFrames?: number;
+  /** Deslocamento inicial em px. Lead desloca mais; support, menos (skill choreograph). */
+  distancia?: number;
+  style?: React.CSSProperties;
 };
 
 /**
@@ -15,7 +19,9 @@ type TextRevealProps = {
 export const TextReveal: React.FC<TextRevealProps> = ({
   children,
   delayFrames = 0,
-  durationFrames = 18,
+  durationFrames = motionTokens.textReveal.durationFrames,
+  distancia = 24,
+  style,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -27,11 +33,14 @@ export const TextReveal: React.FC<TextRevealProps> = ({
     config: { damping: 200, stiffness: 120 },
   });
 
-  const opacity = progress;
-  const translateY = (1 - progress) * 24;
-
   return (
-    <div style={{ opacity, transform: `translateY(${translateY}px)` }}>
+    <div
+      style={{
+        opacity: progress,
+        translate: `0px ${(1 - progress) * distancia}px`,
+        ...style,
+      }}
+    >
       {children}
     </div>
   );

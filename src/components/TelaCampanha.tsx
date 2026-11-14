@@ -1,61 +1,66 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
 import { TextReveal } from "../motion/TextReveal";
-import { WiggleShape } from "../motion/WiggleShape";
+import { Grafismo } from "../motion/Grafismo";
+import { BrandShape } from "../brand/BrandShape";
+import { cor, tipo } from "../brand/theme";
 import { fontFamily } from "../fonts";
-import tokens from "../../brand/tokens.json";
 
 type TelaCampanhaProps = {
-  corpo: string;
-  logo?: string;
+  chamada: string;
+  corpo?: string;
 };
 
-export const TelaCampanha: React.FC<TelaCampanhaProps> = ({ corpo }) => {
-  const linhas = corpo.split("\n\n");
-
+/**
+ * Campanha sazonal sem logo próprio (ex.: Novembro Azul). Texto à esquerda,
+ * grafismos agrupados à direita — nunca sobre o texto.
+ */
+export const TelaCampanha: React.FC<TelaCampanhaProps> = ({ chamada, corpo }) => {
   return (
-    <AbsoluteFill
-      style={{
-        backgroundColor: tokens.colors.azulAgibank.hex,
-        padding: tokens.video.safeMarginPx.value,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <WiggleShape amplitudeDeg={2} amplitudePx={6}>
-        <div
-          style={{
-            position: "absolute",
-            top: 90,
-            right: 100,
-            width: 120,
-            height: 120,
-            background: tokens.colors.verdeClaro.hex,
-            clipPath: "polygon(50% 0%, 100% 100%, 0% 100%)",
-          }}
-        />
-      </WiggleShape>
+    <AbsoluteFill style={{ backgroundColor: cor.azul }}>
+      <Grafismo x={1390} y={170} delayFrames={2} fase={0.3}>
+        <BrandShape nome="pentagon-05" largura={640} cor={cor.azulMedio} rotacao={-10} />
+      </Grafismo>
+      <Grafismo x={1250} y={560} delayFrames={6} fase={1.9}>
+        <BrandShape nome="quadrilateral-14" largura={330} cor={cor.verde} modo="outline" rotacao={16} />
+      </Grafismo>
+      <Grafismo x={1330} y={130} delayFrames={9} fase={3.3}>
+        <BrandShape nome="triangle-10" largura={120} cor={cor.branco} rotacao={-24} />
+      </Grafismo>
 
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 24 }}>
-        {linhas.map((linha, i) => (
-          <TextReveal key={linha} delayFrames={i * 10}>
+      <div style={{ position: "absolute", left: 140, top: 0, bottom: 0, width: 1060, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <TextReveal delayFrames={4} distancia={32}>
+          <h1
+            style={{
+              fontFamily,
+              fontWeight: 800,
+              fontSize: tipo.titulo.sizePx,
+              lineHeight: tipo.titulo.lineHeight,
+              color: cor.branco,
+              margin: 0,
+              letterSpacing: -1,
+            }}
+          >
+            {chamada}
+          </h1>
+        </TextReveal>
+        {corpo && (
+          <TextReveal delayFrames={16} distancia={18} style={{ marginTop: 44 }}>
             <p
               style={{
                 fontFamily,
-                fontWeight: i === 0 ? 700 : 400,
-                fontSize: i === 0
-                  ? tokens.typography.typeScaleVideo.subtitulo.sizePx
-                  : tokens.typography.typeScaleVideo.corpo.sizePx,
-                color: tokens.colors.branco.hex,
-                textAlign: "center",
-                maxWidth: "75%",
+                fontWeight: 400,
+                fontSize: 44,
+                lineHeight: 1.3,
+                color: cor.branco,
                 margin: 0,
+                maxWidth: 900,
               }}
             >
-              {linha}
+              {corpo}
             </p>
           </TextReveal>
-        ))}
+        )}
       </div>
     </AbsoluteFill>
   );

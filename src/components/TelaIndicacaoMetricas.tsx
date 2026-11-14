@@ -1,9 +1,11 @@
 import React from "react";
-import { AbsoluteFill, Img } from "remotion";
+import { AbsoluteFill, Img, staticFile } from "remotion";
 import { TextReveal } from "../motion/TextReveal";
-import { WiggleShape } from "../motion/WiggleShape";
+import { Grafismo } from "../motion/Grafismo";
+import { BrandShape } from "../brand/BrandShape";
+import { Logo } from "../brand/Logo";
+import { cor, raio } from "../brand/theme";
 import { fontFamily } from "../fonts";
-import tokens from "../../brand/tokens.json";
 
 type TelaIndicacaoMetricasProps = {
   corpo: string;
@@ -12,107 +14,131 @@ type TelaIndicacaoMetricasProps = {
   logo: string;
 };
 
-const NUMERO_REGEX = /^([\dXx]+%?)\s+(.*)$/;
+// Cores dos módulos de métrica (Brandbook p.50 + contraste p.38)
+const MODULOS = [
+  { fundo: cor.branco, numero: cor.azul, rotulo: cor.azulEscuro },
+  { fundo: cor.verde, numero: cor.azulEscuro, rotulo: cor.azulEscuro },
+  { fundo: cor.azulMedio, numero: cor.branco, rotulo: cor.branco },
+];
 
+/** "10 ganhadores no 2º trimestre" → ["10", "ganhadores no 2º trimestre"] (texto intacto). */
+const separar = (b: string): [string, string] => {
+  const m = b.match(/^(\S+)\s+(.*)$/);
+  return m ? [m[1], m[2]] : [b, ""];
+};
+
+const LARG_MOD = 240;
+const GAP_MOD = 18; // 7,5% do módulo (Brandbook p.52: 5–8%)
+
+/**
+ * Programa de Indicação — modelo da aplicação "evento" do Brandbook:
+ * foto em módulo grande + métricas em módulos coloridos com número em destaque.
+ */
 export const TelaIndicacaoMetricas: React.FC<TelaIndicacaoMetricasProps> = ({
   corpo,
   bullets,
   foto,
   logo,
 }) => {
-  const PADDING = tokens.video.safeMarginPx.value;
-
   return (
-    <AbsoluteFill style={{ backgroundColor: tokens.colors.branco.hex }}>
-      <AbsoluteFill style={{ flexDirection: "row" }}>
+    <AbsoluteFill style={{ backgroundColor: cor.azul }}>
+      {/* módulo de foto */}
+      <Grafismo x={1000} y={80} delayFrames={0} wiggle={false}>
         <div
           style={{
-            width: "52%",
-            padding: PADDING,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
+            width: 780,
+            height: 920,
+            borderRadius: raio,
+            overflow: "hidden",
           }}
         >
-          <TextReveal>
-            <Img src={logo} style={{ height: 56, marginBottom: 24 }} />
-          </TextReveal>
-
-          <TextReveal delayFrames={6}>
-            <p
-              style={{
-                fontFamily,
-                fontWeight: 400,
-                fontSize: tokens.typography.typeScaleVideo.corpo.sizePx,
-                color: tokens.colors.azulEscuro.hex,
-                maxWidth: "90%",
-                margin: 0,
-              }}
-            >
-              {corpo}
-            </p>
-          </TextReveal>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: 20, marginTop: 32 }}>
-            {bullets.map((bullet, i) => {
-              const match = bullet.match(NUMERO_REGEX);
-              return (
-                <TextReveal key={bullet} delayFrames={12 + i * 6}>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: 16 }}>
-                    <span
-                      style={{
-                        fontFamily,
-                        fontWeight: 800,
-                        fontSize: 56,
-                        color: tokens.colors.azulAgibank.hex,
-                        lineHeight: 1,
-                      }}
-                    >
-                      {match ? match[1] : "•"}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily,
-                        fontWeight: 400,
-                        fontSize: tokens.typography.typeScaleVideo.corpo.sizePx,
-                        color: tokens.colors.azulEscuro.hex,
-                      }}
-                    >
-                      {match ? match[2] : bullet}
-                    </span>
-                  </div>
-                </TextReveal>
-              );
-            })}
-          </div>
-        </div>
-
-        <div style={{ width: "48%", position: "relative", overflow: "hidden" }}>
           <Img
-            src={foto}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              borderRadius: tokens.shapes.cornerRadiusPxRange.default,
-            }}
+            src={staticFile(foto)}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
         </div>
-      </AbsoluteFill>
+      </Grafismo>
+      {/* forma interagindo com a foto (Brandbook p.48) */}
+      <Grafismo x={928} y={150} delayFrames={10} fase={1.4}>
+        <BrandShape nome="triangle-01" largura={120} cor={cor.verde} rotacao={-32} />
+      </Grafismo>
 
-      <WiggleShape amplitudeDeg={2} amplitudePx={5}>
-        <div
+      <div style={{ position: "absolute", left: 140, top: 236 }}>
+        <TextReveal distancia={0}>
+          <Logo arquivo={logo} versao="negativa" altura={118} />
+        </TextReveal>
+      </div>
+
+      {/* lead */}
+      <TextReveal
+        delayFrames={6}
+        distancia={28}
+        style={{ position: "absolute", left: 140, top: 404, width: 780 }}
+      >
+        <p
           style={{
-            position: "absolute",
-            top: 60,
-            left: PADDING,
-            width: 64,
-            height: 64,
-            background: tokens.colors.verde.hex,
-            borderRadius: tokens.shapes.cornerRadiusPxRange.default,
+            fontFamily,
+            fontWeight: 500,
+            fontSize: 44,
+            lineHeight: 1.2,
+            color: cor.branco,
+            margin: 0,
           }}
-        />
-      </WiggleShape>
+        >
+          {corpo}
+        </p>
+      </TextReveal>
+
+      {/* support: métricas — stagger com passos decrescentes */}
+      <div
+        style={{ position: "absolute", left: 140, top: 660, display: "flex", gap: GAP_MOD }}
+      >
+        {bullets.map((b, i) => {
+          const [numero, rotulo] = separar(b);
+          const m = MODULOS[i % MODULOS.length];
+          return (
+            <TextReveal key={b} delayFrames={18 + [0, 4, 7][i % 3]} distancia={20}>
+              <div
+                style={{
+                  width: LARG_MOD,
+                  height: 300,
+                  backgroundColor: m.fundo,
+                  borderRadius: raio,
+                  padding: "30px 26px",
+                  boxSizing: "border-box",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily,
+                    fontWeight: 800,
+                    fontSize: 96,
+                    lineHeight: 1,
+                    color: m.numero,
+                    letterSpacing: -2,
+                  }}
+                >
+                  {numero}
+                </div>
+                <div
+                  style={{
+                    fontFamily,
+                    fontWeight: 500,
+                    fontSize: 28,
+                    lineHeight: 1.2,
+                    color: m.rotulo,
+                  }}
+                >
+                  {rotulo}
+                </div>
+              </div>
+            </TextReveal>
+          );
+        })}
+      </div>
     </AbsoluteFill>
   );
 };
