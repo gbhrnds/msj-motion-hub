@@ -4,6 +4,7 @@ import { MSJComposition } from "./Composition";
 import { CatalogoFormas } from "./components/CatalogoFormas";
 import { ChecaFormas } from "./components/ChecaFormas";
 import { ExportaFigma } from "./export/ExportaFigma";
+import { ShowcasePropostas, SEGUNDOS_POR_PROPOSTA } from "./components/ShowcasePropostas";
 import tokens from "../brand/tokens.json";
 
 const fps = tokens.video.fps;
@@ -34,6 +35,15 @@ export const RemotionRoot: React.FC = () => {
         id="ChecaFormas"
         component={ChecaFormas}
         durationInFrames={1}
+        fps={fps}
+        width={tokens.video.resolution.width}
+        height={tokens.video.resolution.height}
+      />
+      {/* Etapa 3: as 3 propostas de relógio, 15s cada */}
+      <Composition
+        id="ShowcasePropostas"
+        component={ShowcasePropostas}
+        durationInFrames={Math.round(SEGUNDOS_POR_PROPOSTA * fps) * 3}
         fps={fps}
         width={tokens.video.resolution.width}
         height={tokens.video.resolution.height}
