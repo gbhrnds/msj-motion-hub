@@ -58,6 +58,11 @@ que está escrito) e do que a vinheta de Outubro/2026 faz. Complementa o
 - Alinhamento à esquerda predomina; centralizado só em telas de uma frase.
 - Muito espaço vazio. Texto de respiro em Regular/Light, tamanho moderado (~48–56px).
 
+- **Quebra de linha (decisão do usuário, 2026-11-14):** artigo, preposição,
+  conjunção ou número curto nunca fica no fim da linha (gruda na palavra
+  seguinte) e nunca há viúva (palavra sozinha na última linha). Aplicado por
+  `quebraBoa` com espaço não separável — o texto da redação não muda.
+
 ## 4. Logo
 
 - Logo da marca/evento sempre no **canto inferior direito** nas aplicações.
@@ -84,7 +89,7 @@ que está escrito) e do que a vinheta de Outubro/2026 faz. Complementa o
 | 2026-11-14 | Cinza claro `#F3F3F3` como fundo | respiro, buffer, destaques |
 | 2026-11-14 | Texto em azul Agibank sobre cinza claro (Brandbook pede azul escuro) | todas as telas cinza |
 | 2026-11-14 | Telas de respiro todas em cinza claro (outline amarelo sem logo / verde com logo) | respiro |
-| 2026-11-14 | Módulos do Uni Agi com canto de 30px (asset de módulos trazido pelo usuário; regra geral 12–17px) | tela Uni Agi |
+| 2026-11-14 | Módulos grandes (meia tela ou mais) com canto de 30px; módulos pequenos seguem 12–17px | Uni Agi e futuros módulos grandes |
 | 2026-11-14 | Coração amarelo sobre cinza (ícone decorativo, ao lado do texto azul) | fechamento Destaques |
 | 2026-11-14 | Foto recortada por forma oficial (pentagon-06) com a pessoa recortada saindo da forma | tela Indicação |
 | 2026-11-14 | Azul + amarelo **sem verde**, com amarelo predominante entre os grafismos (Brandbook p.47 pede amarelo em menor proporção e com verde) — precedente na vinheta de Outubro | Tela Destaques do Ciclo |

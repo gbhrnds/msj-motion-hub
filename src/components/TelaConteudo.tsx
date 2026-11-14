@@ -1,4 +1,5 @@
 import React from "react";
+import { quebraBoa } from "../brand/quebraDeLinha";
 import { AbsoluteFill } from "remotion";
 import { TextReveal } from "../motion/TextReveal";
 import { CamadaGrafismos } from "../motion/CamadaGrafismos";
@@ -98,7 +99,7 @@ export const TelaConteudo: React.FC<TelaConteudoProps> = ({
             margin: 0,
           }}
         >
-          {corpo}
+          {quebraBoa(corpo)}
         </p>
       </TextReveal>
 
@@ -117,7 +118,7 @@ export const TelaConteudo: React.FC<TelaConteudoProps> = ({
                 maxWidth: 600,
               }}
             >
-              {chamadaLista}
+              {quebraBoa(chamadaLista)}
             </h2>
           </TextReveal>
         )}
@@ -150,7 +151,7 @@ export const TelaConteudo: React.FC<TelaConteudoProps> = ({
                   color: cor.branco,
                 }}
               >
-                {b}
+                {quebraBoa(b)}
               </span>
             </div>
           </TextReveal>

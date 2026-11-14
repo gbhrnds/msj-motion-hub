@@ -1,4 +1,5 @@
 import React from "react";
+import { quebraBoa } from "../brand/quebraDeLinha";
 import { AbsoluteFill } from "remotion";
 import { TextReveal } from "../motion/TextReveal";
 import { CamadaGrafismos } from "../motion/CamadaGrafismos";
@@ -49,8 +50,11 @@ export const zonasAguarde = (comLogo: boolean): ZonaLivre[] => [
 
 /** Divide o título em [antes, destaque, depois] sem alterar o texto. */
 const partes = (t: string, d?: string): [string, string, string] => {
+  const q = quebraBoa(t); // mesmo comprimento: os índices continuam valendo
   const i = d ? t.indexOf(d) : -1;
-  return i < 0 || !d ? [t, "", ""] : [t.slice(0, i), d, t.slice(i + d.length)];
+  return i < 0 || !d
+    ? [q, "", ""]
+    : [q.slice(0, i), q.slice(i, i + d.length), q.slice(i + d.length)];
 };
 
 /** Tela de respiro: uma frase (Light + trecho Bold), outline se desenhando e logo MSJ. */

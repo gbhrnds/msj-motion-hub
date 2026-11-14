@@ -1,4 +1,5 @@
 import React from "react";
+import { quebraBoa } from "../brand/quebraDeLinha";
 import { AbsoluteFill } from "remotion";
 import { TextReveal } from "../motion/TextReveal";
 import { CamadaGrafismos } from "../motion/CamadaGrafismos";
@@ -35,7 +36,9 @@ export const TelaCampanha: React.FC<TelaCampanhaProps> = ({
   corpo,
   duracaoFrames,
 }) => {
-  const [leve, forte] = dividir(chamada);
+  const [l0] = dividir(chamada);
+  const q = quebraBoa(chamada); // mesmo comprimento do original
+  const [leve, forte] = [q.slice(0, l0.length), q.slice(l0.length)];
   return (
     <AbsoluteFill style={{ backgroundColor: cor.azul }}>
       <CamadaGrafismos
@@ -85,7 +88,7 @@ export const TelaCampanha: React.FC<TelaCampanhaProps> = ({
                 maxWidth: 860,
               }}
             >
-              {corpo}
+              {quebraBoa(corpo)}
             </p>
           </TextReveal>
         )}

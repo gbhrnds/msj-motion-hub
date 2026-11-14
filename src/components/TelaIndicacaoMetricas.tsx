@@ -1,4 +1,5 @@
 import React from "react";
+import { quebraBoa } from "../brand/quebraDeLinha";
 import { AbsoluteFill } from "remotion";
 import { TextReveal } from "../motion/TextReveal";
 import { CamadaGrafismos } from "../motion/CamadaGrafismos";
@@ -97,7 +98,7 @@ export const TelaIndicacaoMetricas: React.FC<TelaIndicacaoMetricasProps> = ({
             margin: 0,
           }}
         >
-          {corpo}
+          {quebraBoa(corpo)}
         </p>
       </TextReveal>
 
@@ -154,10 +155,9 @@ export const TelaIndicacaoMetricas: React.FC<TelaIndicacaoMetricasProps> = ({
                     fontSize: 28,
                     lineHeight: 1.2,
                     color: m.rotulo,
-                    textWrap: "balance",
                   }}
                 >
-                  {rotulo}
+                  {quebraBoa(rotulo)}
                 </div>
               </div>
             </TextReveal>

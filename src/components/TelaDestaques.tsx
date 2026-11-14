@@ -1,4 +1,5 @@
 import React from "react";
+import { quebraBoa } from "../brand/quebraDeLinha";
 import {
   AbsoluteFill,
   Easing,
@@ -244,10 +245,19 @@ export const TelaDestaques: React.FC<TelaDestaquesProps> = ({
             textWrap: "balance",
           }}
         >
-          {chamada.replace(/se destaca!$/, "")}
-          {chamada.endsWith("se destaca!") && (
-            <span style={{ fontWeight: 700 }}>se destaca!</span>
-          )}
+          {(() => {
+            const q = quebraBoa(chamada);
+            const d = "se destaca!";
+            const n = chamada.endsWith(d) ? q.length - d.length : q.length;
+            return (
+              <>
+                {q.slice(0, n)}
+                {n < q.length && (
+                  <span style={{ fontWeight: 700 }}>{q.slice(n)}</span>
+                )}
+              </>
+            );
+          })()}
         </div>
       )}
 
@@ -329,7 +339,7 @@ export const TelaDestaques: React.FC<TelaDestaquesProps> = ({
                 color: cor.azul,
               }}
             >
-              {fechamento}
+              {quebraBoa(fechamento)}
             </span>
             {icone && (
               <div style={{ scale: String(escalaCoracao) }}>

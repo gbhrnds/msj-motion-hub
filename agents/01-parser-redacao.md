@@ -80,6 +80,8 @@ duracao_base = 10 segundos
 + 2 segundos se houver foto + texto numérico (ex: percentuais, metas)
 máximo = 20 segundos (se ultrapassar, sinalizar ao usuário que o texto
          pode estar longo demais para o padrão da vinheta)
+exceção = telas com grid/créditos de nomes vão até 30 segundos (aprovado em
+          2026-11-14): calcule para os nomes subirem a ~80–100px/s)
 ```
 
 ### Telas de respiro
