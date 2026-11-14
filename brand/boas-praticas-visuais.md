@@ -37,7 +37,13 @@ que está escrito) e do que a vinheta de Outubro/2026 faz. Complementa o
 - **Outline emoldurando:** pode envolver um texto curto ou o número do relógio
   (citação p.48, contagem de Outubro), sempre com folga — nunca riscar por cima
   de letras nem cruzar foto.
-- **Transformações:** só rotacionar, espelhar, escalonar (p.46). Morph proibido.
+- **Transformações:** só rotacionar, espelhar, escalonar (p.46).
+- **Morph (pedido da redação e do usuário, 2026-11-14):** permitido **só entre
+  formas oficiais** (`MorphForma`). A forma fica parada como forma oficial a
+  maior parte do tempo e a troca é curta (≈20 frames, ease-in-out forte): as
+  formas intermediárias só existem em movimento. Para não mudar a composição,
+  a forma morfa para parceiras de proporção parecida, na mesma caixa, e só para
+  as que passam na checagem daquela tela (`parceirasSeguras`).
 - **Cores (p.47):** monocromático azul ou verde sobre branco; duas/três cores
   sobre branco ou azul; amarelo sempre em menor proporção (ver exceção §6).
 

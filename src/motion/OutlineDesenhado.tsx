@@ -3,6 +3,8 @@ import { Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import shapesData from "../shapesData.json";
 import type { ShapeName } from "../brand/BrandShape";
 import { motionTokens, strokeOutline } from "../brand/theme";
+import { MorphForma } from "./MorphForma";
+import { parceiras, useRefinado } from "./estilo";
 
 const cfg = motionTokens.outlineDesenhado;
 
@@ -53,6 +55,28 @@ export const OutlineDesenhado: React.FC<Props> = ({
   }
   const deslocamento = -(frame / fps) * cfg.voltasPorSegundo;
 
+  const refinado = useRefinado();
+  if (refinado) {
+    // o contorno que se desenha também troca de forma oficial no caminho
+    const lado = Math.max(largura, altura);
+    return (
+      <div style={{ width: largura, height: altura, position: "relative" }}>
+        <div style={{ position: "absolute", left: (largura - lado) / 2, top: (altura - lado) / 2 }}>
+          <MorphForma
+            formas={[nome, ...parceiras(nome)]}
+            tamanho={lado}
+            cor={cor}
+            modo="outline"
+            rotacao={rotacao}
+            segurar={Math.round(fps * 3)}
+            morfar={22}
+            atraso={-delayFrames - entrada}
+            trim={{ visivel, deslocamento }}
+          />
+        </div>
+      </div>
+    );
+  }
   return (
     <svg
       width={largura}

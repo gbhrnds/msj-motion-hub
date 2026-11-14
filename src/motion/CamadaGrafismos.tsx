@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
-import { BrandShape } from "../brand/BrandShape";
-import { conflitos, GrafismoSpec, ZonaLivre } from "../brand/grafismos";
+import { FormaViva } from "./FormaViva";
+import { conflitos, GrafismoSpec, parceirasSeguras, ZonaLivre } from "../brand/grafismos";
 import { Grafismo } from "./Grafismo";
 import { OutlineDesenhado } from "./OutlineDesenhado";
 
@@ -32,6 +32,7 @@ export const CamadaGrafismos: React.FC<Props> = ({
   mascaras = [],
 }) => {
   const erros = conflitos(formas, zonasLivres, comContador);
+  const seguras = parceirasSeguras(formas, zonasLivres, comContador);
   if (erros.length > 0) {
     throw new Error(
       `[${tela}] formas sobrepostas (proibido pelo Brandbook): ${erros.join(", ")}`,
@@ -60,13 +61,15 @@ export const CamadaGrafismos: React.FC<Props> = ({
               duracaoFrames={duracaoFrames}
             />
           ) : (
-            <BrandShape
+            <FormaViva
               nome={g.nome}
               largura={g.largura}
               cor={g.cor}
               modo={g.modo}
               rotacao={g.rotacao}
               espelhar={g.espelhar}
+              fase={g.fase}
+              alternativas={seguras[g.id]}
             />
           )}
           </div>

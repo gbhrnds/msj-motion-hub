@@ -28,7 +28,7 @@ curva?) e descarte o que é específico de UI:
    classifique cada elemento:
    - **Lead:** título ou número em destaque — entra primeiro, com o maior deslocamento.
    - **Support:** corpo, bullets, grid de nomes — entra logo depois, com deslocamento menor.
-   - **Decoration:** formas irregulares — só fade e o `WiggleShape`/`MorphingShape` contínuo; nunca disputam atenção com o lead.
+   - **Decoration:** formas irregulares — só fade e o `WiggleShape` contínuo e o `MorphForma` (morph entre formas oficiais, ver boas-praticas §1); nunca disputam atenção com o lead.
    - **Static:** fundo e logo — presentes desde o frame 0 da tela (no máximo um fade curto).
    Se duas coisas quiserem ser o lead, pare e avise: é problema de hierarquia de layout, não de motion.
 2. **Texto:** sempre via `TextReveal` (entrada única fade + translate). Depois

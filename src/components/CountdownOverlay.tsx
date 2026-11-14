@@ -9,6 +9,10 @@ import { fontFamily } from "../fonts";
 import { cor } from "../brand/theme";
 import { BrandShape } from "../brand/BrandShape";
 import { PainelContagem, formatarTempo } from "./PainelContagem";
+import { interpolate } from "remotion";
+import { useRefinado } from "../motion/estilo";
+import { MorphForma } from "../motion/MorphForma";
+import { easeMove, Numero } from "./contagem/base";
 
 type CountdownOverlayProps = {
   durationInSeconds: number; // Tempo total da fase de conteudo (ex: 600s para 10min)
@@ -35,7 +39,9 @@ export const CountdownOverlay: React.FC<CountdownOverlayProps> = ({
   const restante = Math.max(0, durationInSeconds - Math.floor(frame / fps));
   const inicioHero = Math.ceil((durationInSeconds - SEGUNDOS_HERO) * fps);
 
+  const refinado = useRefinado();
   if (frame < ocultarAteFrame) return null;
+  const noSegundo = frame - Math.ceil(Math.floor(frame / fps) * fps);
 
   if (frame >= inicioHero) {
     return (
@@ -52,8 +58,21 @@ export const CountdownOverlay: React.FC<CountdownOverlayProps> = ({
     );
   }
 
+  // refinado: nos 16 frames antes do painel final, uma forma azul sai do
+  // relógio e cresce morfando até cobrir a tela (o painel nasce dela)
+  const WIPE = 16;
+  const pw = refinado
+    ? easeMove(interpolate(frame, [inicioHero - WIPE, inicioHero], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }))
+    : 0;
+  const lado = 200 + 4800 * pw;
+
   return (
     <AbsoluteFill style={{ pointerEvents: "none" }}>
+      {pw > 0 && (
+        <div style={{ position: "absolute", left: 140 + (960 - 140) * pw - lado / 2, top: 60 + (540 - 60) * pw - lado / 2 }}>
+          <MorphForma formas={["quadrilateral-01", "pentagon-01"]} tamanho={lado} cor={cor.azul} segurar={0} morfar={WIPE} atraso={-(inicioHero - WIPE)} rotacao={-4 + 30 * pw} />
+        </div>
+      )}
       <div data-camada="moldura do contador" style={{ position: "absolute", left: -96, top: -92 }}>
         <BrandShape
           nome="quadrilateral-01"
@@ -75,7 +94,11 @@ export const CountdownOverlay: React.FC<CountdownOverlayProps> = ({
           fontVariantNumeric: "tabular-nums",
         }}
       >
-        {formatarTempo(restante)}
+        {refinado ? (
+          <Numero segundos={restante} noSegundo={noSegundo} tamanho={54} cor={cor.azul} rolar />
+        ) : (
+          formatarTempo(restante)
+        )}
       </div>
     </AbsoluteFill>
   );

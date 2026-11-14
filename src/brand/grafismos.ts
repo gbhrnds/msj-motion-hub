@@ -259,3 +259,49 @@ export const conflitos = (
   });
   return out;
 };
+
+/** Formas oficiais de proporção parecida (candidatas a morph sem mudar o "tamanho"). */
+export const parceiras = (nome: ShapeName, n = 3): ShapeName[] => {
+  const r = shapesData[nome].w / shapesData[nome].h;
+  return (Object.keys(shapesData) as ShapeName[])
+    .filter((k) => k !== nome)
+    .map((k) => ({ k, d: Math.abs(shapesData[k].w / shapesData[k].h - r) }))
+    .sort((a, b) => a.d - b.d)
+    .slice(0, n)
+    .map((x) => x.k);
+};
+
+/** A mesma forma trocada por outra oficial, na mesma caixa (mesmo centro e lado maior). */
+export const trocarForma = (g: GrafismoSpec, nome: ShapeName): GrafismoSpec => {
+  const f0 = shapesData[g.nome];
+  const alt = (g.largura * f0.h) / f0.w;
+  const lado = Math.max(g.largura, alt);
+  const f1 = shapesData[nome];
+  const larg = (lado * f1.w) / Math.max(f1.w, f1.h);
+  const h1 = (larg * f1.h) / f1.w;
+  return { ...g, nome, largura: larg, x: g.x + g.largura / 2 - larg / 2, y: g.y + alt / 2 - h1 / 2 };
+};
+
+/**
+ * Para o morph (Versão 3): de cada forma, só as parceiras que continuam
+ * respeitando a regra contra TODAS as variantes das outras formas da tela
+ * (original + parceiras), contra as zonas e contra a borda.
+ */
+export const parceirasSeguras = (
+  formas: GrafismoSpec[],
+  zonas: ZonaLivre[],
+  comContador = true,
+): Record<string, ShapeName[]> => {
+  const variantes = (g: GrafismoSpec) => [g, ...parceiras(g.nome).map((p) => trocarForma(g, p))];
+  return Object.fromEntries(
+    formas.map((g) => {
+      const outras = formas.filter((h) => h.id !== g.id);
+      const ok = parceiras(g.nome).filter((p) => {
+        const t = trocarForma(g, p);
+        if (conflitos([t], zonas, comContador).length) return false;
+        return outras.every((h) => variantes(h).every((v) => conflitos([t, v], [], false).length === 0));
+      });
+      return [g.id, ok];
+    }),
+  );
+};

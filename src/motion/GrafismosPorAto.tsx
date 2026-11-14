@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, Easing, interpolate, useCurrentFrame } from "remotion";
-import { BrandShape } from "../brand/BrandShape";
-import { conflitos, GrafismoSpec, ZonaLivre } from "../brand/grafismos";
+import { FormaViva } from "./FormaViva";
+import { conflitos, GrafismoSpec, parceirasSeguras, ZonaLivre } from "../brand/grafismos";
 import { motionTokens } from "../brand/theme";
 import { WiggleShape } from "./WiggleShape";
 
@@ -25,10 +25,11 @@ const lerpAngulo = (a: number, b: number, p: number) => {
   return a + d * p;
 };
 
-const Camada: React.FC<{ g: GrafismoSpec; opacidade: number; escala?: number }> = ({
+const Camada: React.FC<{ g: GrafismoSpec; opacidade: number; escala?: number; alternativas?: Parameters<typeof FormaViva>[0]["alternativas"] }> = ({
   g,
   opacidade,
   escala = 1,
+  alternativas = [],
 }) => (
   <div
     style={{
@@ -46,13 +47,15 @@ const Camada: React.FC<{ g: GrafismoSpec; opacidade: number; escala?: number }> 
       fase={g.fase ?? 0}
     >
       <div data-camada={`forma ${g.id} · ${g.nome}`} style={{ display: "contents" }}>
-        <BrandShape
+        <FormaViva
           nome={g.nome}
           largura={g.largura}
           cor={g.cor}
           modo={g.modo}
           rotacao={g.rotacao}
           espelhar={g.espelhar}
+          fase={g.fase}
+          alternativas={alternativas}
         />
       </div>
     </WiggleShape>
@@ -76,6 +79,7 @@ export const GrafismosPorAto: React.FC<{ tela: string; atos: Ato[] }> = ({
       throw new Error(`[${tela} ato ${i + 1}] formas sobrepostas: ${erros.join(", ")}`);
   });
 
+  const seguras = atos.map((a) => parceirasSeguras(a.formas, a.zonas));
   const frame = useCurrentFrame();
   const k = atos.reduce((acc, a, i) => (frame >= a.inicio ? i : acc), 0);
   const atual = atos[k];
@@ -99,11 +103,13 @@ export const GrafismosPorAto: React.FC<{ tela: string; atos: Ato[] }> = ({
           <Camada key={`${g.id}-de`} g={{ ...meio, cor: de.cor, nome: de.nome }} opacidade={1 - pMov} />,
         );
       }
-      camadas.push(<Camada key={g.id} g={meio} opacidade={de.cor !== g.cor || de.nome !== g.nome ? pMov : 1} />);
+      camadas.push(
+        <Camada key={g.id} g={meio} opacidade={de.cor !== g.cor || de.nome !== g.nome ? pMov : 1} alternativas={pMov >= 1 ? seguras[k][g.id] : []} />,
+      );
     } else {
       const te = t - (g.delayFrames ?? 0) - (anterior ? mov.durationFrames / 2 : 0);
       const p = easeEnt(interpolate(te, [0, ent.durationFrames], [0, 1], clamp));
-      camadas.push(<Camada key={g.id} g={g} opacidade={p} escala={lerp(ent.scaleFrom, 1, p)} />);
+      camadas.push(<Camada key={g.id} g={g} opacidade={p} escala={lerp(ent.scaleFrom, 1, p)} alternativas={seguras[k][g.id]} />);
     }
   }
   for (const g of anterior?.formas ?? []) {

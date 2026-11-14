@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
-import { conflitos, girar180, GrafismoSpec, ZonaLivre } from "../brand/grafismos";
+import { conflitos, girar180, GrafismoSpec, parceirasSeguras, trocarForma, ZonaLivre } from "../brand/grafismos";
 import { cor } from "../brand/theme";
 import { fontFamily } from "../fonts";
 import * as Painel from "./PainelContagem";
@@ -39,6 +39,18 @@ const CASOS: Caso[] = [
   { nome: "Campanha", formas: Campanha.FORMAS, zonas: Campanha.ZONAS, contador: true },
 ];
 
+/** Versão 3: cada forma trocada pela i-ésima parceira segura (as outras em qualquer variante já foram testadas). */
+const CASOS_MORPH: Caso[] = [0, 1].flatMap((i) =>
+  CASOS.map((c) => {
+    const seg = parceirasSeguras(c.formas, c.zonas, c.contador);
+    return {
+      ...c,
+      nome: `${c.nome} · morph ${i + 1}`,
+      formas: c.formas.map((g) => (seg[g.id][i] ? trocarForma(g, seg[g.id][i]) : g)),
+    };
+  }),
+);
+
 /**
  * QA automático das regras de forma (brand/boas-praticas-visuais.md):
  * sem sobreposição, sem invadir texto/logo/contador (+ respiro), sem corte na borda.
@@ -48,15 +60,15 @@ export const ChecaFormas: React.FC = () => (
   <AbsoluteFill
     style={{ backgroundColor: cor.branco, padding: 80, fontFamily }}
   >
-    <h1 style={{ color: cor.azul, margin: "0 0 40px", fontSize: 48 }}>
+    <h1 style={{ color: cor.azul, margin: "0 0 16px", fontSize: 32 }}>
       Checagem de formas
     </h1>
-    {CASOS.map((c) => {
+    {[...CASOS, ...CASOS_MORPH].map((c) => {
       const erros = conflitos(c.formas, c.zonas, c.contador);
       return (
         <div
           key={c.nome}
-          style={{ fontSize: 28, margin: "10px 0", color: cor.azulEscuro }}
+          style={{ fontSize: 17, margin: "3px 0", color: cor.azulEscuro }}
         >
           <b style={{ color: erros.length ? "#EF0000" : "#008A00" }}>
             {erros.length ? "FALHA" : "OK"}

@@ -1,6 +1,7 @@
 import React from "react";
 import { useCurrentFrame, spring, useVideoConfig } from "remotion";
 import { motionTokens } from "../brand/theme";
+import { useRefinado } from "./estilo";
 
 type TextRevealProps = {
   children: React.ReactNode;
@@ -33,6 +34,15 @@ export const TextReveal: React.FC<TextRevealProps> = ({
     config: { damping: 200, stiffness: 120 },
   });
 
+  const refinado = useRefinado();
+  if (refinado && distancia > 0) {
+    // revelação por máscara: o bloco sobe de dentro da própria caixa
+    return (
+      <div style={{ overflow: "hidden", paddingBottom: "0.12em", marginBottom: "-0.12em", ...style }}>
+        <div style={{ translate: `0 ${(1 - progress) * 105}%` }}>{children}</div>
+      </div>
+    );
+  }
   return (
     <div
       style={{

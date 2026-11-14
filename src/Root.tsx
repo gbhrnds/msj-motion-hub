@@ -7,7 +7,7 @@ import { ExportaFigma } from "./export/ExportaFigma";
 import { duracaoReview } from "./versoes/VersaoBase";
 import { V1NuDay } from "./versoes/v1/V1NuDay";
 import { V2Modulos } from "./versoes/v2/V2Modulos";
-import { ShowcasePropostas, SEGUNDOS_POR_PROPOSTA } from "./components/ShowcasePropostas";
+import { V3Refinado } from "./versoes/v3/V3Refinado";
 import tokens from "../brand/tokens.json";
 
 const fps = tokens.video.fps;
@@ -59,11 +59,10 @@ export const RemotionRoot: React.FC = () => {
         width={tokens.video.resolution.width}
         height={tokens.video.resolution.height}
       />
-      {/* Etapa 3 (1ª tentativa): só as 3 propostas de relógio */}
       <Composition
-        id="ShowcasePropostas"
-        component={ShowcasePropostas}
-        durationInFrames={Math.round(SEGUNDOS_POR_PROPOSTA * fps) * 3}
+        id="Versao3-MotionRefinado"
+        component={V3Refinado}
+        durationInFrames={duracaoReview(fps)}
         fps={fps}
         width={tokens.video.resolution.width}
         height={tokens.video.resolution.height}

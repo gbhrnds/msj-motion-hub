@@ -5,6 +5,8 @@ import { cor } from "../brand/theme";
 import { Logo } from "../brand/Logo";
 import { CamadaGrafismos } from "../motion/CamadaGrafismos";
 import { TextReveal } from "../motion/TextReveal";
+import { useRefinado } from "../motion/estilo";
+import { Numero } from "./contagem/base";
 import type { GrafismoSpec, ZonaLivre } from "../brand/grafismos";
 
 type Props = {
@@ -60,6 +62,8 @@ export const PainelContagem: React.FC<Props> = ({
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const restante = Math.max(0, segundosNoInicio - Math.floor(frame / fps));
+  const refinado = useRefinado();
+  const noSegundo = frame - Math.ceil(Math.floor(frame / fps) * fps);
 
   return (
     <AbsoluteFill style={{ backgroundColor: cor.azul }}>
@@ -85,7 +89,11 @@ export const PainelContagem: React.FC<Props> = ({
               letterSpacing: -2,
             }}
           >
-            {formatarTempo(restante)}
+            {refinado ? (
+              <Numero segundos={restante} noSegundo={noSegundo} tamanho={190} cor={cor.branco} rolar />
+            ) : (
+              formatarTempo(restante)
+            )}
           </div>
         </TextReveal>
       </AbsoluteFill>

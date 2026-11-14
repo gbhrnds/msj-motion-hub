@@ -45,6 +45,8 @@ type Props = {
   /** Rotação contínua lenta (graus por segundo, 0 = parada). */
   giro?: number;
   fps?: number;
+  /** Trim path (outline que se desenha): fração visível e deslocamento. */
+  trim?: { visivel: number; deslocamento: number };
   style?: React.CSSProperties;
 };
 
@@ -65,6 +67,7 @@ export const MorphForma: React.FC<Props> = ({
   rotacao = 0,
   giro = 0,
   fps = 23.976,
+  trim,
   style,
 }) => {
   const frame = useCurrentFrame() + atraso;
@@ -93,20 +96,26 @@ export const MorphForma: React.FC<Props> = ({
       }}
     >
       {caminho ? (
-        <path d={caminho} fill={outline ? "none" : cor} stroke={outline ? cor : "none"} strokeWidth={sw} strokeLinejoin="round" />
+        <path d={caminho} fill={outline ? "none" : cor} stroke={outline ? cor : "none"} strokeWidth={sw} strokeLinejoin="round" strokeLinecap="round" {...tracos(trim)} />
       ) : (
-        <FormaNormalizada nome={p >= 1 ? para : de} cor={cor} outline={outline} sw={sw} />
+        <FormaNormalizada nome={p >= 1 ? para : de} cor={cor} outline={outline} sw={sw} trim={trim} />
       )}
     </svg>
   );
 };
 
+const tracos = (trim?: { visivel: number; deslocamento: number }) =>
+  trim
+    ? { pathLength: 1, strokeDasharray: `${trim.visivel} ${1 - trim.visivel + 0.0001}`, strokeDashoffset: trim.deslocamento }
+    : {};
+
 /** A forma oficial (path original), na mesma caixa normalizada do morph. */
-const FormaNormalizada: React.FC<{ nome: ShapeName; cor: string; outline: boolean; sw: number }> = ({
+const FormaNormalizada: React.FC<{ nome: ShapeName; cor: string; outline: boolean; sw: number; trim?: { visivel: number; deslocamento: number } }> = ({
   nome,
   cor,
   outline,
   sw,
+  trim,
 }) => {
   const f = shapesData[nome];
   const k = 100 / Math.max(f.w, f.h);
@@ -118,6 +127,8 @@ const FormaNormalizada: React.FC<{ nome: ShapeName; cor: string; outline: boolea
       stroke={outline ? cor : "none"}
       strokeWidth={sw / k}
       strokeLinejoin="round"
+      strokeLinecap="round"
+      {...tracos(trim)}
     />
   );
 };

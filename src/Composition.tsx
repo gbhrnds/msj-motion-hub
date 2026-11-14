@@ -11,7 +11,7 @@ import { cor } from "./brand/theme";
 import { midia, paragrafos, roteiro, Tela } from "./dados";
 import { LOGO_MSJ } from "./dados";
 
-const renderTela = (
+export const renderTela = (
   tela: Tela,
   duracaoFrames: number,
   repeticao: number,
