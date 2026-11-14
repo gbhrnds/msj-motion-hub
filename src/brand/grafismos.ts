@@ -19,6 +19,8 @@ export type GrafismoSpec = {
   desenhar?: boolean;
   /** Outline que emoldura um texto curto (Brandbook p.48): dispensa a checagem de zona, não a de forma. */
   moldura?: boolean;
+  /** Forma grande de canto que sai pelo quadro (aprovado no Figma, 2026-11-14). Pequenas ficam inteiras. */
+  sangra?: boolean;
 };
 
 /** Retângulo livre: texto, logo, foto, módulo... onde nenhuma forma pode entrar. */
@@ -36,33 +38,114 @@ type P = [number, number];
 const FOLGA = 18;
 /** "Máscara" ao redor de texto/logo: respiro mínimo entre forma e conteúdo. */
 export const RESPIRO_CONTEUDO = 40;
-/** Formas ficam inteiras dentro do quadro (decisão do usuário: sem corte na borda). */
-export const MARGEM_QUADRO = 48;
+/** Formas pequenas ficam inteiras e afastadas da borda; só as marcadas com `sangra` saem do quadro. */
+export const MARGEM_QUADRO = 32;
 
 const alturaDe = (g: GrafismoSpec) => {
   const f = shapesData[g.nome];
   return (g.largura * f.h) / f.w;
 };
 
-/** Quatro cantos da caixa da forma, rotacionada em torno do centro (como o CSS faz). */
-const cantos = (g: GrafismoSpec, folga: number): P[] => {
+/** Pontos do contorno do path (vértices + curvas amostradas). */
+const pontosDoPath = (d: string): P[] => {
+  const tokens = d.match(/[a-zA-Z]|-?\d*\.?\d+(?:e-?\d+)?/g) ?? [];
+  const pts: P[] = [];
+  let cmd = "";
+  let x = 0;
+  let y = 0;
+  let i = 0;
+  const n = () => parseFloat(tokens[i++]);
+  while (i < tokens.length) {
+    if (/[a-zA-Z]/.test(tokens[i])) cmd = tokens[i++];
+    const rel = cmd === cmd.toLowerCase();
+    switch (cmd.toUpperCase()) {
+      case "M":
+      case "L": {
+        const nx = n() + (rel ? x : 0);
+        const ny = n() + (rel ? y : 0);
+        x = nx;
+        y = ny;
+        pts.push([x, y]);
+        if (cmd === "M") cmd = "L";
+        if (cmd === "m") cmd = "l";
+        break;
+      }
+      case "H":
+        x = n() + (rel ? x : 0);
+        pts.push([x, y]);
+        break;
+      case "V":
+        y = n() + (rel ? y : 0);
+        pts.push([x, y]);
+        break;
+      case "C": {
+        const c = [n(), n(), n(), n(), n(), n()];
+        const ox = rel ? x : 0;
+        const oy = rel ? y : 0;
+        const p0: P = [x, y];
+        const p1: P = [c[0] + ox, c[1] + oy];
+        const p2: P = [c[2] + ox, c[3] + oy];
+        const p3: P = [c[4] + ox, c[5] + oy];
+        // amostra a curva real (não os pontos de controle) para o contorno ficar justo
+        for (let t = 0.125; t <= 1.0001; t += 0.125) {
+          const u = 1 - t;
+          const b = [u * u * u, 3 * u * u * t, 3 * u * t * t, t * t * t];
+          pts.push([
+            b[0] * p0[0] + b[1] * p1[0] + b[2] * p2[0] + b[3] * p3[0],
+            b[0] * p0[1] + b[1] * p1[1] + b[2] * p2[1] + b[3] * p3[1],
+          ]);
+        }
+        x = p3[0];
+        y = p3[1];
+        break;
+      }
+      case "Z":
+        break;
+      default:
+        i++;
+    }
+  }
+  return pts;
+};
+
+const fecho = (pts: P[]): P[] => {
+  const p = [...pts].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const cruz = (o: P, a: P, b: P) =>
+    (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const inf: P[] = [];
+  for (const q of p) {
+    while (inf.length >= 2 && cruz(inf[inf.length - 2], inf[inf.length - 1], q) <= 0) inf.pop();
+    inf.push(q);
+  }
+  const sup: P[] = [];
+  for (const q of [...p].reverse()) {
+    while (sup.length >= 2 && cruz(sup[sup.length - 2], sup[sup.length - 1], q) <= 0) sup.pop();
+    sup.push(q);
+  }
+  return [...inf.slice(0, -1), ...sup.slice(0, -1)];
+};
+
+const FECHOS = Object.fromEntries(
+  Object.entries(shapesData).map(([k, v]) => [k, fecho(pontosDoPath(v.d))]),
+) as Record<ShapeName, P[]>;
+
+/** Contorno (fecho convexo) da forma já posicionada, girada e espelhada como no CSS. */
+export const contorno = (g: GrafismoSpec): P[] => {
+  const f = shapesData[g.nome];
+  const k = g.largura / f.w;
   const h = alturaDe(g);
   const cx = g.x + g.largura / 2;
   const cy = g.y + h / 2;
   const a = ((g.rotacao ?? 0) * Math.PI) / 180;
-  const hw = g.largura / 2 + folga / 2;
-  const hh = h / 2 + folga / 2;
-  return (
-    [
-      [-hw, -hh],
-      [hw, -hh],
-      [hw, hh],
-      [-hw, hh],
-    ] as P[]
-  ).map(([px, py]) => [
-    cx + px * Math.cos(a) - py * Math.sin(a),
-    cy + px * Math.sin(a) + py * Math.cos(a),
-  ]);
+  return FECHOS[g.nome].map(([px, py]) => {
+    let lx = px * k - g.largura / 2;
+    const ly = py * k - h / 2;
+    if (g.espelhar) lx = -lx;
+    return [
+      cx + lx * Math.cos(a) - ly * Math.sin(a),
+      cy + lx * Math.sin(a) + ly * Math.cos(a),
+    ];
+  });
 };
 
 const retangulo = (z: ZonaLivre, r = 0): P[] => [
@@ -72,25 +155,54 @@ const retangulo = (z: ZonaLivre, r = 0): P[] => [
   [z.x - r, z.y + z.altura + r],
 ];
 
-/** Teste de eixo separador (SAT) entre dois polígonos convexos. */
-const intersecta = (a: P[], b: P[]) => {
+/** Teste de eixo separador (SAT): true se os polígonos convexos ficam a menos de `folga`. */
+const intersecta = (a: P[], b: P[], folga = 0) => {
   for (const poly of [a, b]) {
     for (let i = 0; i < poly.length; i++) {
       const [x1, y1] = poly[i];
       const [x2, y2] = poly[(i + 1) % poly.length];
-      const nx = y2 - y1;
-      const ny = x1 - x2;
+      const len = Math.hypot(x2 - x1, y2 - y1) || 1;
+      const nx = (y2 - y1) / len;
+      const ny = (x1 - x2) / len;
       const proj = (p: P[]) => p.map(([x, y]) => x * nx + y * ny);
       const pa = proj(a);
       const pb = proj(b);
       if (
-        Math.max(...pa) <= Math.min(...pb) ||
-        Math.max(...pb) <= Math.min(...pa)
+        Math.max(...pa) + folga <= Math.min(...pb) ||
+        Math.max(...pb) + folga <= Math.min(...pa)
       )
         return false;
     }
   }
   return true;
+};
+
+/** Parte visível de um polígono convexo (recorte pelo quadro, Sutherland–Hodgman). */
+const noQuadro = (poly: P[]): P[] => {
+  const bordas: [(p: P) => number][] = [
+    [(p) => p[0]],
+    [(p) => tela.largura - p[0]],
+    [(p) => p[1]],
+    [(p) => tela.altura - p[1]],
+  ];
+  let out = poly;
+  for (const [dist] of bordas) {
+    const ent = out;
+    out = [];
+    for (let i = 0; i < ent.length; i++) {
+      const a = ent[i];
+      const b = ent[(i + 1) % ent.length];
+      const da = dist(a);
+      const db = dist(b);
+      if (da >= 0) out.push(a);
+      if (da >= 0 !== db >= 0) {
+        const t = da / (da - db);
+        out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]);
+      }
+    }
+    if (!out.length) return out;
+  }
+  return out;
 };
 
 /** Gira o layout 180° (rotação permitida) mantendo as coordenadas reais na tela. */
@@ -116,24 +228,30 @@ export const conflitos = (
     : zonas;
   const out: string[] = [];
   formas.forEach((a, i) => {
-    const ca = cantos(a, FOLGA);
-    const fora = cantos(a, 0).some(
+    const ca = contorno(a);
+    const va = noQuadro(ca);
+    const fora = ca.some(
       ([x, y]) =>
         x < MARGEM_QUADRO ||
         y < MARGEM_QUADRO ||
         x > tela.largura - MARGEM_QUADRO ||
         y > tela.altura - MARGEM_QUADRO,
     );
-    if (fora) out.push(`${a.id} cortada pela borda do quadro`);
+    if (fora && !a.sangra) out.push(`${a.id} cortada pela borda do quadro`);
     formas.slice(i + 1).forEach((b) => {
-      if (intersecta(ca, cantos(b, 0))) out.push(`${a.id} × ${b.id}`);
+      // só conta o que aparece: formas que sangram podem se cruzar fora do quadro
+      const vb = noQuadro(contorno(b));
+      if (va.length > 2 && vb.length > 2 && intersecta(va, vb, FOLGA))
+        out.push(`${a.id} × ${b.id}`);
     });
     if (a.moldura) return;
     todasZonas.forEach((z) => {
       if (
+        va.length > 2 &&
         intersecta(
-          cantos(a, FOLGA),
-          retangulo(z, z.id === "contador" ? 0 : RESPIRO_CONTEUDO),
+          va,
+          retangulo(z),
+          z.id === "contador" ? 0 : RESPIRO_CONTEUDO,
         )
       )
         out.push(`${a.id} × zona ${z.id}`);

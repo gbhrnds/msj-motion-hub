@@ -10,7 +10,8 @@
   },
   "tela_04": {
     "foto": "projects/2025-11_abertura/fotos/PI_A0001-22.jpg",
-    "logo_programa": "brand/logos/programa-de-indicacao-positive.svg"
+    "logo_programa": "brand/logos/programa-de-indicacao-positive.svg",
+    "foto_recorte": "projects/2025-11_abertura/fotos/PI_A0001-22_recorte.png"
   },
   "tela_06": {
     "logo_uni_agi": "brand/logos/uni-agi-positive.svg"

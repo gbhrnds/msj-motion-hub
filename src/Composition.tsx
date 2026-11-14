@@ -30,6 +30,7 @@ type Tela = {
     gridNomes?: string[] | null;
   };
   fundoHex?: string;
+  layout?: { corOutline?: keyof typeof cor; destaque?: string };
 };
 
 const roteiro = roteiroData as unknown as { telas: Tela[] };
@@ -62,21 +63,20 @@ const renderTela = (
         />
       );
     case "tela_aguarde": {
-      const cinza =
-        tela.fundoHex?.toUpperCase() === cor.cinzaClaro.toUpperCase();
       const n = Number(tela.id.replace(/\D/g, ""));
       return (
         <TelaAguarde
           id={tela.id}
           duracaoFrames={duracaoFrames}
           titulo={tela.textos.titulo ?? ""}
-          variante={cinza ? "cinza" : "azul"}
+          destaque={tela.layout?.destaque}
+          corOutline={cor[tela.layout?.corOutline ?? "verde"]}
           logoMsj={
             tela.midia.logo
               ? midia(tela.midia.logo as string, tela.id)
               : undefined
           }
-          // telas repetidas (01/05, 03/07) e voltas do loop alternam a rotação dos grafismos
+          // telas repetidas (01/05, 03/07) e voltas do loop alternam a rotação do outline
           girarGrafismos={(Math.floor(n / 4) + repeticao) % 2 === 1}
         />
       );
@@ -104,6 +104,7 @@ const renderTela = (
           corpo={tela.textos.corpo ?? ""}
           bullets={tela.textos.bullets}
           foto={tela.midia.foto ?? ""}
+          recorte={midia("foto_recorte", tela.id) || undefined}
           logo={midia(tela.midia.logo as string, tela.id)}
         />
       );

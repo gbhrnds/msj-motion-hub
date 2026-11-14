@@ -6,7 +6,7 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { CamadaGrafismos } from "../motion/CamadaGrafismos";
+import { GrafismosPorAto } from "../motion/GrafismosPorAto";
 import { Logo } from "../brand/Logo";
 import { Icone } from "../brand/Icone";
 import { cor, motionTokens } from "../brand/theme";
@@ -54,69 +54,48 @@ const DESTAQUES = {
 };
 
 // Fundo cinza + azul e amarelo, amarelo predominante (exceção aprovada).
-// Todas as formas ficam nas bordas, fora de logos, frases e da janela de nomes.
-export const FORMAS: GrafismoSpec[] = [
-  {
-    id: "y1",
-    nome: "triangle-02",
-    x: 110,
-    y: 330,
-    largura: 80,
-    cor: cor.amarelo,
-    rotacao: 10,
-    delayFrames: 2,
-    fase: 0.3,
-  },
-  {
-    id: "b1",
-    nome: "quadrilateral-16",
-    x: 130,
-    y: 690,
-    largura: 64,
-    cor: cor.azul,
-    rotacao: -12,
-    delayFrames: 6,
-    fase: 1.1,
-  },
-  {
-    id: "y2",
-    nome: "quadrilateral-05",
-    x: 1760,
-    y: 300,
-    largura: 52,
-    cor: cor.amarelo,
-    rotacao: 14,
-    delayFrames: 4,
-    fase: 2.0,
-  },
-  {
-    id: "y3",
-    nome: "pentagon-05",
-    x: 1730,
-    y: 720,
-    largura: 90,
-    cor: cor.amarelo,
-    rotacao: -8,
-    delayFrames: 9,
-    fase: 2.9,
-  },
-  {
-    id: "y4",
-    nome: "triangle-09",
-    x: 720,
-    y: 90,
-    largura: 60,
-    cor: cor.amarelo,
-    modo: "outline",
-    rotacao: 20,
-    delayFrames: 11,
-    fase: 3.6,
-  },
+// Arranjos de cada ato ajustados no Figma (2026-11-14): formas grandes saindo
+// pelos cantos, sempre longe de logos, frases e da janela de nomes.
+const am = cor.amarelo;
+const az = cor.azul;
+export const FORMAS_ATO1: GrafismoSpec[] = [
+  { id: "b1", nome: "quadrilateral-16", x: -166, y: 363, largura: 503, cor: am, rotacao: -167.3, sangra: true, fase: 1.1 },
+  { id: "y1", nome: "triangle-02", x: 176, y: 321, largura: 80, cor: am, rotacao: 52.1, delayFrames: 4, fase: 0.3 },
+  { id: "y2", nome: "quadrilateral-05", x: 1726, y: 642, largura: 82, cor: az, rotacao: -134.8, delayFrames: 6, fase: 2.0 },
+  { id: "y3", nome: "pentagon-05", x: 1457, y: 755, largura: 557, cor: am, rotacao: -9.6, sangra: true, delayFrames: 2, fase: 2.9 },
+];
+export const FORMAS_ATO2: GrafismoSpec[] = [
+  { id: "y1", nome: "triangle-02", x: 1486, y: 890, largura: 92, cor: am, rotacao: -7.6, fase: 0.3 },
+  { id: "b1", nome: "quadrilateral-16", x: 1182, y: 947, largura: 334, cor: az, rotacao: 88.8, sangra: true, fase: 1.1 },
+  { id: "y2", nome: "quadrilateral-05", x: 1280, y: 856, largura: 74, cor: am, rotacao: -134, fase: 2.0 },
+  { id: "y3", nome: "pentagon-05", x: 1503, y: 875, largura: 526, cor: am, rotacao: -6.1, sangra: true, fase: 2.9 },
+];
+export const FORMAS_ATO3: GrafismoSpec[] = [
+  { id: "n1", nome: "quadrilateral-05", x: 1622, y: 865, largura: 247, cor: am, rotacao: 39.9, sangra: true, fase: 0.6 },
+  { id: "n2", nome: "pentagon-05", x: -250, y: 511, largura: 372, cor: am, rotacao: 0, sangra: true, delayFrames: 3, fase: 1.7 },
+  { id: "n3", nome: "triangle-07", x: 39, y: 488, largura: 87, cor: am, rotacao: -166.4, delayFrames: 6, fase: 2.6 },
+  { id: "n4", nome: "triangle-02", x: 1806, y: 837, largura: 70, cor: am, rotacao: -8.6, delayFrames: 8, fase: 3.4 },
+];
+export const FORMAS_ATO4: GrafismoSpec[] = [
+  { id: "b1", nome: "quadrilateral-16", x: 347, y: 934, largura: 372, cor: am, rotacao: -167.3, sangra: true, fase: 1.1 },
+  { id: "y1", nome: "triangle-02", x: 600, y: 903, largura: 59, cor: am, rotacao: 52.1, delayFrames: 4, fase: 0.3 },
+  { id: "y2", nome: "quadrilateral-05", x: 1825, y: 370, largura: 82, cor: az, rotacao: -134.8, sangra: true, delayFrames: 6, fase: 2.0 },
+  { id: "y3", nome: "pentagon-05", x: 1556, y: 483, largura: 557, cor: am, rotacao: -9.6, sangra: true, delayFrames: 2, fase: 2.9 },
 ];
 
-export const ZONAS: ZonaLivre[] = [
-  { id: "nomes", ...JANELA },
-  { id: "logos-canto", x: 1250, y: 60, largura: 560, altura: 120 },
+const LOGOS_CANTO: ZonaLivre = { id: "logos-canto", x: 1300, y: 70, largura: 490, altura: 96 };
+export const ZONAS_ATO1: ZonaLivre[] = [
+  { id: "logo-jeito", x: 733, y: 395, largura: 454, altura: 150 },
+  { id: "frase", x: 533, y: 600, largura: 855, altura: 125 },
+];
+export const ZONAS_ATO2: ZonaLivre[] = [
+  { id: "logo-destaques", x: 673, y: 420, largura: 574, altura: 240 },
+  LOGOS_CANTO,
+];
+export const ZONAS_ATO3: ZonaLivre[] = [{ id: "nomes", ...JANELA }, LOGOS_CANTO];
+export const ZONAS_ATO4: ZonaLivre[] = [
+  { id: "fechamento", x: 385, y: 497, largura: 1080, altura: 86 },
+  LOGOS_CANTO,
 ];
 
 const mover = (a: number, b: number, p: number) => a + (b - a) * p;
@@ -236,10 +215,14 @@ export const TelaDestaques: React.FC<TelaDestaquesProps> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: cor.cinzaClaro }}>
-      <CamadaGrafismos
+      <GrafismosPorAto
         tela="tela_destaques"
-        formas={FORMAS}
-        zonasLivres={ZONAS}
+        atos={[
+          { inicio: 0, formas: FORMAS_ATO1, zonas: ZONAS_ATO1 },
+          { inicio: s(T.jeitoParaCanto), formas: FORMAS_ATO2, zonas: ZONAS_ATO2 },
+          { inicio: s(T.destaquesParaCanto), formas: FORMAS_ATO3, zonas: ZONAS_ATO3 },
+          { inicio: fimNomes, formas: FORMAS_ATO4, zonas: ZONAS_ATO4 },
+        ]}
       />
 
       {/* Ato 1 — frase (Regular + destaque Bold no final) */}
@@ -304,7 +287,7 @@ export const TelaDestaques: React.FC<TelaDestaquesProps> = ({
                   alignItems: "center",
                   justifyContent: "center",
                   fontFamily,
-                  fontWeight: 600,
+                  fontWeight: 300,
                   fontSize: 28,
                   color: cor.azul,
                   whiteSpace: "nowrap",
@@ -350,7 +333,7 @@ export const TelaDestaques: React.FC<TelaDestaquesProps> = ({
             </span>
             {icone && (
               <div style={{ scale: String(escalaCoracao) }}>
-                <Icone arquivo={icone} cor={cor.azul} tamanho={76} />
+                <Icone arquivo={icone} cor={cor.amarelo} tamanho={76} />
               </div>
             )}
           </div>

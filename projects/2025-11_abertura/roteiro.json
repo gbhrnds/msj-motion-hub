@@ -48,8 +48,13 @@
         "dadoPendente": false,
         "requerComposicaoExtra": false
       },
-      "fundoHex": "#0064F5",
-      "observacoesOriginais": "[ usar morphing shape decorativo ] — sem logo: intencional (confirmado pelo usuário), o nome do evento já está na frase, fundo azul Agibank"
+      "fundoHex": "#F3F3F3",
+      "observacoesOriginais": "[ usar morphing shape decorativo ] — sem logo: intencional (confirmado pelo usuário), o nome do evento já está na frase, fundo azul Agibank",
+      "layout": {
+        "corOutline": "amarelo",
+        "destaque": "Momento Sempre Juntos",
+        "origem": "ajuste do usuário no Figma, 2026-11-14 (fundo cinza, outline + máscara no texto)"
+      }
     },
     {
       "id": "tela_02",
@@ -165,7 +170,12 @@
         "requerComposicaoExtra": false
       },
       "fundoHex": "#F3F3F3",
-      "observacoesOriginais": "[ logo MSJ ] [ usar morphing shape decorativo ] — confirmado pelo usuário: fundo cinza claro (#F3F3F3) + logo_msj_positivo"
+      "observacoesOriginais": "[ logo MSJ ] [ usar morphing shape decorativo ] — confirmado pelo usuário: fundo cinza claro (#F3F3F3) + logo_msj_positivo",
+      "layout": {
+        "corOutline": "verde",
+        "destaque": "estarmos juntos...",
+        "origem": "ajuste do usuário no Figma, 2026-11-14 (fundo cinza, outline + máscara no texto)"
+      }
     },
     {
       "id": "tela_04",
@@ -211,8 +221,13 @@
         "dadoPendente": false,
         "requerComposicaoExtra": false
       },
-      "fundoHex": "#0064F5",
-      "observacoesOriginais": "[ usar morphing shape decorativo ] — sem logo: intencional (confirmado pelo usuário), o nome do evento já está na frase, fundo azul Agibank"
+      "fundoHex": "#F3F3F3",
+      "observacoesOriginais": "[ usar morphing shape decorativo ] — sem logo: intencional (confirmado pelo usuário), o nome do evento já está na frase, fundo azul Agibank",
+      "layout": {
+        "corOutline": "amarelo",
+        "destaque": "Momento Sempre Juntos",
+        "origem": "ajuste do usuário no Figma, 2026-11-14 (fundo cinza, outline + máscara no texto)"
+      }
     },
     {
       "id": "tela_06",
@@ -261,7 +276,12 @@
         "requerComposicaoExtra": false
       },
       "fundoHex": "#F3F3F3",
-      "observacoesOriginais": "[ logo MSJ ] [ usar morphing shape decorativo ] — confirmado pelo usuário: fundo cinza claro (#F3F3F3) + logo_msj_positivo"
+      "observacoesOriginais": "[ logo MSJ ] [ usar morphing shape decorativo ] — confirmado pelo usuário: fundo cinza claro (#F3F3F3) + logo_msj_positivo",
+      "layout": {
+        "corOutline": "verde",
+        "destaque": "estarmos juntos...",
+        "origem": "ajuste do usuário no Figma, 2026-11-14 (fundo cinza, outline + máscara no texto)"
+      }
     },
     {
       "id": "tela_08",

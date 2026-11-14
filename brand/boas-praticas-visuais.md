@@ -13,12 +13,19 @@ que está escrito) e do que a vinheta de Outubro/2026 faz. Complementa o
 - **Nunca passam por trás/por cima de texto, logo ou foto.** Elas *contornam*
   o conteúdo, com uma "máscara" de respiro de 40px em volta (nada de forma
   "recortando" um texto ou o canto de uma foto).
-- **Inteiras dentro do quadro** (decisão do usuário, 2026-11-14): nenhuma forma
-  é cortada pela borda; margem mínima de 48px. Isso substitui o "sangrar pela
-  borda" que aparece em algumas aplicações do Brandbook e na vinheta de Outubro.
-- **Poucas e pequenas:** formas de apoio do porte do texto ao lado (≈40–120px em
-  telas com texto pequeno; até ~300px só em telas com pouco texto). No máximo
-  ~5–6 por tela — mais que isso polui.
+- **Borda do quadro (ajuste do usuário no Figma, 2026-11-14):** formas
+  **grandes** (≈250–750px) podem sangrar pelos cantos (`sangra: true`). Formas
+  **pequenas** ficam inteiras, a pelo menos 32px da borda. Nunca uma forma
+  pequena "mordida" pela borda.
+- **Poucas, com contraste de escala:** 2 a 4 formas por tela, misturando uma ou
+  duas grandes de canto com uma ou duas pequenas de acento. A checagem só conta
+  o que aparece: formas que sangram podem se cruzar fora do quadro.
+- **Máscara no texto:** um outline pode atravessar a frase/número desde que um
+  retângulo na cor do fundo abra o respiro onde o texto passa (`mascaras` no
+  `CamadaGrafismos`). É o padrão das telas de contagem e de respiro.
+- **Arranjo por ato:** em telas com vários atos (Destaques), cada ato tem seu
+  arranjo; a mesma forma desliza para a nova posição e formas novas entram com
+  fade + scale (`GrafismosPorAto`).
 - **Composição "ao redor do título" (p.48):** 4 a 6 formas de tamanhos bem
   diferentes (a maior ~3–4x a menor), rotações variadas, espalhadas em volta do
   texto, todas inteiras dentro do quadro.
@@ -76,4 +83,8 @@ que está escrito) e do que a vinheta de Outubro/2026 faz. Complementa o
 |---|---|---|
 | 2026-11-14 | Cinza claro `#F3F3F3` como fundo | respiro, buffer, destaques |
 | 2026-11-14 | Texto em azul Agibank sobre cinza claro (Brandbook pede azul escuro) | todas as telas cinza |
+| 2026-11-14 | Telas de respiro todas em cinza claro (outline amarelo sem logo / verde com logo) | respiro |
+| 2026-11-14 | Módulos do Uni Agi com canto de 30px (asset de módulos trazido pelo usuário; regra geral 12–17px) | tela Uni Agi |
+| 2026-11-14 | Coração amarelo sobre cinza (ícone decorativo, ao lado do texto azul) | fechamento Destaques |
+| 2026-11-14 | Foto recortada por forma oficial (pentagon-06) com a pessoa recortada saindo da forma | tela Indicação |
 | 2026-11-14 | Azul + amarelo **sem verde**, com amarelo predominante entre os grafismos (Brandbook p.47 pede amarelo em menor proporção e com verde) — precedente na vinheta de Outubro | Tela Destaques do Ciclo |

@@ -29,20 +29,21 @@ export const ZONAS: ZonaLivre[] = [
     altura: LOGO_ALT,
   },
 ];
+// Ajustado no Figma (2026-11-14): outline atrás do número, com máscara no texto.
 export const FORMAS: GrafismoSpec[] = [
-  // outline fino que se desenha em volta do número (Outubro/2026)
   {
     id: "moldura",
     nome: "pentagon-01",
-    x: 960 - 330,
-    y: 540 - 309,
-    largura: 660,
+    x: 725,
+    y: 320,
+    largura: 471,
     cor: cor.verde,
     desenhar: true,
     moldura: true,
     rotacao: -4,
   },
 ];
+export const MASCARA = { id: "numero", x: 691, y: 445, largura: 538, altura: 190 };
 
 /**
  * Painel de contagem no padrão da vinheta de Outubro: fundo azul, número
@@ -68,6 +69,7 @@ export const PainelContagem: React.FC<Props> = ({
         zonasLivres={ZONAS}
         duracaoFrames={duracaoFrames}
         comContador={false}
+        mascaras={[{ ...MASCARA, cor: cor.azul }]}
       />
 
       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>

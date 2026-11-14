@@ -10,151 +10,71 @@ import { fontFamily } from "../fonts";
 type TelaAguardeProps = {
   id: string;
   titulo: string;
-  variante: "azul" | "cinza";
+  /** Trecho do título em Bold (vem do roteiro; o texto não muda). */
+  destaque?: string;
+  /** Cor do outline que se desenha em volta da frase. */
+  corOutline: string;
   /** Caminho do logo MSJ (manifest). Ausente = tela sem logo (decisão aprovada). */
   logoMsj?: string;
-  /** Gira o conjunto de grafismos 180° (rotação permitida) nas repetições. */
+  /** Gira o outline 180° (rotação permitida) nas repetições. */
   girarGrafismos?: boolean;
   duracaoFrames: number;
 };
 
-const LOGO_ALT = 86;
+// Layout ajustado no Figma (2026-11-14): fundo cinza, um único outline
+// atravessando a frase com máscara no texto, logo MSJ abaixo à direita.
+const LOGO = { x: 1244, y: 750, altura: 110 };
+export const MASCARA = { id: "frase", x: 691, y: 445, largura: 538, altura: 190 };
 
-// Moldura: outline que se desenha em volta da frase (padrão Outubro/2026).
-const moldura = (c: string): GrafismoSpec => ({
-  id: "moldura",
-  nome: "quadrilateral-07",
-  x: 960 - 620,
-  y: 540 - 330,
-  largura: 1240,
-  cor: c,
-  desenhar: true,
-  moldura: true,
-});
-
-export const FORMAS_AZUL: GrafismoSpec[] = [
-  moldura(cor.verde),
+export const formasAguarde = (c: string): GrafismoSpec[] => [
   {
-    id: "a1",
+    id: "moldura",
     nome: "pentagon-03",
-    x: 1660,
-    y: 560,
-    largura: 150,
-    cor: cor.azulMedio,
-    rotacao: 12,
-    delayFrames: 2,
-    fase: 0.4,
-  },
-  {
-    id: "a2",
-    nome: "triangle-02",
-    x: 1700,
-    y: 260,
-    largura: 70,
-    cor: cor.branco,
-    rotacao: -10,
-    delayFrames: 8,
-    fase: 1.6,
-  },
-  {
-    id: "a3",
-    nome: "quadrilateral-05",
-    x: 520,
-    y: 880,
-    largura: 50,
-    cor: cor.verde,
-    rotacao: 20,
-    delayFrames: 10,
-    fase: 2.8,
-  },
-  {
-    id: "a4",
-    nome: "triangle-05",
-    x: 110,
-    y: 420,
-    largura: 110,
-    cor: cor.azulMedio,
-    rotacao: 8,
-    delayFrames: 4,
-    fase: 3.7,
-  },
-];
-
-export const FORMAS_CINZA: GrafismoSpec[] = [
-  moldura(cor.verde),
-  {
-    id: "c1",
-    nome: "pentagon-06",
-    x: 120,
-    y: 790,
-    largura: 170,
-    cor: cor.azul,
-    rotacao: -10,
-    delayFrames: 2,
-    fase: 0.4,
-  },
-  {
-    id: "c2",
-    nome: "quadrilateral-17",
-    x: 1700,
-    y: 280,
-    largura: 80,
-    cor: cor.azulMedio,
-    rotacao: 14,
-    delayFrames: 6,
-    fase: 1.5,
-  },
-  {
-    id: "c3",
-    nome: "triangle-09",
-    x: 1740,
-    y: 600,
-    largura: 60,
-    cor: cor.azul,
-    rotacao: -18,
-    delayFrames: 10,
-    fase: 2.6,
+    x: 724,
+    y: 289,
+    largura: 471,
+    cor: c,
+    rotacao: 11.3,
+    desenhar: true,
+    moldura: true,
   },
 ];
 
 export const zonasAguarde = (comLogo: boolean): ZonaLivre[] => [
-  { id: "frase", x: 360, y: 490, largura: 1200, altura: 100 },
+  { id: "frase", x: 390, y: 500, largura: 1140, altura: 80 },
   ...(comLogo
-    ? [{ id: "logo", x: 960 - 150, y: 616, largura: 300, altura: LOGO_ALT }]
+    ? [{ id: "logo", x: LOGO.x, y: LOGO.y, largura: 376, altura: LOGO.altura }]
     : []),
 ];
 
-/** Últimas 2 palavras em Bold (pesos misturados, padrão Outubro). Texto intacto. */
-const comDestaque = (t: string) => {
-  const p = t.split(" ");
-  return [p.slice(0, -2).join(" "), p.slice(-2).join(" ")];
+/** Divide o título em [antes, destaque, depois] sem alterar o texto. */
+const partes = (t: string, d?: string): [string, string, string] => {
+  const i = d ? t.indexOf(d) : -1;
+  return i < 0 || !d ? [t, "", ""] : [t.slice(0, i), d, t.slice(i + d.length)];
 };
 
-/**
- * Tela de respiro no padrão da vinheta de Outubro: uma frase, outline se
- * desenhando ao redor, logo MSJ discreto e poucos grafismos nas bordas.
- */
+/** Tela de respiro: uma frase (Light + trecho Bold), outline se desenhando e logo MSJ. */
 export const TelaAguarde: React.FC<TelaAguardeProps> = ({
   id,
   titulo,
-  variante,
+  destaque,
+  corOutline,
   logoMsj,
   girarGrafismos = false,
   duracaoFrames,
 }) => {
-  const azul = variante === "azul";
-  const base = azul ? FORMAS_AZUL : FORMAS_CINZA;
+  const base = formasAguarde(corOutline);
   const formas = girarGrafismos ? base.map(girar180) : base;
-  const zonas = zonasAguarde(Boolean(logoMsj));
-  const [inicio, destaque] = comDestaque(titulo);
+  const [antes, forte, depois] = partes(titulo, destaque);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: azul ? cor.azul : cor.cinzaClaro }}>
+    <AbsoluteFill style={{ backgroundColor: cor.cinzaClaro }}>
       <CamadaGrafismos
         tela={id}
         formas={formas}
-        zonasLivres={zonas}
+        zonasLivres={zonasAguarde(Boolean(logoMsj))}
         duracaoFrames={duracaoFrames}
+        mascaras={[{ ...MASCARA, cor: cor.cinzaClaro }]}
       />
 
       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
@@ -162,36 +82,26 @@ export const TelaAguarde: React.FC<TelaAguardeProps> = ({
           <h1
             style={{
               fontFamily,
-              fontWeight: 400,
+              fontWeight: 300,
               fontSize: 60,
               lineHeight: 1.1,
-              color: azul ? cor.branco : cor.azul,
+              color: cor.azul,
               textAlign: "center",
               margin: 0,
+              whiteSpace: "nowrap",
             }}
           >
-            {inicio} <span style={{ fontWeight: 700 }}>{destaque}</span>
+            {antes}
+            {forte && <span style={{ fontWeight: 700 }}>{forte}</span>}
+            {depois}
           </h1>
         </TextReveal>
       </AbsoluteFill>
 
       {logoMsj && (
-        <div
-          style={{
-            position: "absolute",
-            left: 0,
-            right: 0,
-            top: 616,
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
+        <div style={{ position: "absolute", left: LOGO.x, top: LOGO.y }}>
           <TextReveal delayFrames={16} distancia={0}>
-            <Logo
-              arquivo={logoMsj}
-              versao={azul ? "negativa" : "positiva"}
-              altura={LOGO_ALT}
-            />
+            <Logo arquivo={logoMsj} versao="positiva" altura={LOGO.altura} />
           </TextReveal>
         </div>
       )}

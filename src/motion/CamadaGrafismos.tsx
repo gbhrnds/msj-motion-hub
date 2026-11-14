@@ -12,6 +12,11 @@ type Props = {
   duracaoFrames?: number;
   /** false só em telas sem contador (abertura). */
   comContador?: boolean;
+  /**
+   * "Máscara" do texto: retângulo na cor do fundo, por cima dos grafismos,
+   * que abre um respiro no outline onde o texto passa (padrão do Figma aprovado).
+   */
+  mascaras?: (ZonaLivre & { cor: string })[];
 };
 
 /**
@@ -24,6 +29,7 @@ export const CamadaGrafismos: React.FC<Props> = ({
   zonasLivres,
   duracaoFrames,
   comContador = true,
+  mascaras = [],
 }) => {
   const erros = conflitos(formas, zonasLivres, comContador);
   if (erros.length > 0) {
@@ -65,6 +71,20 @@ export const CamadaGrafismos: React.FC<Props> = ({
           )}
           </div>
         </Grafismo>
+      ))}
+      {mascaras.map((m) => (
+        <div
+          key={m.id}
+          data-camada={`máscara ${m.id}`}
+          style={{
+            position: "absolute",
+            left: m.x,
+            top: m.y,
+            width: m.largura,
+            height: m.altura,
+            backgroundColor: m.cor,
+          }}
+        />
       ))}
     </AbsoluteFill>
   );

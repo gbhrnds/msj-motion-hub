@@ -12,81 +12,18 @@ type TelaCampanhaProps = {
   duracaoFrames: number;
 };
 
-// "Formas ao redor do título" (Brandbook p.48): tamanhos variados, sem sobreposição.
+// Ajustado no Figma (2026-11-14): formas grandes saindo pelo canto direito.
 export const FORMAS: GrafismoSpec[] = [
-  {
-    id: "c1",
-    nome: "pentagon-05",
-    x: 1420,
-    y: 330,
-    largura: 300,
-    cor: cor.azulMedio,
-    rotacao: -10,
-    delayFrames: 2,
-    fase: 0.2,
-  },
-  {
-    id: "c2",
-    nome: "quadrilateral-14",
-    x: 1540,
-    y: 760,
-    largura: 160,
-    cor: cor.verde,
-    modo: "outline",
-    rotacao: 16,
-    delayFrames: 6,
-    fase: 1.3,
-  },
-  {
-    id: "c3",
-    nome: "triangle-10",
-    x: 1300,
-    y: 140,
-    largura: 90,
-    cor: cor.branco,
-    rotacao: -24,
-    delayFrames: 9,
-    fase: 2.4,
-  },
-  {
-    id: "c4",
-    nome: "triangle-02",
-    x: 1720,
-    y: 100,
-    largura: 100,
-    cor: cor.azulMedio,
-    rotacao: 14,
-    delayFrames: 4,
-    fase: 3.1,
-  },
-  {
-    id: "c5",
-    nome: "quadrilateral-16",
-    x: 1300,
-    y: 880,
-    largura: 64,
-    cor: cor.verde,
-    rotacao: -6,
-    delayFrames: 11,
-    fase: 4.0,
-  },
-  {
-    id: "c6",
-    nome: "quadrilateral-05",
-    x: 720,
-    y: 920,
-    largura: 44,
-    cor: cor.branco,
-    rotacao: 28,
-    delayFrames: 12,
-    fase: 4.8,
-  },
+  { id: "c1", nome: "pentagon-05", x: 1312, y: 684, largura: 754, cor: cor.azulMedio, rotacao: -8, sangra: true, delayFrames: 2, fase: 0.2 },
+  { id: "c4", nome: "triangle-02", x: 1802, y: 245, largura: 44, cor: cor.azulMedio, rotacao: -7.2, delayFrames: 9, fase: 3.1 },
+  { id: "c5", nome: "quadrilateral-16", x: 1583, y: 60, largura: 205, cor: cor.verde, rotacao: 7.7, sangra: true, delayFrames: 6, fase: 4.0 },
+  { id: "c6", nome: "quadrilateral-05", x: 1466, y: 217, largura: 386, cor: cor.branco, rotacao: -137.1, sangra: true, delayFrames: 4, fase: 4.8 },
 ];
 export const ZONAS: ZonaLivre[] = [
-  { id: "texto", x: 140, y: 290, largura: 1060, altura: 520 },
+  { id: "texto", x: 269, y: 348, largura: 830, altura: 404 },
 ];
 
-/** Primeira oração em Regular, restante em Bold (pesos misturados). Texto intacto. */
+/** Primeira oração em Light, restante em Bold (pesos misturados). Texto intacto. */
 const dividir = (t: string) => {
   const i = t.indexOf(", ", t.indexOf(",") + 1);
   return i > 0 ? [t.slice(0, i + 1), t.slice(i + 1)] : ["", t];
@@ -111,7 +48,7 @@ export const TelaCampanha: React.FC<TelaCampanhaProps> = ({
       <div
         style={{
           position: "absolute",
-          left: 140,
+          left: 269,
           top: 290,
           width: 1040,
           height: 520,
@@ -131,7 +68,7 @@ export const TelaCampanha: React.FC<TelaCampanhaProps> = ({
               fontWeight: 700,
             }}
           >
-            {leve && <span style={{ fontWeight: 400 }}>{leve}</span>}
+            {leve && <span style={{ fontWeight: 300 }}>{leve}</span>}
             {forte}
           </h1>
         </TextReveal>
@@ -140,7 +77,7 @@ export const TelaCampanha: React.FC<TelaCampanhaProps> = ({
             <p
               style={{
                 fontFamily,
-                fontWeight: 400,
+                fontWeight: 300,
                 fontSize: 40,
                 lineHeight: 1.3,
                 color: cor.branco,

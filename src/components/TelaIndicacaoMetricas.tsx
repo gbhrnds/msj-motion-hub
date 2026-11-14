@@ -1,10 +1,10 @@
 import React from "react";
-import { AbsoluteFill, Img, staticFile } from "remotion";
+import { AbsoluteFill } from "remotion";
 import { TextReveal } from "../motion/TextReveal";
-import { Grafismo } from "../motion/Grafismo";
 import { CamadaGrafismos } from "../motion/CamadaGrafismos";
 import type { GrafismoSpec, ZonaLivre } from "../brand/grafismos";
 import { Logo } from "../brand/Logo";
+import { FotoNaForma } from "../brand/FotoNaForma";
 import { cor, raio } from "../brand/theme";
 import { fontFamily } from "../fonts";
 
@@ -12,6 +12,8 @@ type TelaIndicacaoMetricasProps = {
   corpo: string;
   bullets: string[];
   foto: string;
+  /** PNG da pessoa recortada (mesmo enquadramento da foto), por cima da forma. */
+  recorte?: string;
   logo: string;
 };
 
@@ -30,25 +32,24 @@ const separar = (b: string): [string, string] => {
 
 const LARG_MOD = 240;
 
-// Forma interagindo com a borda da foto (Brandbook p.48) + acento no rodapé.
+// Ajustado no Figma (2026-11-14): foto recortada pela forma pentagon-06 (sangrando
+// à direita e embaixo), recorte da pessoa saindo da forma, forma verde grande no canto.
+export const FOTO = {
+  forma: "pentagon-06" as const,
+  x: 960,
+  y: 97,
+  largura: 1040,
+  // enquadramento da imagem (mesma escala para a foto e o recorte)
+  imagem: { x: 595, y: 0, largura: 1620, altura: 1080 },
+};
 export const FORMAS: GrafismoSpec[] = [
-  {
-    id: "i1",
-    nome: "triangle-01",
-    x: 580,
-    y: 96,
-    largura: 80,
-    cor: cor.verde,
-    rotacao: -32,
-    delayFrames: 10,
-    fase: 1.4,
-  },
+  { id: "i1", nome: "triangle-01", x: 1094, y: 147, largura: 80, cor: cor.azulMedio, rotacao: -81.6, delayFrames: 10, fase: 1.4 },
+  { id: "i2", nome: "quadrilateral-05", x: 1589, y: -168, largura: 398, cor: cor.verde, rotacao: -82.4, sangra: true, delayFrames: 4, fase: 0.5 },
 ];
 export const ZONAS: ZonaLivre[] = [
-  { id: "foto", x: 1000, y: 80, largura: 780, altura: 920 },
   { id: "logo", x: 140, y: 236, largura: 360, altura: 118 },
-  { id: "corpo", x: 140, y: 404, largura: 780, altura: 200 },
-  { id: "metricas", x: 140, y: 640, largura: 760, altura: 340 },
+  { id: "corpo", x: 140, y: 404, largura: 780, altura: 160 },
+  { id: "metricas", x: 140, y: 660, largura: 756, altura: 300 },
 ];
 const GAP_MOD = 18; // 7,5% do módulo (Brandbook p.52: 5–8%)
 
@@ -60,27 +61,14 @@ export const TelaIndicacaoMetricas: React.FC<TelaIndicacaoMetricasProps> = ({
   corpo,
   bullets,
   foto,
+  recorte,
   logo,
 }) => {
   return (
     <AbsoluteFill style={{ backgroundColor: cor.azul }}>
-      {/* módulo de foto */}
-      <Grafismo x={1000} y={80} delayFrames={0} wiggle={false}>
-        <div
-          style={{
-            width: 780,
-            height: 920,
-            borderRadius: raio,
-            overflow: "hidden",
-          }}
-        >
-          <Img
-            src={staticFile(foto)}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        </div>
-      </Grafismo>
-      {/* forma interagindo com a foto (Brandbook p.48) */}
+      <TextReveal distancia={0} style={{ position: "absolute", inset: 0 }}>
+        <FotoNaForma {...FOTO} foto={foto} recorte={recorte} />
+      </TextReveal>
       <CamadaGrafismos
         tela="tela_indicacao_metricas"
         formas={FORMAS}
@@ -102,7 +90,7 @@ export const TelaIndicacaoMetricas: React.FC<TelaIndicacaoMetricasProps> = ({
         <p
           style={{
             fontFamily,
-            fontWeight: 500,
+            fontWeight: 300,
             fontSize: 44,
             lineHeight: 1.2,
             color: cor.branco,
@@ -138,11 +126,13 @@ export const TelaIndicacaoMetricas: React.FC<TelaIndicacaoMetricasProps> = ({
                   height: 300,
                   backgroundColor: m.fundo,
                   borderRadius: raio,
-                  padding: "30px 26px",
+                  padding: "69px 20px 0",
                   boxSizing: "border-box",
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: 9,
+                  textAlign: "center",
                 }}
               >
                 <div
@@ -164,6 +154,7 @@ export const TelaIndicacaoMetricas: React.FC<TelaIndicacaoMetricasProps> = ({
                     fontSize: 28,
                     lineHeight: 1.2,
                     color: m.rotulo,
+                    textWrap: "balance",
                   }}
                 >
                   {rotulo}
