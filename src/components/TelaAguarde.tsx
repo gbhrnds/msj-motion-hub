@@ -1,107 +1,198 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
 import { TextReveal } from "../motion/TextReveal";
-import { Grafismo } from "../motion/Grafismo";
-import { TrocaDeForma } from "../motion/TrocaDeForma";
-import { BrandShape } from "../brand/BrandShape";
+import { CamadaGrafismos } from "../motion/CamadaGrafismos";
 import { Logo } from "../brand/Logo";
-import { cor, tipo } from "../brand/theme";
+import { cor } from "../brand/theme";
+import { girar180, GrafismoSpec, ZonaLivre } from "../brand/grafismos";
 import { fontFamily } from "../fonts";
 
 type TelaAguardeProps = {
+  id: string;
   titulo: string;
   variante: "azul" | "cinza";
   /** Caminho do logo MSJ (manifest). Ausente = tela sem logo (decisão aprovada). */
   logoMsj?: string;
-  /** Gira os grafismos 180° (rotação permitida pelo Brandbook) para as repetições não ficarem iguais, sem invadir a zona do contador. */
-  espelharGrafismos?: boolean;
+  /** Gira o conjunto de grafismos 180° (rotação permitida) nas repetições. */
+  girarGrafismos?: boolean;
+  duracaoFrames: number;
+};
+
+const LOGO_ALT = 86;
+
+// Moldura: outline que se desenha em volta da frase (padrão Outubro/2026).
+const moldura = (c: string): GrafismoSpec => ({
+  id: "moldura",
+  nome: "quadrilateral-07",
+  x: 960 - 620,
+  y: 540 - 330,
+  largura: 1240,
+  cor: c,
+  desenhar: true,
+  moldura: true,
+});
+
+const FORMAS_AZUL: GrafismoSpec[] = [
+  moldura(cor.verde),
+  {
+    id: "a1",
+    nome: "pentagon-03",
+    x: 1700,
+    y: 500,
+    largura: 280,
+    cor: cor.azulMedio,
+    rotacao: 12,
+    delayFrames: 2,
+    fase: 0.4,
+  },
+  {
+    id: "a2",
+    nome: "triangle-02",
+    x: 1700,
+    y: 330,
+    largura: 80,
+    cor: cor.branco,
+    rotacao: -10,
+    delayFrames: 8,
+    fase: 1.6,
+  },
+  {
+    id: "a3",
+    nome: "quadrilateral-05",
+    x: 420,
+    y: 900,
+    largura: 60,
+    cor: cor.verde,
+    rotacao: 20,
+    delayFrames: 10,
+    fase: 2.8,
+  },
+  {
+    id: "a4",
+    nome: "triangle-05",
+    x: -60,
+    y: 380,
+    largura: 170,
+    cor: cor.azulMedio,
+    rotacao: 8,
+    delayFrames: 4,
+    fase: 3.7,
+  },
+];
+
+const FORMAS_CINZA: GrafismoSpec[] = [
+  moldura(cor.verde),
+  {
+    id: "c1",
+    nome: "pentagon-06",
+    x: -80,
+    y: 820,
+    largura: 300,
+    cor: cor.azul,
+    rotacao: -10,
+    delayFrames: 2,
+    fase: 0.4,
+  },
+  {
+    id: "c2",
+    nome: "quadrilateral-17",
+    x: 1690,
+    y: 260,
+    largura: 120,
+    cor: cor.azulMedio,
+    rotacao: 14,
+    delayFrames: 6,
+    fase: 1.5,
+  },
+  {
+    id: "c3",
+    nome: "triangle-09",
+    x: 1760,
+    y: 560,
+    largura: 90,
+    cor: cor.azul,
+    rotacao: -18,
+    delayFrames: 10,
+    fase: 2.6,
+  },
+];
+
+/** Últimas 2 palavras em Bold (pesos misturados, padrão Outubro). Texto intacto. */
+const comDestaque = (t: string) => {
+  const p = t.split(" ");
+  return [p.slice(0, -2).join(" "), p.slice(-2).join(" ")];
 };
 
 /**
- * Tela de respiro. Azul: texto branco, grafismos branco/verde/azul médio.
- * Cinza (#F3F3F3, exceção aprovada): texto em azul Agibank (decisão do usuário),
- * grafismos em proporção do Brandbook — azul predominante, azul médio de apoio,
- * verde como acento.
+ * Tela de respiro no padrão da vinheta de Outubro: uma frase, outline se
+ * desenhando ao redor, logo MSJ discreto e poucos grafismos nas bordas.
  */
 export const TelaAguarde: React.FC<TelaAguardeProps> = ({
+  id,
   titulo,
   variante,
   logoMsj,
-  espelharGrafismos = false,
+  girarGrafismos = false,
+  duracaoFrames,
 }) => {
   const azul = variante === "azul";
+  const base = azul ? FORMAS_AZUL : FORMAS_CINZA;
+  const formas = girarGrafismos ? base.map(girar180) : base;
+  const zonas: ZonaLivre[] = [
+    { id: "frase", x: 360, y: 490, largura: 1200, altura: 100 },
+    ...(logoMsj
+      ? [{ id: "logo", x: 960 - 150, y: 616, largura: 300, altura: LOGO_ALT }]
+      : []),
+  ];
+  const [inicio, destaque] = comDestaque(titulo);
 
   return (
     <AbsoluteFill style={{ backgroundColor: azul ? cor.azul : cor.cinzaClaro }}>
-      <AbsoluteFill style={{ scale: espelharGrafismos ? "-1 -1" : undefined }}>
-        {azul ? (
-          <>
-            <Grafismo x={-150} y={700} delayFrames={2} fase={0.5}>
-              <BrandShape nome="pentagon-02" largura={500} cor={cor.azulMedio} rotacao={-24} />
-            </Grafismo>
-            <Grafismo x={1460} y={-110} delayFrames={6} wiggle={false}>
-              <TrocaDeForma
-                formas={["quadrilateral-03", "pentagon-06", "quadrilateral-12"]}
-                largura={520}
-                cor={cor.verde}
-                rotacaoInicial={10}
-              />
-            </Grafismo>
-            <Grafismo x={1600} y={560} delayFrames={10} fase={2}>
-              <BrandShape nome="triangle-07" largura={150} cor={cor.branco} rotacao={30} />
-            </Grafismo>
-            <Grafismo x={420} y={190} delayFrames={12} fase={3.1}>
-              <BrandShape nome="triangle-02" largura={70} cor={cor.verde} rotacao={-15} />
-            </Grafismo>
-          </>
-        ) : (
-          <>
-            <Grafismo x={-190} y={640} delayFrames={2} fase={0.5}>
-              <BrandShape nome="pentagon-06" largura={640} cor={cor.azul} rotacao={-14} />
-            </Grafismo>
-            <Grafismo x={1530} y={-140} delayFrames={6} fase={1.7}>
-              <BrandShape nome="quadrilateral-18" largura={460} cor={cor.azulMedio} rotacao={22} />
-            </Grafismo>
-            <Grafismo x={1560} y={380} delayFrames={8} wiggle={false}>
-              <TrocaDeForma
-                formas={["pentagon-03", "quadrilateral-23", "pentagon-01"]}
-                largura={460}
-                cor={cor.verde}
-                rotacaoInicial={-6}
-              />
-            </Grafismo>
-            <Grafismo x={430} y={230} delayFrames={12} fase={2.6}>
-              <BrandShape nome="triangle-05" largura={80} cor={cor.azul} rotacao={12} />
-            </Grafismo>
-          </>
-        )}
-      </AbsoluteFill>
+      <CamadaGrafismos
+        tela={id}
+        formas={formas}
+        zonasLivres={zonas}
+        duracaoFrames={duracaoFrames}
+      />
 
       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
-        <TextReveal delayFrames={4} distancia={32}>
+        <TextReveal delayFrames={6} distancia={20}>
           <h1
             style={{
               fontFamily,
-              fontWeight: 800,
-              fontSize: 96,
-              lineHeight: tipo.titulo.lineHeight,
+              fontWeight: 400,
+              fontSize: 60,
+              lineHeight: 1.1,
               color: azul ? cor.branco : cor.azul,
               textAlign: "center",
-              maxWidth: 1100,
               margin: 0,
-              letterSpacing: -1,
             }}
           >
-            {titulo}
+            {inicio} <span style={{ fontWeight: 700 }}>{destaque}</span>
           </h1>
         </TextReveal>
-
-        {logoMsj && (
-          <TextReveal delayFrames={14} distancia={0} style={{ marginTop: 64 }}>
-            <Logo arquivo={logoMsj} versao={azul ? "negativa" : "positiva"} altura={96} />
-          </TextReveal>
-        )}
       </AbsoluteFill>
+
+      {logoMsj && (
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            top: 616,
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <TextReveal delayFrames={16} distancia={0}>
+            <Logo
+              arquivo={logoMsj}
+              versao={azul ? "negativa" : "positiva"}
+              altura={LOGO_ALT}
+            />
+          </TextReveal>
+        </div>
+      )}
     </AbsoluteFill>
   );
 };

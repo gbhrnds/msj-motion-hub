@@ -1,6 +1,7 @@
 import React from "react";
 import { Composition } from "remotion";
 import { MSJComposition } from "./Composition";
+import { CatalogoFormas } from "./components/CatalogoFormas";
 import tokens from "../brand/tokens.json";
 
 const fps = tokens.video.fps;
@@ -10,13 +11,23 @@ const durationInSeconds = tokens.timing.contentLoopMinutes * 60;
 
 export const RemotionRoot: React.FC = () => {
   return (
-    <Composition
-      id="MSJ-2025-11-Abertura-Fase1"
-      component={MSJComposition}
-      durationInFrames={Math.round(durationInSeconds * fps)}
-      fps={fps}
-      width={tokens.video.resolution.width}
-      height={tokens.video.resolution.height}
-    />
+    <>
+      <Composition
+        id="MSJ-2025-11-Abertura-Fase1"
+        component={MSJComposition}
+        durationInFrames={Math.round(durationInSeconds * fps)}
+        fps={fps}
+        width={tokens.video.resolution.width}
+        height={tokens.video.resolution.height}
+      />
+      <Composition
+        id="CatalogoFormas"
+        component={CatalogoFormas}
+        durationInFrames={1}
+        fps={fps}
+        width={tokens.video.resolution.width}
+        height={tokens.video.resolution.height}
+      />
+    </>
   );
 };

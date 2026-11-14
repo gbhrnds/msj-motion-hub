@@ -2,7 +2,10 @@
  * Gera o path SVG de um polígono com cantos arredondados (raio fixo),
  * para módulos de composição (Brandbook p.49-54: cantos 12-17px).
  */
-export const roundedPolygon = (pontos: [number, number][], raio: number): string => {
+export const roundedPolygon = (
+  pontos: [number, number][],
+  raio: number,
+): string => {
   const n = pontos.length;
   const partes: string[] = [];
   for (let i = 0; i < n; i++) {

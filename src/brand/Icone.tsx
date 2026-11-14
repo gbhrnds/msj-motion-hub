@@ -10,7 +10,12 @@ type IconeProps = {
 };
 
 /** Ícone oficial de brand/icons/ pintado com uma cor da paleta via máscara. */
-export const Icone: React.FC<IconeProps> = ({ arquivo, cor, tamanho, style }) => {
+export const Icone: React.FC<IconeProps> = ({
+  arquivo,
+  cor,
+  tamanho,
+  style,
+}) => {
   const url = `url(${staticFile(arquivo)})`;
   return (
     <div

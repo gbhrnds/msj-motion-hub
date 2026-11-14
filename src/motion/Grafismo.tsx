@@ -45,7 +45,12 @@ export const Grafismo: React.FC<GrafismoProps> = ({
         left: x,
         top: y,
         opacity: interpolate(t, [0, ent.durationFrames], [0, 1], opts),
-        scale: interpolate(t, [0, ent.durationFrames], [ent.scaleFrom, 1], opts),
+        scale: interpolate(
+          t,
+          [0, ent.durationFrames],
+          [ent.scaleFrom, 1],
+          opts,
+        ),
       }}
     >
       {wiggle ? (

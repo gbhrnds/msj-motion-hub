@@ -1,35 +1,154 @@
 import React from "react";
-import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
-import { TextReveal } from "../motion/TextReveal";
-import { Grafismo } from "../motion/Grafismo";
-import { BrandShape } from "../brand/BrandShape";
+import {
+  AbsoluteFill,
+  Easing,
+  interpolate,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
+import { CamadaGrafismos } from "../motion/CamadaGrafismos";
 import { Logo } from "../brand/Logo";
 import { Icone } from "../brand/Icone";
-import { cor, motionTokens, raio } from "../brand/theme";
+import { cor, motionTokens } from "../brand/theme";
+import type { GrafismoSpec, ZonaLivre } from "../brand/grafismos";
 import { fontFamily } from "../fonts";
 
 type TelaDestaquesProps = {
   chamada: string;
   fechamento?: string;
   nomes: string[];
+  /** [logo destaques do ciclo, logo o jeito agi] — ordem do roteiro. */
   logos: string[];
   icone?: string;
   duracaoFrames: number;
 };
 
+// ---- Roteiro de tempo (segundos) ------------------------------------------
+const T = {
+  jeitoEntra: 0,
+  fraseEntra: 0.6,
+  fraseSai: 4.4,
+  jeitoParaCanto: 4.4,
+  destaquesEntra: 5.0,
+  destaquesParaCanto: 6.6,
+  nomesInicio: 7.0,
+  // fim dos nomes e entrada do fechamento são calculados a partir da duração
+  fechamentoAntesDoFim: 3.0,
+};
+
+// ---- Layout -----------------------------------------------------------------
 const COLUNAS = 4;
-const ALTURA_LINHA = 60;
-// Módulo branco que segura os nomes (margens dentro da safe area)
-const LINHAS_VISIVEIS = 8;
-// Janela = múltiplo exato da linha: no início e no fim nenhum nome aparece cortado.
-const JANELA = LINHAS_VISIVEIS * ALTURA_LINHA;
-const MOD = { x: 140, y: 386, largura: 1640, padX: 48, padY: 24, altura: JANELA + 48 };
+const LINHA = 56;
+const JANELA = { x: 160, y: 250, largura: 1600, altura: 710 };
+const FADE_BORDA = 70;
+const CANTO_Y = 118;
+const JEITO = {
+  centro: { x: 960, y: 470, h: 150 },
+  canto: { x: 1672, y: CANTO_Y, h: 72 },
+  ratio: 1505.1 / 498.1,
+};
+const DESTAQUES = {
+  centro: { x: 960, y: 540, h: 240 },
+  canto: { x: 1412, y: CANTO_Y, h: 86 },
+  ratio: 1635 / 683.9,
+};
+
+// Fundo cinza + azul e amarelo, amarelo predominante (exceção aprovada).
+// Todas as formas ficam nas bordas, fora de logos, frases e da janela de nomes.
+const FORMAS: GrafismoSpec[] = [
+  {
+    id: "y1",
+    nome: "triangle-06",
+    x: -70,
+    y: 880,
+    largura: 200,
+    cor: cor.amarelo,
+    rotacao: 10,
+    delayFrames: 2,
+    fase: 0.3,
+  },
+  {
+    id: "b1",
+    nome: "quadrilateral-20",
+    x: 1800,
+    y: 760,
+    largura: 120,
+    cor: cor.azul,
+    rotacao: -8,
+    delayFrames: 6,
+    fase: 1.1,
+  },
+  {
+    id: "y2",
+    nome: "quadrilateral-07",
+    x: 620,
+    y: -40,
+    largura: 220,
+    cor: cor.amarelo,
+    rotacao: 6,
+    delayFrames: 4,
+    fase: 2.0,
+  },
+  {
+    id: "y3",
+    nome: "triangle-03",
+    x: 1810,
+    y: 360,
+    largura: 90,
+    cor: cor.amarelo,
+    rotacao: 16,
+    delayFrames: 9,
+    fase: 2.9,
+  },
+  {
+    id: "y4",
+    nome: "pentagon-02",
+    x: 30,
+    y: 400,
+    largura: 90,
+    cor: cor.amarelo,
+    modo: "outline",
+    rotacao: -12,
+    delayFrames: 11,
+    fase: 3.6,
+  },
+  {
+    id: "b2",
+    nome: "triangle-10",
+    x: 980,
+    y: 990,
+    largura: 110,
+    cor: cor.azul,
+    rotacao: -12,
+    delayFrames: 8,
+    fase: 4.4,
+  },
+  {
+    id: "y5",
+    nome: "pentagon-07",
+    x: 1500,
+    y: 985,
+    largura: 260,
+    cor: cor.amarelo,
+    rotacao: 4,
+    delayFrames: 12,
+    fase: 5.2,
+  },
+];
+
+const ZONAS: ZonaLivre[] = [
+  { id: "nomes", ...JANELA },
+  { id: "logos-canto", x: 1250, y: 60, largura: 560, altura: 120 },
+];
+
+const mover = (a: number, b: number, p: number) => a + (b - a) * p;
 
 /**
- * Destaques do Ciclo: os nomes correm como créditos de filme em 4 colunas,
- * dentro de um módulo branco. Ordem alfabética lida linha a linha.
- * Começa com o módulo cheio, pausa, rola com ease-in-out e termina cheio com
- * a última linha visível — todos os nomes ficam vários segundos na tela.
+ * Destaques do Ciclo em 4 atos:
+ * 1) logo "O jeito agi | Crescer na jornada" + frase;
+ * 2) logo Destaques do Ciclo no centro;
+ * 3) os dois logos vão para o canto e os nomes sobem como créditos (4 colunas);
+ * 4) quando o último nome sai, entra o fechamento com o coração pulsando.
  */
 export const TelaDestaques: React.FC<TelaDestaquesProps> = ({
   chamada,
@@ -41,130 +160,223 @@ export const TelaDestaques: React.FC<TelaDestaquesProps> = ({
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const sc = motionTokens.scrollCreditos;
-
-  const linhas = Math.ceil(nomes.length / COLUNAS);
-  const alturaLista = linhas * ALTURA_LINHA;
-  const percurso = Math.max(0, alturaLista - JANELA);
-  const inicio = Math.round(sc.pausaInicialSegundos * fps);
-  const fim = duracaoFrames - Math.round(sc.pausaFinalSegundos * fps);
-  const scrollY = interpolate(frame, [inicio, fim], [0, -percurso], {
+  const s = (seg: number) => Math.round(seg * fps);
+  const t = frame / fps;
+  const clamp = {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
-    easing: Easing.inOut(Easing.cubic),
+  } as const;
+  const [bx1, by1, bx2, by2] = motionTokens.movimentoEmTela.easingBezier;
+  const easeMov = Easing.bezier(bx1, by1, bx2, by2);
+  const easeEntra = Easing.bezier(0.23, 1, 0.32, 1);
+  const durMov = motionTokens.movimentoEmTela.durationFrames;
+
+  const [logoDestaques, logoJeito] = logos;
+  const fimNomes = duracaoFrames - s(T.fechamentoAntesDoFim);
+
+  // --- Logo O jeito agi
+  const jeitoIn = interpolate(
+    frame,
+    [s(T.jeitoEntra), s(T.jeitoEntra) + 20],
+    [0, 1],
+    { ...clamp, easing: easeEntra },
+  );
+  const jeitoMov = interpolate(
+    frame,
+    [s(T.jeitoParaCanto), s(T.jeitoParaCanto) + durMov],
+    [0, 1],
+    { ...clamp, easing: easeMov },
+  );
+  // --- Frase
+  const fraseIn = interpolate(
+    frame,
+    [s(T.fraseEntra), s(T.fraseEntra) + 18],
+    [0, 1],
+    { ...clamp, easing: easeEntra },
+  );
+  const fraseOut = interpolate(
+    frame,
+    [s(T.fraseSai), s(T.fraseSai) + 12],
+    [0, 1],
+    { ...clamp, easing: Easing.in(Easing.cubic) },
+  );
+  // --- Logo Destaques
+  const destIn = interpolate(
+    frame,
+    [s(T.destaquesEntra), s(T.destaquesEntra) + 20],
+    [0, 1],
+    { ...clamp, easing: easeEntra },
+  );
+  const destMov = interpolate(
+    frame,
+    [s(T.destaquesParaCanto), s(T.destaquesParaCanto) + durMov],
+    [0, 1],
+    { ...clamp, easing: easeMov },
+  );
+  // --- Créditos: sobem em velocidade constante (movimento contínuo = linear)
+  const linhas = Math.ceil(nomes.length / COLUNAS);
+  const topoLista = interpolate(
+    frame,
+    [s(T.nomesInicio), fimNomes],
+    [JANELA.y + JANELA.altura, JANELA.y - linhas * LINHA],
+    clamp,
+  );
+  // --- Fechamento
+  const fechIn = interpolate(frame, [fimNomes, fimNomes + 18], [0, 1], {
+    ...clamp,
+    easing: easeEntra,
   });
+  const pulso = motionTokens.coracaoPulso;
+  const batida = Math.pow(
+    Math.max(0, Math.sin(2 * Math.PI * pulso.batidasPorSegundo * t)),
+    6,
+  );
+  const escalaCoracao = 1 + (pulso.escalaMax - 1) * batida;
 
-  return (
-    <AbsoluteFill style={{ backgroundColor: cor.azul }}>
-      {/* decoration */}
-      <Grafismo x={1600} y={780} delayFrames={6} fase={0.8}>
-        <BrandShape nome="pentagon-04" largura={460} cor={cor.azulMedio} rotacao={-18} />
-      </Grafismo>
-      <Grafismo x={1330} y={250} delayFrames={10} fase={2.2}>
-        <BrandShape nome="triangle-09" largura={70} cor={cor.verde} rotacao={24} />
-      </Grafismo>
-
-      {/* static: logos do programa, canto superior direito */}
+  const logoEmMovimento = (
+    arquivo: string,
+    cfg: typeof JEITO,
+    entrada: number,
+    mov: number,
+  ) => {
+    const h = mover(cfg.centro.h, cfg.canto.h, mov);
+    return (
       <div
         style={{
           position: "absolute",
-          top: 84,
-          right: 140,
-          display: "flex",
-          alignItems: "center",
-          gap: 56,
+          left: mover(cfg.centro.x, cfg.canto.x, mov),
+          top: mover(cfg.centro.y, cfg.canto.y, mov),
+          translate: "-50% -50%",
+          opacity: entrada,
+          scale: String(mover(0.96, 1, entrada) * (h / cfg.centro.h)),
         }}
       >
-        {logos.map((l, i) => (
-          <TextReveal key={l} delayFrames={i * 3} distancia={0}>
-            <Logo arquivo={l} versao="negativa" altura={i === 0 ? 112 : 92} />
-          </TextReveal>
-        ))}
+        <Logo arquivo={arquivo} versao="positiva" altura={cfg.centro.h} />
       </div>
+    );
+  };
 
-      {/* lead: chamada */}
-      <TextReveal
-        delayFrames={4}
-        distancia={28}
-        style={{ position: "absolute", left: 140, top: 228, width: 1120 }}
-      >
-        <h1
-          style={{
-            fontFamily,
-            fontWeight: 700,
-            fontSize: 54,
-            lineHeight: 1.12,
-            color: cor.branco,
-            margin: 0,
-          }}
-        >
-          {chamada}
-        </h1>
-      </TextReveal>
+  return (
+    <AbsoluteFill style={{ backgroundColor: cor.cinzaClaro }}>
+      <CamadaGrafismos
+        tela="tela_destaques"
+        formas={FORMAS}
+        zonasLivres={ZONAS}
+      />
 
-      {/* support: módulo de nomes (uma entrada para o container inteiro) */}
-      <Grafismo x={MOD.x} y={MOD.y} delayFrames={12} wiggle={false}>
+      {/* Ato 1 — frase (Regular + destaque Bold no final) */}
+      {frame < s(T.fraseSai) + 12 && (
         <div
           style={{
-            width: MOD.largura,
-            height: MOD.altura,
-            backgroundColor: cor.branco,
-            borderRadius: raio,
-            padding: `${MOD.padY}px ${MOD.padX}px`,
-            boxSizing: "border-box",
+            position: "absolute",
+            left: 310,
+            width: 1300,
+            top: 600,
+            textAlign: "center",
+            opacity: fraseIn * (1 - fraseOut),
+            translate: `0px ${(1 - fraseIn) * 20 - fraseOut * 16}px`,
+            fontFamily,
+            fontSize: 52,
+            lineHeight: 1.2,
+            color: cor.azul,
+            fontWeight: 400,
+            textWrap: "balance",
           }}
         >
-          <div style={{ height: JANELA, overflow: "hidden" }}>
-            <div
-              style={{
-                translate: `0px ${scrollY}px`,
-                display: "grid",
-                gridTemplateColumns: `repeat(${COLUNAS}, 1fr)`,
-                gridAutoRows: ALTURA_LINHA,
-                alignItems: "center",
-                columnGap: 32,
-              }}
-            >
-              {nomes.map((n) => (
-                <div
-                  key={n}
-                  style={{
-                    fontFamily,
-                    fontWeight: 600,
-                    fontSize: 30,
-                    color: cor.azul,
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {n}
-                </div>
-              ))}
-            </div>
-          </div>
+          {chamada.replace(/se destaca!$/, "")}
+          {chamada.endsWith("se destaca!") && (
+            <span style={{ fontWeight: 700 }}>se destaca!</span>
+          )}
         </div>
-      </Grafismo>
+      )}
 
-      {/* support: fechamento + ícone */}
-      {fechamento && (
-        <TextReveal
-          delayFrames={20}
-          distancia={16}
+      {/* Ato 3 — créditos */}
+      {frame >= s(T.nomesInicio) && frame < fimNomes && (
+        <div
           style={{
             position: "absolute",
-            left: 140,
-            top: 930,
-            display: "flex",
-            alignItems: "center",
-            gap: 20,
+            left: JANELA.x,
+            top: 0,
+            width: JANELA.largura,
+            display: "grid",
+            gridTemplateColumns: `repeat(${COLUNAS}, 1fr)`,
+            translate: `0px ${topoLista}px`,
           }}
         >
-          <span
-            style={{ fontFamily, fontWeight: 700, fontSize: 44, color: cor.branco }}
+          {nomes.map((n, i) => {
+            const y = topoLista + Math.floor(i / COLUNAS) * LINHA + LINHA / 2;
+            const op = Math.min(
+              interpolate(y, [JANELA.y, JANELA.y + FADE_BORDA], [0, 1], clamp),
+              interpolate(
+                y,
+                [
+                  JANELA.y + JANELA.altura - FADE_BORDA,
+                  JANELA.y + JANELA.altura,
+                ],
+                [1, 0],
+                clamp,
+              ),
+            );
+            return (
+              <div
+                key={n}
+                style={{
+                  height: LINHA,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontFamily,
+                  fontWeight: 600,
+                  fontSize: 30,
+                  color: cor.azul,
+                  whiteSpace: "nowrap",
+                  opacity: op,
+                }}
+              >
+                {n}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Logos (ato 1 → canto; ato 2 → canto) */}
+      {logoJeito && logoEmMovimento(logoJeito, JEITO, jeitoIn, jeitoMov)}
+      {logoDestaques &&
+        frame >= s(T.destaquesEntra) &&
+        logoEmMovimento(logoDestaques, DESTAQUES, destIn, destMov)}
+
+      {/* Ato 4 — fechamento */}
+      {fechamento && frame >= fimNomes && (
+        <AbsoluteFill
+          style={{ justifyContent: "center", alignItems: "center" }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 28,
+              opacity: fechIn,
+              translate: `0px ${(1 - fechIn) * 24}px`,
+            }}
           >
-            {fechamento}
-          </span>
-          {icone && <Icone arquivo={icone} cor={cor.verde} tamanho={46} />}
-        </TextReveal>
+            <span
+              style={{
+                fontFamily,
+                fontWeight: 700,
+                fontSize: 72,
+                color: cor.azul,
+              }}
+            >
+              {fechamento}
+            </span>
+            {icone && (
+              <div style={{ scale: String(escalaCoracao) }}>
+                <Icone arquivo={icone} cor={cor.azul} tamanho={76} />
+              </div>
+            )}
+          </div>
+        </AbsoluteFill>
       )}
     </AbsoluteFill>
   );

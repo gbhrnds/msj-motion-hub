@@ -1,99 +1,81 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
+import {
+  AbsoluteFill,
+  Sequence,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
 import { fontFamily } from "../fonts";
-import tokens from "../../brand/tokens.json";
-import { TrocaDeForma } from "../motion/TrocaDeForma";
+import { cor } from "../brand/theme";
+import { BrandShape } from "../brand/BrandShape";
+import { PainelContagem, formatarTempo } from "./PainelContagem";
 
 type CountdownOverlayProps = {
   durationInSeconds: number; // Tempo total da fase de conteudo (ex: 600s para 10min)
   /** Frames iniciais em que o overlay não aparece (a tela de abertura já mostra o relógio). */
   ocultarAteFrame?: number;
+  logoMsj: string;
 };
 
+const SEGUNDOS_HERO = 10;
+
+/**
+ * Relógio da Fase 1.
+ * - Compacto: moldura = forma irregular oficial (quadrilateral-01) em branco,
+ *   sangrando pelo canto superior esquerdo, número azul (padrão Outubro/2026).
+ * - Últimos 10s: painel de contagem em tela cheia.
+ */
 export const CountdownOverlay: React.FC<CountdownOverlayProps> = ({
   durationInSeconds,
   ocultarAteFrame = 0,
+  logoMsj,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-
-  // Calcula quanto tempo ja passou e quanto falta
-  const elapsedSeconds = Math.floor(frame / fps);
-  const remainingSeconds = Math.max(0, durationInSeconds - elapsedSeconds);
-
-  // Formata para MM:SS
-  const minutes = Math.floor(remainingSeconds / 60).toString().padStart(2, "0");
-  const seconds = (remainingSeconds % 60).toString().padStart(2, "0");
-  const timeString = `${minutes}:${seconds}`;
-
-  // Logica do Relatorio: nos ultimos 10s, o relogio vira "Hero" (gigante no centro)
-  const isHero = remainingSeconds <= 10;
+  const restante = Math.max(0, durationInSeconds - Math.floor(frame / fps));
+  const inicioHero = Math.ceil((durationInSeconds - SEGUNDOS_HERO) * fps);
 
   if (frame < ocultarAteFrame) return null;
 
-  if (isHero) {
+  if (frame >= inicioHero) {
     return (
-      <AbsoluteFill
-        style={{
-          backgroundColor: tokens.colors.azulAgibank.hex,
-          justifyContent: "center",
-          alignItems: "center",
-          zIndex: 100, // Garante que fica por cima de tudo
-        }}
-      >
-        {/* Forma decorativa fina atras do numero (conforme relatorio) */}
-        <div style={{ position: "absolute" }}>
-          <TrocaDeForma
-            formas={["pentagon-01", "quadrilateral-04", "pentagon-05"]}
-            largura={900}
-            cor={tokens.colors.verde.hex}
+      <Sequence from={inicioHero} layout="none">
+        <AbsoluteFill>
+          <PainelContagem
+            id="contagem_final"
+            segundosNoInicio={SEGUNDOS_HERO}
+            logoMsj={logoMsj}
+            duracaoFrames={Math.round(SEGUNDOS_HERO * fps)}
           />
-        </div>
-
-        <h1
-          style={{
-            fontFamily,
-            fontWeight: 800,
-            fontSize: 280, // Relogio Gigante
-            color: tokens.colors.branco.hex,
-            margin: 0,
-            fontVariantNumeric: "tabular-nums", // Evita que os numeros tremam (Dica do Claude!)
-            zIndex: 101,
-          }}
-        >
-          {timeString}
-        </h1>
-      </AbsoluteFill>
+        </AbsoluteFill>
+      </Sequence>
     );
   }
 
-  // Estado "Corner" (Loop normal)
   return (
-    <AbsoluteFill style={{ pointerEvents: "none", zIndex: 100 }}>
+    <AbsoluteFill style={{ pointerEvents: "none" }}>
+      <div style={{ position: "absolute", left: -96, top: -92 }}>
+        <BrandShape
+          nome="quadrilateral-01"
+          largura={470}
+          cor={cor.branco}
+          rotacao={-4}
+        />
+      </div>
       <div
         style={{
           position: "absolute",
-          top: 60,
-          left: 60,
-          backgroundColor: tokens.colors.branco.hex,
-          padding: "20px 40px",
-          borderRadius: tokens.shapes.cornerRadiusPxRange.default,
-          transform: "rotate(-2deg)", // Leve rotacao de "plaquinha"
-          boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+          left: 62,
+          top: 42,
+          fontFamily,
+          fontWeight: 700,
+          fontSize: 54,
+          lineHeight: 1,
+          color: cor.azul,
+          fontVariantNumeric: "tabular-nums",
         }}
       >
-        <h2
-          style={{
-            fontFamily,
-            fontWeight: 800,
-            fontSize: 64,
-            color: tokens.colors.azulAgibank.hex,
-            margin: 0,
-            fontVariantNumeric: "tabular-nums",
-          }}
-        >
-          {timeString}
-        </h2>
+        {formatarTempo(restante)}
       </div>
     </AbsoluteFill>
   );

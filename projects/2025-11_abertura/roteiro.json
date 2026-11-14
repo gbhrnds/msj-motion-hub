@@ -54,7 +54,7 @@
     {
       "id": "tela_02",
       "tipo": "tela_destaques",
-      "duracaoSegundos": 18,
+      "duracaoSegundos": 22,
       "textos": {
         "titulo": null,
         "corpo": "Quem luta pelo nosso propósito com o Jeito Agi de verdade, se destaca!\n\nParabéns, Destaques do Ciclo",
@@ -143,7 +143,7 @@
         "dadoPendente": false,
         "requerComposicaoExtra": false
       },
-      "observacoesOriginais": "[ logo destaques do ciclo ] [ logo o jeito agi - crescer na jornada ] [ criar grid com o nome das pessoas - lista abaixo ] [ icone coracao ] — 68 nomes na lista; duração ampliada de 15s para 18s (pedido do usuário) para dar tempo de leitura ao scroll vertical contínuo em 4 colunas"
+      "observacoesOriginais": "[ logo destaques do ciclo ] [ logo o jeito agi - crescer na jornada ] [ criar grid com o nome das pessoas - lista abaixo ] [ icone coracao ] — nova sequência pedida pelo usuário em 2026-11-14 (logo Jeito Agi + frase → logo Destaques → logos para o canto + créditos → fechamento com coração). Duração 22s: ACIMA do máximo de 20s do Agente 01, para os créditos subirem a ~140px/s (cada nome ~4,6s visível). Aguardando aprovação."
     },
     {
       "id": "tela_03",
@@ -291,14 +291,16 @@
       "tela_04: 'XX indicados' e 'XX% indicações contratadas' — placeholder intencional confirmado pelo usuário, substituir pelos dados oficiais antes do render final"
     ],
     "telasQueRequerComposicaoExtra": [],
-    "telasAcimaDe20Segundos": [],
+    "telasAcimaDe20Segundos": [
+      "tela_02 (22s) — sequência em 4 atos + créditos legíveis; aguardando aprovação"
+    ],
     "decisoesAprovadasPeloUsuario": {
       "data": "2026-11-14",
       "logoMsjTelas03e07": "logo_msj_positivo sobre fundo #F3F3F3",
       "semLogoTelas01e05": "intencional, fundo azul Agibank (#0064F5), nome do evento já está na frase",
       "schemaTela02": "adaptado para array de logos + campo icone, aprovado",
       "layoutTela06": "manter diagonal azul/branco conforme redação",
-      "duracaoTela02": "ampliada de 15s para 18s para comportar scroll de 68 nomes"
+      "duracaoTela02": "ver telasAcimaDe20Segundos (proposta 22s)"
     },
     "assuncoesParaConfirmar": [
       "tela_00: tipo novo 'tela_inicio_contagem', exibida 1x fora do loop, 10s, relógio vivo a partir de 10:00"

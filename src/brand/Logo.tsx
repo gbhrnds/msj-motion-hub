@@ -14,12 +14,24 @@ type LogoProps = {
  * Troca entre as versões positiva/negativa pelo nome do arquivo
  * (-positive/-negative, _positivo/_negativo), sem nunca recolorir o SVG.
  */
-export const versaoDoArquivo = (arquivo: string, versao: LogoProps["versao"]) =>
+export const versaoDoArquivo = (
+  arquivo: string,
+  versao: LogoProps["versao"],
+) =>
   versao === "negativa"
-    ? arquivo.replace("-positive", "-negative").replace("_positivo", "_negativo")
-    : arquivo.replace("-negative", "-positive").replace("_negativo", "_positivo");
+    ? arquivo
+        .replace("-positive", "-negative")
+        .replace("_positivo", "_negativo")
+    : arquivo
+        .replace("-negative", "-positive")
+        .replace("_negativo", "_positivo");
 
-export const Logo: React.FC<LogoProps> = ({ arquivo, versao, altura, style }) => (
+export const Logo: React.FC<LogoProps> = ({
+  arquivo,
+  versao,
+  altura,
+  style,
+}) => (
   <Img
     src={staticFile(versaoDoArquivo(arquivo, versao))}
     style={{ height: altura, width: "auto", display: "block", ...style }}

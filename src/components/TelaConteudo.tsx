@@ -2,6 +2,8 @@ import React from "react";
 import { AbsoluteFill } from "remotion";
 import { TextReveal } from "../motion/TextReveal";
 import { Grafismo } from "../motion/Grafismo";
+import { CamadaGrafismos } from "../motion/CamadaGrafismos";
+import type { GrafismoSpec, ZonaLivre } from "../brand/grafismos";
 import { BrandShape } from "../brand/BrandShape";
 import { Logo } from "../brand/Logo";
 import { roundedPolygon } from "../brand/roundedPolygon";
@@ -27,6 +29,48 @@ const MODULO: [number, number][] = [
 ];
 const STAGGER = [0, 4, 7, 10, 12, 14];
 
+const FORMAS: GrafismoSpec[] = [
+  {
+    id: "o1",
+    nome: "quadrilateral-21",
+    x: 1660,
+    y: 900,
+    largura: 200,
+    cor: cor.azul,
+    modo: "outline",
+    rotacao: -14,
+    delayFrames: 8,
+    fase: 1,
+  },
+  {
+    id: "o2",
+    nome: "triangle-03",
+    x: 1130,
+    y: 920,
+    largura: 80,
+    cor: cor.verde,
+    rotacao: 18,
+    delayFrames: 12,
+    fase: 2.5,
+  },
+  {
+    id: "o3",
+    nome: "triangle-08",
+    x: 1700,
+    y: 110,
+    largura: 70,
+    cor: cor.amarelo,
+    rotacao: -20,
+    delayFrames: 14,
+    fase: 3.4,
+  },
+];
+// Módulo azul inteiro + bloco da lista
+const ZONAS: ZonaLivre[] = [
+  { id: "modulo", x: 80, y: 80, largura: 1000, altura: 920 },
+  { id: "lista", x: 1090, y: 290, largura: 720, altura: 560 },
+];
+
 /** Conteúdo com layout dividido em diagonal azul/branco (pedido da redação). */
 export const TelaConteudo: React.FC<TelaConteudoProps> = ({
   corpo,
@@ -42,13 +86,11 @@ export const TelaConteudo: React.FC<TelaConteudoProps> = ({
         </svg>
       </Grafismo>
 
-      {/* decoration */}
-      <Grafismo x={1640} y={850} delayFrames={8} fase={1}>
-        <BrandShape nome="quadrilateral-21" largura={260} cor={cor.azul} modo="outline" rotacao={-14} />
-      </Grafismo>
-      <Grafismo x={900} y={880} delayFrames={12} fase={2.5}>
-        <BrandShape nome="triangle-03" largura={96} cor={cor.verde} rotacao={18} />
-      </Grafismo>
+      <CamadaGrafismos
+        tela="tela_conteudo"
+        formas={FORMAS}
+        zonasLivres={ZONAS}
+      />
 
       {/* lado azul */}
       {logo && (
@@ -97,7 +139,11 @@ export const TelaConteudo: React.FC<TelaConteudoProps> = ({
           </TextReveal>
         )}
         {bullets.map((b, i) => (
-          <TextReveal key={b} delayFrames={18 + STAGGER[Math.min(i, STAGGER.length - 1)]} distancia={14}>
+          <TextReveal
+            key={b}
+            delayFrames={18 + STAGGER[Math.min(i, STAGGER.length - 1)]}
+            distancia={14}
+          >
             <div
               style={{
                 display: "flex",
@@ -106,7 +152,12 @@ export const TelaConteudo: React.FC<TelaConteudoProps> = ({
                 marginBottom: 26,
               }}
             >
-              <BrandShape nome="triangle-06" largura={24} cor={cor.verde} rotacao={-90} />
+              <BrandShape
+                nome="triangle-06"
+                largura={24}
+                cor={cor.verde}
+                rotacao={-90}
+              />
               <span
                 style={{
                   fontFamily,

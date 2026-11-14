@@ -36,7 +36,7 @@ const getPalette = (seed: string) => {
   return [
     shapesData[tri] || FALLBACK_PATH,
     shapesData[quad] || FALLBACK_PATH,
-    shapesData[pent] || FALLBACK_PATH
+    shapesData[pent] || FALLBACK_PATH,
   ];
 };
 
@@ -67,9 +67,20 @@ export const MorphingShape: React.FC<MorphingShapeProps> = ({
 
   return (
     // ViewBox aumentado para 150 para garantir que nenhuma forma seja cortada
-    <svg width={width} height={height} viewBox="0 0 150 150" style={{ overflow: "visible" }}>
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 150 150"
+      style={{ overflow: "visible" }}
+    >
       <g transform="translate(15, 15)">
-        <path d={interpolator(progress)} fill="none" stroke={color} strokeWidth={2} strokeLinejoin="round" />
+        <path
+          d={interpolator(progress)}
+          fill="none"
+          stroke={color}
+          strokeWidth={2}
+          strokeLinejoin="round"
+        />
       </g>
     </svg>
   );

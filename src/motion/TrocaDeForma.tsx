@@ -67,7 +67,8 @@ export const TrocaDeForma: React.FC<TrocaDeFormaProps> = ({
   return (
     <div style={{ position: "relative", width: largura, height: largura }}>
       {camada(indice, saindo, interpolate(saindo, [0, 1], [1.04, 1]))}
-      {entrando > 0 && camada(indice + 1, entrando, interpolate(entrando, [0, 1], [0.96, 1]))}
+      {entrando > 0 &&
+        camada(indice + 1, entrando, interpolate(entrando, [0, 1], [0.96, 1]))}
     </div>
   );
 };

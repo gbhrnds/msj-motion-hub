@@ -33,6 +33,6 @@ export const tela = {
  * Área ocupada pelo contador regressivo (canto superior esquerdo).
  * Nenhum texto ou logo de tela pode entrar aqui.
  */
-export const zonaContador = { x: 0, y: 0, largura: 360, altura: 200 } as const;
+export const zonaContador = { x: 0, y: 0, largura: 400, altura: 210 } as const;
 
 export const motionTokens = tokens.motion;

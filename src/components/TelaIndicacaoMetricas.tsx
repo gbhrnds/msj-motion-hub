@@ -2,7 +2,8 @@ import React from "react";
 import { AbsoluteFill, Img, staticFile } from "remotion";
 import { TextReveal } from "../motion/TextReveal";
 import { Grafismo } from "../motion/Grafismo";
-import { BrandShape } from "../brand/BrandShape";
+import { CamadaGrafismos } from "../motion/CamadaGrafismos";
+import type { GrafismoSpec, ZonaLivre } from "../brand/grafismos";
 import { Logo } from "../brand/Logo";
 import { cor, raio } from "../brand/theme";
 import { fontFamily } from "../fonts";
@@ -28,6 +29,37 @@ const separar = (b: string): [string, string] => {
 };
 
 const LARG_MOD = 240;
+
+// Forma interagindo com a borda da foto (Brandbook p.48) + acento no rodapé.
+const FORMAS: GrafismoSpec[] = [
+  {
+    id: "i1",
+    nome: "triangle-01",
+    x: 928,
+    y: 150,
+    largura: 110,
+    cor: cor.verde,
+    rotacao: -32,
+    delayFrames: 10,
+    fase: 1.4,
+  },
+  {
+    id: "i2",
+    nome: "quadrilateral-16",
+    x: 560,
+    y: 1012,
+    largura: 90,
+    cor: cor.azulMedio,
+    rotacao: 12,
+    delayFrames: 14,
+    fase: 2.6,
+  },
+];
+const ZONAS: ZonaLivre[] = [
+  { id: "logo", x: 140, y: 236, largura: 360, altura: 118 },
+  { id: "corpo", x: 140, y: 404, largura: 780, altura: 200 },
+  { id: "metricas", x: 140, y: 640, largura: 760, altura: 340 },
+];
 const GAP_MOD = 18; // 7,5% do módulo (Brandbook p.52: 5–8%)
 
 /**
@@ -59,9 +91,11 @@ export const TelaIndicacaoMetricas: React.FC<TelaIndicacaoMetricasProps> = ({
         </div>
       </Grafismo>
       {/* forma interagindo com a foto (Brandbook p.48) */}
-      <Grafismo x={928} y={150} delayFrames={10} fase={1.4}>
-        <BrandShape nome="triangle-01" largura={120} cor={cor.verde} rotacao={-32} />
-      </Grafismo>
+      <CamadaGrafismos
+        tela="tela_indicacao_metricas"
+        formas={FORMAS}
+        zonasLivres={ZONAS}
+      />
 
       <div style={{ position: "absolute", left: 140, top: 236 }}>
         <TextReveal distancia={0}>
@@ -91,13 +125,23 @@ export const TelaIndicacaoMetricas: React.FC<TelaIndicacaoMetricasProps> = ({
 
       {/* support: métricas — stagger com passos decrescentes */}
       <div
-        style={{ position: "absolute", left: 140, top: 660, display: "flex", gap: GAP_MOD }}
+        style={{
+          position: "absolute",
+          left: 140,
+          top: 660,
+          display: "flex",
+          gap: GAP_MOD,
+        }}
       >
         {bullets.map((b, i) => {
           const [numero, rotulo] = separar(b);
           const m = MODULOS[i % MODULOS.length];
           return (
-            <TextReveal key={b} delayFrames={18 + [0, 4, 7][i % 3]} distancia={20}>
+            <TextReveal
+              key={b}
+              delayFrames={18 + [0, 4, 7][i % 3]}
+              distancia={20}
+            >
               <div
                 style={{
                   width: LARG_MOD,

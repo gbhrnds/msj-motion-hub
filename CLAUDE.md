@@ -43,6 +43,10 @@ O texto das telas de respiro **vem da redação**, como qualquer outra tela: o
 agente nunca escreve frase de respiro por conta própria.
 
 ## Linguagem visual (resumo — fonte completa em `brand/tokens.json`)
+- Antes de montar ou revisar qualquer tela, ler `brand/boas-praticas-visuais.md`
+  (aplicações do Brandbook + vinheta de Outubro + exceções aprovadas)
+- **Formas nunca se sobrepõem** entre si nem invadem texto/logo/contador: declare os
+  grafismos como dados e renderize com `CamadaGrafismos` (o render falha se houver conflito)
 - Minimalista, fundos sólidos (uma cor de cada vez, sem gradientes)
 - Fundos permitidos: azul Agibank, branco, azul médio, azul escuro e **cinza claro
   (#F3F3F3)** — este último é exceção aprovada para o MSJ (o Brandbook o restringe
