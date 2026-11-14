@@ -6,6 +6,7 @@ import { ChecaFormas } from "./components/ChecaFormas";
 import { ExportaFigma } from "./export/ExportaFigma";
 import { duracaoReview } from "./versoes/VersaoBase";
 import { V1NuDay } from "./versoes/v1/V1NuDay";
+import { V2Modulos } from "./versoes/v2/V2Modulos";
 import { ShowcasePropostas, SEGUNDOS_POR_PROPOSTA } from "./components/ShowcasePropostas";
 import tokens from "../brand/tokens.json";
 
@@ -45,6 +46,14 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="Versao1-NuDay"
         component={V1NuDay}
+        durationInFrames={duracaoReview(fps)}
+        fps={fps}
+        width={tokens.video.resolution.width}
+        height={tokens.video.resolution.height}
+      />
+      <Composition
+        id="Versao2-Modulos"
+        component={V2Modulos}
         durationInFrames={duracaoReview(fps)}
         fps={fps}
         width={tokens.video.resolution.width}
