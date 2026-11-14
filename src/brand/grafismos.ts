@@ -47,7 +47,7 @@ const alturaDe = (g: GrafismoSpec) => {
 };
 
 /** Pontos do contorno do path (vértices + curvas amostradas). */
-const pontosDoPath = (d: string): P[] => {
+export const pontosDoPath = (d: string): P[] => {
   const tokens = d.match(/[a-zA-Z]|-?\d*\.?\d+(?:e-?\d+)?/g) ?? [];
   const pts: P[] = [];
   let cmd = "";

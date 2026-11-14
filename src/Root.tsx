@@ -4,6 +4,8 @@ import { MSJComposition } from "./Composition";
 import { CatalogoFormas } from "./components/CatalogoFormas";
 import { ChecaFormas } from "./components/ChecaFormas";
 import { ExportaFigma } from "./export/ExportaFigma";
+import { duracaoReview } from "./versoes/VersaoBase";
+import { V1NuDay } from "./versoes/v1/V1NuDay";
 import { ShowcasePropostas, SEGUNDOS_POR_PROPOSTA } from "./components/ShowcasePropostas";
 import tokens from "../brand/tokens.json";
 
@@ -39,7 +41,16 @@ export const RemotionRoot: React.FC = () => {
         width={tokens.video.resolution.width}
         height={tokens.video.resolution.height}
       />
-      {/* Etapa 3: as 3 propostas de relógio, 15s cada */}
+      {/* Etapa 3: versões novas da vinheta (1 volta do loop + 10s finais) */}
+      <Composition
+        id="Versao1-NuDay"
+        component={V1NuDay}
+        durationInFrames={duracaoReview(fps)}
+        fps={fps}
+        width={tokens.video.resolution.width}
+        height={tokens.video.resolution.height}
+      />
+      {/* Etapa 3 (1ª tentativa): só as 3 propostas de relógio */}
       <Composition
         id="ShowcasePropostas"
         component={ShowcasePropostas}

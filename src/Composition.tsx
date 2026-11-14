@@ -8,43 +8,8 @@ import { TelaConteudo } from "./components/TelaConteudo";
 import { TelaCampanha } from "./components/TelaCampanha";
 import { CountdownOverlay } from "./components/CountdownOverlay";
 import { cor } from "./brand/theme";
-import roteiroData from "../projects/2025-11_abertura/roteiro.json";
-import manifestData from "../projects/2025-11_abertura/manifest.json";
-
-type Tela = {
-  id: string;
-  tipo:
-    | "tela_inicio_contagem"
-    | "tela_aguarde"
-    | "tela_destaques"
-    | "tela_conteudo"
-    | "tela_campanha"
-    | "tela_indicacao_metricas";
-  duracaoSegundos: number;
-  exibicao?: "uma_vez";
-  textos: { titulo: string | null; corpo: string | null; bullets: string[] };
-  midia: {
-    foto?: string | null;
-    logo?: string | string[] | null;
-    icone?: string;
-    gridNomes?: string[] | null;
-  };
-  fundoHex?: string;
-  layout?: { corOutline?: keyof typeof cor; destaque?: string };
-};
-
-const roteiro = roteiroData as unknown as { telas: Tela[] };
-const manifest = manifestData as unknown as Record<
-  string,
-  Record<string, string>
->;
-
-/** Chave do roteiro → caminho do arquivo (manifest da tela, depois "geral"). */
-const midia = (chave: string, telaId: string): string =>
-  manifest[telaId]?.[chave] ?? manifest.geral?.[chave] ?? "";
-
-/** Separa os parágrafos do campo "corpo" (texto intacto, só dividido). */
-const paragrafos = (corpo: string | null) => (corpo ?? "").split("\n\n");
+import { midia, paragrafos, roteiro, Tela } from "./dados";
+import { LOGO_MSJ } from "./dados";
 
 const renderTela = (
   tela: Tela,
@@ -181,7 +146,7 @@ export const MSJComposition: React.FC = () => {
       <CountdownOverlay
         durationInSeconds={segundosTotais}
         ocultarAteFrame={framesAbertura}
-        logoMsj={manifest.geral?.logo_msj_negativo ?? ""}
+        logoMsj={LOGO_MSJ.negativo}
       />
     </AbsoluteFill>
   );
