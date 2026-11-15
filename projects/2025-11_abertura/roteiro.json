@@ -1,11 +1,34 @@
 {
   "projeto": "2025-11_abertura",
-  "geradoEm": "2026-11-14T03:31:09Z",
+  "geradoEm": "2026-11-14T03:41:44Z",
   "fasePreLive": {
     "contentLoopMinutes": 10,
     "bufferOnlyLogoMinutes": 5
   },
   "telas": [
+    {
+      "id": "tela_00",
+      "tipo": "tela_inicio_contagem",
+      "duracaoSegundos": 10,
+      "textos": {
+        "titulo": "10:00",
+        "corpo": null,
+        "bullets": []
+      },
+      "midia": {
+        "foto": null,
+        "logo": "logo_msj_negativo",
+        "gridNomes": null
+      },
+      "flags": {
+        "midiaPendente": false,
+        "dadoPendente": false,
+        "requerComposicaoExtra": false
+      },
+      "exibicao": "uma_vez",
+      "fundoHex": "#0064F5",
+      "observacoesOriginais": "(Inicio da Contagem regressiva) [logo-msj-negative] [ usar morphing shape decorativo ] — tipo novo criado pelo parser. Assumido: o '10:00' é o próprio relógio (começa em 10:00 e corre), tela exibida uma única vez antes do loop, duração base 10s. Morphing substituído por troca de formas oficiais (Brandbook p.46)."
+    },
     {
       "id": "tela_01",
       "tipo": "tela_aguarde",
@@ -25,8 +48,13 @@
         "dadoPendente": false,
         "requerComposicaoExtra": false
       },
-      "fundoHex": "#0064F5",
-      "observacoesOriginais": "[ usar morphing shape decorativo ] — sem logo: intencional (confirmado pelo usuário), o nome do evento já está na frase, fundo azul Agibank"
+      "fundoHex": "#F3F3F3",
+      "observacoesOriginais": "[ usar morphing shape decorativo ] — sem logo: intencional (confirmado pelo usuário), o nome do evento já está na frase, fundo azul Agibank",
+      "layout": {
+        "corOutline": "amarelo",
+        "destaque": "Momento Sempre Juntos",
+        "origem": "ajuste do usuário no Figma, 2026-11-14 (fundo cinza, outline + máscara no texto)"
+      }
     },
     {
       "id": "tela_02",
@@ -120,7 +148,7 @@
         "dadoPendente": false,
         "requerComposicaoExtra": false
       },
-      "observacoesOriginais": "[ logo destaques do ciclo ] [ logo o jeito agi - crescer na jornada ] [ criar grid com o nome das pessoas - lista abaixo ] [ icone coracao ] — 68 nomes na lista; duração ampliada de 15s para 18s (pedido do usuário) para dar tempo de leitura ao scroll vertical contínuo em 4 colunas"
+      "observacoesOriginais": "[ logo destaques do ciclo ] [ logo o jeito agi - crescer na jornada ] [ criar grid com o nome das pessoas - lista abaixo ] [ icone coracao ] — nova sequência pedida pelo usuário em 2026-11-14 (logo Jeito Agi + frase → logo Destaques → logos para o canto + créditos → fechamento com coração). Duração 18s: cada nome fica ~3,6s visível (créditos a ~200px/s), pedido do usuário em 2026-11-14 (3–4s por nome; o loop repete a lista)."
     },
     {
       "id": "tela_03",
@@ -142,7 +170,12 @@
         "requerComposicaoExtra": false
       },
       "fundoHex": "#F3F3F3",
-      "observacoesOriginais": "[ logo MSJ ] [ usar morphing shape decorativo ] — confirmado pelo usuário: fundo cinza claro (#F3F3F3) + logo_msj_positivo"
+      "observacoesOriginais": "[ logo MSJ ] [ usar morphing shape decorativo ] — confirmado pelo usuário: fundo cinza claro (#F3F3F3) + logo_msj_positivo",
+      "layout": {
+        "corOutline": "verde",
+        "destaque": "estarmos juntos...",
+        "origem": "ajuste do usuário no Figma, 2026-11-14 (fundo cinza, outline + máscara no texto)"
+      }
     },
     {
       "id": "tela_04",
@@ -188,8 +221,13 @@
         "dadoPendente": false,
         "requerComposicaoExtra": false
       },
-      "fundoHex": "#0064F5",
-      "observacoesOriginais": "[ usar morphing shape decorativo ] — sem logo: intencional (confirmado pelo usuário), o nome do evento já está na frase, fundo azul Agibank"
+      "fundoHex": "#F3F3F3",
+      "observacoesOriginais": "[ usar morphing shape decorativo ] — sem logo: intencional (confirmado pelo usuário), o nome do evento já está na frase, fundo azul Agibank",
+      "layout": {
+        "corOutline": "amarelo",
+        "destaque": "Momento Sempre Juntos",
+        "origem": "ajuste do usuário no Figma, 2026-11-14 (fundo cinza, outline + máscara no texto)"
+      }
     },
     {
       "id": "tela_06",
@@ -238,7 +276,12 @@
         "requerComposicaoExtra": false
       },
       "fundoHex": "#F3F3F3",
-      "observacoesOriginais": "[ logo MSJ ] [ usar morphing shape decorativo ] — confirmado pelo usuário: fundo cinza claro (#F3F3F3) + logo_msj_positivo"
+      "observacoesOriginais": "[ logo MSJ ] [ usar morphing shape decorativo ] — confirmado pelo usuário: fundo cinza claro (#F3F3F3) + logo_msj_positivo",
+      "layout": {
+        "corOutline": "verde",
+        "destaque": "estarmos juntos...",
+        "origem": "ajuste do usuário no Figma, 2026-11-14 (fundo cinza, outline + máscara no texto)"
+      }
     },
     {
       "id": "tela_08",
@@ -272,10 +315,14 @@
     "decisoesAprovadasPeloUsuario": {
       "data": "2026-11-14",
       "logoMsjTelas03e07": "logo_msj_positivo sobre fundo #F3F3F3",
-      "semLogoTelas01e05": "intencional, fundo azul Agibank (#0064F5), nome do evento já está na frase",
+      "semLogoTelas01e05": "intencional; fundo alterado para cinza claro (#F3F3F3) no ajuste do Figma",
       "schemaTela02": "adaptado para array de logos + campo icone, aprovado",
-      "layoutTela06": "manter diagonal azul/branco conforme redação",
-      "duracaoTela02": "ampliada de 15s para 18s para comportar scroll de 68 nomes"
-    }
+      "layoutTela06": "dois módulos (azul + azul médio) com divisão diagonal, ajuste do Figma",
+      "duracaoTela02": "18s — cada nome ~3,6s na tela (pedido: 3–4s); limite aprovado para telas com nomes: até 30s",
+      "quebrasDeLinha": "sem artigo/preposição no fim da linha e sem viúva (src/brand/quebraDeLinha.ts)"
+    },
+    "assuncoesParaConfirmar": [
+      "tela_00: tipo novo 'tela_inicio_contagem', exibida 1x fora do loop, 10s, relógio vivo a partir de 10:00"
+    ]
   }
 }

@@ -32,7 +32,8 @@ A vinheta de abertura é sincronizada com o horário real do evento:
 | Fase 2 — Buffer de contingência | 5 minutos | Apenas o logo do MSJ (estático ou com wiggle sutil), sem texto, para cobrir eventuais atrasos antes da live com a MC |
 | **Total pré-live** | **15 minutos** | |
 
-Cada tela de conteúdo individual dura entre **10 e 20 segundos**, variando
+Cada tela de conteúdo individual dura entre **10 e 20 segundos** (exceção: telas
+com créditos/grid de nomes, como Destaques do Ciclo, podem ir até **30 segundos**), variando
 conforme quantidade de informação e complexidade da animação — sempre pensando
 em dar tempo de leitura confortável. Nunca estimar duração "no chute": seguir
 a lógica documentada em `agents/01-parser-redacao.md`.
@@ -43,6 +44,10 @@ O texto das telas de respiro **vem da redação**, como qualquer outra tela: o
 agente nunca escreve frase de respiro por conta própria.
 
 ## Linguagem visual (resumo — fonte completa em `brand/tokens.json`)
+- Antes de montar ou revisar qualquer tela, ler `brand/boas-praticas-visuais.md`
+  (aplicações do Brandbook + vinheta de Outubro + exceções aprovadas)
+- **Formas nunca se sobrepõem** entre si nem invadem texto/logo/contador: declare os
+  grafismos como dados e renderize com `CamadaGrafismos` (o render falha se houver conflito)
 - Minimalista, fundos sólidos (uma cor de cada vez, sem gradientes)
 - Fundos permitidos: azul Agibank, branco, azul médio, azul escuro e **cinza claro
   (#F3F3F3)** — este último é exceção aprovada para o MSJ (o Brandbook o restringe
@@ -54,7 +59,10 @@ agente nunca escreve frase de respiro por conta própria.
 - Paleta: azul Agibank é a cor-base obrigatória em toda comunicação; verde e
   amarelo só aparecem **acompanhados** do azul ou do branco, nunca sozinhos
   como fundo principal; amarelo nunca é cor de fundo
-- Cantos sempre arredondados entre 12–17px (nunca retos, nunca >18px)
+- Cantos sempre arredondados entre 12–17px (nunca retos, nunca >18px); exceção:
+  **módulos grandes** (≈ meia tela ou mais) usam 30px, como no asset de módulos
+- Quebra de linha: nunca artigo/preposição sozinho no fim da linha e nunca viúva
+  (use `quebraBoa` de `src/brand/quebraDeLinha.ts` em todo texto de tela)
 - Texto nunca sobre textura ou sobre grafismo colorido que prejudique leitura
 
 ## O que NUNCA fazer (direto do Brandbook — violação = reprovar a peça)

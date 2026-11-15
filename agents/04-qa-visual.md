@@ -10,6 +10,7 @@ aqui reprova a peça.
 regra que não esteja nesses dois arquivos.
 
 ## Checklist (conferir no código E no PNG de cada tela)
+0. **Boas práticas:** tudo de `brand/boas-praticas-visuais.md`. Sobreposição de formas já é barrada no render; confira no PNG o que o código não vê (equilíbrio, peso tipográfico, respiro).
 1. **Fundo:** uma cor sólida por tela, sem gradiente, sem textura sob texto.
    Amarelo (`#FFD600`) nunca é fundo. Verde/amarelo nunca sem azul ou branco
    no layout.

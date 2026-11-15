@@ -48,6 +48,8 @@ A skill é genérica. Quando ela conflitar com este projeto, vale o projeto:
    `useCurrentFrame()`.
 
 ## Checagem antes de entregar
+- Grafismos declarados como `GrafismoSpec[]` + `ZonaLivre[]` e renderizados por `CamadaGrafismos` (sobreposição = erro de render).
+- Layout confere com `brand/boas-praticas-visuais.md`.
 - `npm run lint` passa sem erros (ESLint + `tsc`).
 - A soma das durações de um loop é coerente com o resumo do Agente 01.
 

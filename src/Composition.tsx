@@ -1,63 +1,64 @@
 import React from "react";
-import { AbsoluteFill, Series, staticFile, useVideoConfig } from "remotion";
+import { AbsoluteFill, Series, useVideoConfig } from "remotion";
+import { PainelContagem } from "./components/PainelContagem";
 import { TelaAguarde } from "./components/TelaAguarde";
 import { TelaDestaques } from "./components/TelaDestaques";
 import { TelaIndicacaoMetricas } from "./components/TelaIndicacaoMetricas";
 import { TelaConteudo } from "./components/TelaConteudo";
 import { TelaCampanha } from "./components/TelaCampanha";
 import { CountdownOverlay } from "./components/CountdownOverlay";
-import roteiroData from "../projects/2025-11_abertura/roteiro.json";
-import manifestData from "../projects/2025-11_abertura/manifest.json";
+import { cor } from "./brand/theme";
+import { midia, paragrafos, roteiro, Tela } from "./dados";
+import { LOGO_MSJ } from "./dados";
 
-type Tela = {
-  id: string;
-  tipo:
-    | "tela_aguarde"
-    | "tela_destaques"
-    | "tela_conteudo"
-    | "tela_campanha"
-    | "tela_indicacao_metricas";
-  duracaoSegundos: number;
-  textos: { titulo: string | null; corpo: string | null; bullets: string[] };
-  midia: {
-    foto?: string | null;
-    logo?: string | string[] | null;
-    icone?: string;
-    gridNomes?: string[] | null;
-  };
-  fundoHex?: string;
-};
-
-const roteiro = roteiroData as unknown as { telas: Tela[] };
-const manifest = manifestData as unknown as Record<string, Record<string, string>>;
-
-const resolveMidia = (chave: string, telaId: string): string => {
-  const caminho = manifest[telaId]?.[chave] ?? manifest.geral?.[chave] ?? "";
-  return staticFile(caminho);
-};
-
-const renderTela = (tela: Tela, duracaoFrames: number): React.ReactNode => {
+export const renderTela = (
+  tela: Tela,
+  duracaoFrames: number,
+  repeticao: number,
+  segundosTotais: number,
+): React.ReactNode => {
   switch (tela.tipo) {
+    case "tela_inicio_contagem":
+      return (
+        <PainelContagem
+          id={tela.id}
+          segundosNoInicio={segundosTotais}
+          logoMsj={midia(tela.midia.logo as string, tela.id)}
+          duracaoFrames={duracaoFrames}
+        />
+      );
     case "tela_aguarde": {
-      const escura = tela.fundoHex === "#0064F5";
+      const n = Number(tela.id.replace(/\D/g, ""));
       return (
         <TelaAguarde
+          id={tela.id}
+          duracaoFrames={duracaoFrames}
           titulo={tela.textos.titulo ?? ""}
-          variante={escura ? "escura" : "clara"}
-          mostrarLogoMsj={Boolean(tela.midia.logo)}
+          destaque={tela.layout?.destaque}
+          corOutline={cor[tela.layout?.corOutline ?? "verde"]}
+          logoMsj={
+            tela.midia.logo
+              ? midia(tela.midia.logo as string, tela.id)
+              : undefined
+          }
+          // telas repetidas (01/05, 03/07) e voltas do loop alternam a rotação do outline
+          girarGrafismos={(Math.floor(n / 4) + repeticao) % 2 === 1}
         />
       );
     }
     case "tela_destaques": {
-      const [subtitulo, fechamento] = (tela.textos.corpo ?? "").split("\n\n");
-      const logos = (tela.midia.logo as string[]) ?? [];
+      const [chamada, fechamento] = paragrafos(tela.textos.corpo);
       return (
         <TelaDestaques
-          subtitulo={subtitulo}
+          chamada={chamada}
           fechamento={fechamento}
           nomes={tela.midia.gridNomes ?? []}
-          logos={logos.map((chave) => resolveMidia(chave, tela.id))}
-          icone={tela.midia.icone ? resolveMidia(tela.midia.icone, tela.id) : undefined}
+          logos={((tela.midia.logo as string[]) ?? []).map((c) =>
+            midia(c, tela.id),
+          )}
+          icone={
+            tela.midia.icone ? midia(tela.midia.icone, tela.id) : undefined
+          }
           duracaoFrames={duracaoFrames}
         />
       );
@@ -67,20 +68,36 @@ const renderTela = (tela: Tela, duracaoFrames: number): React.ReactNode => {
         <TelaIndicacaoMetricas
           corpo={tela.textos.corpo ?? ""}
           bullets={tela.textos.bullets}
-          foto={staticFile(tela.midia.foto ?? "")}
-          logo={resolveMidia(tela.midia.logo as string, tela.id)}
+          foto={tela.midia.foto ?? ""}
+          recorte={midia("foto_recorte", tela.id) || undefined}
+          logo={midia(tela.midia.logo as string, tela.id)}
         />
       );
-    case "tela_conteudo":
+    case "tela_conteudo": {
+      const [corpo, chamadaLista] = paragrafos(tela.textos.corpo);
       return (
         <TelaConteudo
-          corpo={tela.textos.corpo ?? ""}
+          corpo={corpo}
+          chamadaLista={chamadaLista}
           bullets={tela.textos.bullets}
-          logo={tela.midia.logo ? resolveMidia(tela.midia.logo as string, tela.id) : undefined}
+          logo={
+            tela.midia.logo
+              ? midia(tela.midia.logo as string, tela.id)
+              : undefined
+          }
         />
       );
-    case "tela_campanha":
-      return <TelaCampanha corpo={tela.textos.corpo ?? ""} />;
+    }
+    case "tela_campanha": {
+      const [chamada, corpo] = paragrafos(tela.textos.corpo);
+      return (
+        <TelaCampanha
+          chamada={chamada}
+          corpo={corpo}
+          duracaoFrames={duracaoFrames}
+        />
+      );
+    }
     default:
       return null;
   }
@@ -88,44 +105,49 @@ const renderTela = (tela: Tela, duracaoFrames: number): React.ReactNode => {
 
 export const MSJComposition: React.FC = () => {
   const { fps, durationInFrames } = useVideoConfig();
-  const durationInSeconds = Math.floor(durationInFrames / fps);
+  const segundosTotais = Math.round(durationInFrames / fps);
+  const frames = (t: Tela) => Math.round(t.duracaoSegundos * fps);
 
-  // Converte a duracao de cada tela (segundos, do roteiro.json) para frames no
-  // fps oficial do projeto (23.976fps — CLAUDE.md, regra inegociavel).
-  const telasComFrames = roteiro.telas.map((tela) => ({
-    tela,
-    frames: Math.round(tela.duracaoSegundos * fps),
-  }));
+  // Abertura (exibida uma vez) + loop das telas até completar a Fase 1.
+  const abertura = roteiro.telas.filter((t) => t.exibicao === "uma_vez");
+  const loop = roteiro.telas.filter((t) => t.exibicao !== "uma_vez");
 
-  // A Fase 1 (loop das 8 telas) se repete ate preencher o total de frames da
-  // composicao. A ultima tela do ultimo loop e cortada exatamente no limite,
-  // caso nao feche uma volta inteira.
-  const sequencias: { key: string; tela: Tela; frames: number }[] = [];
+  const sequencias: { key: string; tela: Tela; frames: number; rep: number }[] =
+    [];
   let acumulado = 0;
-  let loopIndex = 0;
-  while (acumulado < durationInFrames) {
-    for (const { tela, frames } of telasComFrames) {
-      const restante = durationInFrames - acumulado;
-      if (restante <= 0) break;
-      const framesDaVez = Math.min(frames, restante);
-      sequencias.push({ key: `${tela.id}-loop${loopIndex}`, tela, frames: framesDaVez });
-      acumulado += framesDaVez;
-    }
-    loopIndex += 1;
+  const adicionar = (tela: Tela, rep: number) => {
+    const restante = durationInFrames - acumulado;
+    if (restante <= 0) return;
+    const f = Math.min(frames(tela), restante);
+    sequencias.push({ key: `${tela.id}-r${rep}`, tela, frames: f, rep });
+    acumulado += f;
+  };
+  abertura.forEach((t) => adicionar(t, 0));
+  const framesAbertura = acumulado;
+  for (let rep = 0; acumulado < durationInFrames && loop.length > 0; rep++) {
+    loop.forEach((t) => adicionar(t, rep));
   }
 
   return (
     <AbsoluteFill>
       <Series>
-        {sequencias.map(({ key, tela, frames }) => (
-          <Series.Sequence key={key} durationInFrames={frames}>
-            {renderTela(tela, frames)}
+        {sequencias.map(({ key, tela, frames: f, rep }) => (
+          <Series.Sequence
+            key={key}
+            durationInFrames={f}
+            name={`${tela.id} (volta ${rep + 1})`}
+          >
+            {renderTela(tela, f, rep, segundosTotais)}
           </Series.Sequence>
         ))}
       </Series>
 
-      {/* O Relogio fica por cima de tudo, rodando independente das telas */}
-      <CountdownOverlay durationInSeconds={durationInSeconds} />
+      {/* O relógio fica por cima de tudo; na abertura ele já é a própria tela */}
+      <CountdownOverlay
+        durationInSeconds={segundosTotais}
+        ocultarAteFrame={framesAbertura}
+        logoMsj={LOGO_MSJ.negativo}
+      />
     </AbsoluteFill>
   );
 };

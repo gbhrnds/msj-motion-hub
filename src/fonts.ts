@@ -22,6 +22,6 @@ export const fontsLoaded = Promise.all(
       family: fontFamily,
       url: staticFile(`brand/fonts/${arquivo}`),
       weight,
-    })
-  )
+    }),
+  ),
 );
