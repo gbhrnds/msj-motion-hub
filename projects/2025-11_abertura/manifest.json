@@ -1,7 +1,9 @@
 {
   "geral": {
     "logo_msj_positivo": "brand/logos/logo-msj-positive.svg",
-    "logo_msj_negativo": "brand/logos/logo-msj-negative.svg"
+    "logo_msj_negativo": "brand/logos/logo-msj-negative.svg",
+    "logo_agi_negativo": "brand/logos/agi-negative.svg",
+    "logo_agi_positivo": "brand/logos/agi-positive.svg"
   },
   "tela_02": {
     "logo_destaques": "brand/logos/destaques-do-ciclo-positive.svg",

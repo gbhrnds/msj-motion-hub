@@ -45,7 +45,7 @@ const RelogioFixo: React.FC<{ inicio: number; total: number; corTexto: string }>
 const Selo: React.FC<{ claro: boolean }> = ({ claro: c }) => {
   const arq = c ? LOGO_AGI.positivo : LOGO_AGI.negativo;
   return (
-    <div data-camada="logo agi" style={{ position: "absolute", left: RELOGIO.x, top: 64, width: 120, height: 52 }}>
+    <div data-camada="logo agi" style={{ position: "absolute", left: RELOGIO.x, top: 64, height: 52 }}>
       {arq && <Logo arquivo={arq} versao={c ? "positiva" : "negativa"} altura={52} />}
     </div>
   );
