@@ -28,6 +28,28 @@ export const montarReview = (fps: number) => {
 
 export const duracaoReview = (fps: number) => montarReview(fps).total;
 
+/**
+ * Fase 1 completa: abertura (1x) + o loop repetido até preencher `total` frames.
+ * A última tela é cortada no fim, por baixo do painel dos 10s finais.
+ */
+export const montarCompleta = (fps: number, total: number) => {
+  const telas = roteiro.telas;
+  const seq: Montagem[] = [];
+  let acc = 0;
+  const add = (t: (typeof telas)[number], rep: number) => {
+    const resta = total - acc;
+    if (resta <= 0) return;
+    const f = Math.min(Math.round(t.duracaoSegundos * fps), resta);
+    seq.push({ key: `${t.id}-${rep}`, c: conteudoDe(t), frames: f, rep });
+    acc += f;
+  };
+  telas.filter((t) => t.exibicao === "uma_vez").forEach((t) => add(t, 0));
+  const abertura = acc;
+  const loop = telas.filter((t) => t.exibicao !== "uma_vez");
+  for (let rep = 0; acc < total && loop.length > 0; rep++) loop.forEach((t) => add(t, rep));
+  return { seq, abertura, total };
+};
+
 const [m1, m2, m3, m4] = motionTokens.movimentoEmTela.easingBezier;
 const easeMove = Easing.bezier(m1, m2, m3, m4);
 
@@ -62,6 +84,8 @@ type VersaoProps = {
   /** Pares de formas oficiais usados nas transições (alternam a cada corte). */
   formasTransicao?: ShapeName[][];
   durTransicao?: number;
+  /** Duração total em frames (Fase 1 completa). Sem isso: montagem de review (1 volta). */
+  duracao?: number;
 };
 
 export const VersaoBase: React.FC<VersaoProps> = ({
@@ -70,9 +94,11 @@ export const VersaoBase: React.FC<VersaoProps> = ({
   fundo,
   formasTransicao = [["pentagon-05", "quadrilateral-05"], ["quadrilateral-16", "pentagon-03"], ["pentagon-06", "quadrilateral-01"]],
   durTransicao = 20,
+  duracao,
 }) => {
-  const { fps, durationInFrames } = useVideoConfig();
-  const { seq, abertura } = montarReview(fps);
+  const { fps, durationInFrames: duracaoComp } = useVideoConfig();
+  const durationInFrames = duracao ?? duracaoComp;
+  const { seq, abertura } = duracao ? montarCompleta(fps, duracao) : montarReview(fps);
   const cortes: { frame: number; cor: string }[] = [];
   let acc = 0;
   seq.forEach((s, i) => {

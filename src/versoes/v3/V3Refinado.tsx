@@ -36,9 +36,10 @@ const RelogioV3: React.FC<RelogioProps> = ({ segundosNoInicio, ocultarAte }) => 
   <CountdownOverlay durationInSeconds={segundosNoInicio} ocultarAteFrame={ocultarAte} logoMsj={LOGO_MSJ.negativo} />
 );
 
-export const V3Refinado: React.FC = () => (
+export const V3Refinado: React.FC<{ duracao?: number }> = ({ duracao }) => (
   <EstiloMotion.Provider value="refinado">
     <VersaoBase
+      duracao={duracao}
       Tela={TelaV3}
       Relogio={RelogioV3}
       fundo={(c) => FUNDO[c.tipo]}
