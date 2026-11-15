@@ -9,4 +9,12 @@ export type Estilo = "padrao" | "refinado";
 export const EstiloMotion = React.createContext<Estilo>("padrao");
 export const useRefinado = () => React.useContext(EstiloMotion) === "refinado";
 
+/**
+ * Morph de formas só nas telas de respiro (formas em volta do texto) e nas
+ * transições entre telas (decisão do usuário, Etapa 3). A tela de respiro
+ * abre este contexto; fora dele as formas ficam estáticas.
+ */
+export const MorphPermitido = React.createContext(false);
+export const useMorph = () => useRefinado() && React.useContext(MorphPermitido);
+
 export { parceiras } from "../brand/grafismos";

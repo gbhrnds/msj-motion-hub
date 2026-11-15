@@ -59,6 +59,7 @@ export const CamadaGrafismos: React.FC<Props> = ({
               rotacao={g.rotacao}
               delayFrames={g.delayFrames}
               duracaoFrames={duracaoFrames}
+              alternativas={seguras[g.id]}
             />
           ) : (
             <FormaViva

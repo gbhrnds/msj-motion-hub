@@ -44,6 +44,11 @@ que está escrito) e do que a vinheta de Outubro/2026 faz. Complementa o
   formas intermediárias só existem em movimento. Para não mudar a composição,
   a forma morfa para parceiras de proporção parecida, na mesma caixa, e só para
   as que passam na checagem daquela tela (`parceirasSeguras`).
+  **Onde (decisão do usuário, 2026-11-15):** só nas telas de **respiro**, com as
+  formas em volta do texto, e nas **transições** entre telas. Nas demais telas as
+  formas ficam estáticas (contexto `MorphPermitido`, aberto só pelo respiro).
+- **Outline sem trim path nas versões novas:** o contorno entra inteiro (fade +
+  escala) para a forma ser reconhecida; o trim path fica só na vinheta clássica.
 - **Cores (p.47):** monocromático azul ou verde sobre branco; duas/três cores
   sobre branco ou azul; amarelo sempre em menor proporção (ver exceção §6).
 

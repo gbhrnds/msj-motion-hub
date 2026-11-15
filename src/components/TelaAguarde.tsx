@@ -3,6 +3,7 @@ import { quebraBoa } from "../brand/quebraDeLinha";
 import { AbsoluteFill } from "remotion";
 import { TextReveal } from "../motion/TextReveal";
 import { CamadaGrafismos } from "../motion/CamadaGrafismos";
+import { MorphPermitido } from "../motion/estilo";
 import { Logo } from "../brand/Logo";
 import { cor } from "../brand/theme";
 import { girar180, GrafismoSpec, ZonaLivre } from "../brand/grafismos";
@@ -72,6 +73,7 @@ export const TelaAguarde: React.FC<TelaAguardeProps> = ({
   const [antes, forte, depois] = partes(titulo, destaque);
 
   return (
+    <MorphPermitido.Provider value>
     <AbsoluteFill style={{ backgroundColor: cor.cinzaClaro }}>
       <CamadaGrafismos
         tela={id}
@@ -110,5 +112,6 @@ export const TelaAguarde: React.FC<TelaAguardeProps> = ({
         </div>
       )}
     </AbsoluteFill>
+    </MorphPermitido.Provider>
   );
 };

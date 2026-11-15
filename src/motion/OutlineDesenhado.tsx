@@ -4,7 +4,7 @@ import shapesData from "../shapesData.json";
 import type { ShapeName } from "../brand/BrandShape";
 import { motionTokens, strokeOutline } from "../brand/theme";
 import { MorphForma } from "./MorphForma";
-import { parceiras, useRefinado } from "./estilo";
+import { useMorph, useRefinado } from "./estilo";
 
 const cfg = motionTokens.outlineDesenhado;
 
@@ -16,6 +16,8 @@ type Props = {
   delayFrames?: number;
   /** Duração total da tela, para o traço se apagar antes do corte. */
   duracaoFrames?: number;
+  /** Formas oficiais validadas na tela para o morph (só no respiro, estilo refinado). */
+  alternativas?: ShapeName[];
 };
 
 /**
@@ -30,6 +32,7 @@ export const OutlineDesenhado: React.FC<Props> = ({
   rotacao = 0,
   delayFrames = 0,
   duracaoFrames,
+  alternativas = [],
 }) => {
   const frame = useCurrentFrame() - delayFrames;
   const { fps } = useVideoConfig();
@@ -56,24 +59,37 @@ export const OutlineDesenhado: React.FC<Props> = ({
   const deslocamento = -(frame / fps) * cfg.voltasPorSegundo;
 
   const refinado = useRefinado();
+  const morph = useMorph();
   if (refinado) {
-    // o contorno que se desenha também troca de forma oficial no caminho
+    // V3: sem trim path — o contorno entra inteiro (fade + escala), para a forma
+    // ser lida; no respiro ele morfa entre formas oficiais em volta do texto.
+    const entra = interpolate(frame, [0, entrada], [0, 1], { ...clamp, easing: Easing.bezier(0.23, 1, 0.32, 1) });
+    const sai = duracaoFrames ? interpolate(frame, [duracaoFrames - delayFrames - 12, duracaoFrames - delayFrames - 2], [1, 0], clamp) : 1;
     const lado = Math.max(largura, altura);
-    return (
-      <div style={{ width: largura, height: altura, position: "relative" }}>
-        <div style={{ position: "absolute", left: (largura - lado) / 2, top: (altura - lado) / 2 }}>
-          <MorphForma
-            formas={[nome, ...parceiras(nome)]}
-            tamanho={lado}
-            cor={cor}
-            modo="outline"
-            rotacao={rotacao}
-            segurar={Math.round(fps * 3)}
-            morfar={22}
-            atraso={-delayFrames - entrada}
-            trim={{ visivel, deslocamento }}
-          />
+    const caixa: React.CSSProperties = { width: largura, height: altura, position: "relative", opacity: entra * sai, scale: String(0.92 + 0.08 * entra) };
+    if (morph && alternativas.length > 0) {
+      return (
+        <div style={caixa}>
+          <div style={{ position: "absolute", left: (largura - lado) / 2, top: (altura - lado) / 2 }}>
+            <MorphForma
+              formas={[nome, ...alternativas.slice(0, 2)]}
+              tamanho={lado}
+              cor={cor}
+              modo="outline"
+              rotacao={rotacao}
+              segurar={Math.round(fps * 2.5)}
+              morfar={22}
+              atraso={-delayFrames - entrada}
+            />
+          </div>
         </div>
+      );
+    }
+    return (
+      <div style={caixa}>
+        <svg width={largura} height={altura} viewBox={`${-pad} ${-pad} ${f.w + pad * 2} ${f.h + pad * 2}`} style={{ overflow: "visible", rotate: `${rotacao}deg` }}>
+          <path d={f.d} fill="none" stroke={cor} strokeWidth={(strokeOutline * f.w) / largura} strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </div>
     );
   }
