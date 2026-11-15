@@ -4,21 +4,22 @@ import { cor } from "../../brand/theme";
 import { fontFamily } from "../../fonts";
 import { Logo } from "../../brand/Logo";
 import { Icone } from "../../brand/Icone";
-import { BrandShape } from "../../brand/BrandShape";
+import { BrandShape, ShapeName } from "../../brand/BrandShape";
 import { FotoNaForma } from "../../brand/FotoNaForma";
 import { quebraBoa } from "../../brand/quebraDeLinha";
 import { MorphForma } from "../../motion/MorphForma";
 import { comDestaque, PalavrasReveal } from "../../motion/PalavrasReveal";
-import { Conteudo, LOGO_MSJ, roteiro } from "../../dados";
+import { Conteudo, LOGO_AGI, LOGO_MSJ } from "../../dados";
+import { LogoMSJAnimado } from "../../motion/LogoMSJAnimado";
 import { clamp, easeEntra, Numero } from "../../components/contagem/base";
 import { RelogioProps, SEGUNDOS_FINAIS, TelaProps, VersaoBase } from "../VersaoBase";
 
 /*
  * VERSÃO 1 — inspirada no #NuDay (projetos_referencia/analise_nova).
  * Grade de transmissão: relógio fixo no meio-esquerda, um "slot" de conteúdo
- * à direita que troca a cada tela, moldura fixa (logo MSJ no topo, faixa de
- * letreiro na base). Fundo de uma cor só: azul nas telas de conteúdo, branco
- * nos respiros, com uma forma oficial morfando (o "interlúdio" do NuDay).
+ * à direita que troca a cada tela, logo agi fixo no topo. Fundo de uma cor só:
+ * azul nas telas de conteúdo, branco nos respiros. Morph de formas só nos
+ * respiros (formas em volta do texto) e nas transições entre telas.
  * Só a mecânica vem da referência; cores, formas e tipo são Agibank.
  */
 
@@ -40,54 +41,12 @@ const RelogioFixo: React.FC<{ inicio: number; total: number; corTexto: string }>
   );
 };
 
-/** Moldura superior fixa: logo MSJ pequeno (o "selo" da transmissão). */
-const Selo: React.FC<{ claro: boolean }> = ({ claro: c }) => (
-  <div style={{ position: "absolute", left: RELOGIO.x, top: 64 }}>
-    <Logo arquivo={c ? LOGO_MSJ.positivo : LOGO_MSJ.negativo} versao={c ? "positiva" : "negativa"} altura={52} />
-  </div>
-);
-
-/** Letreiro da base: frases da redação correndo, separadas por triângulos oficiais. */
-const ITENS_LETREIRO = roteiro.telas
-  .filter((t) => t.tipo === "tela_aguarde")
-  .map((t) => t.textos.titulo ?? "")
-  .filter((v, i, a) => v && a.indexOf(v) === i);
-
-const Letreiro: React.FC = () => {
-  const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const VEL = 70; // px/s, movimento contínuo = linear
-  const bloco = (k: number) => (
-    <div key={k} style={{ display: "flex", alignItems: "center", gap: 36, paddingRight: 36 }}>
-      {ITENS_LETREIRO.map((t) => (
-        <React.Fragment key={t}>
-          <span style={{ whiteSpace: "nowrap" }}>{t}</span>
-          <BrandShape nome="triangle-01" largura={20} cor={cor.azul} rotacao={-30} />
-        </React.Fragment>
-      ))}
-    </div>
-  );
+/** Moldura superior fixa: logo agi (versão reduzida, Brandbook p.27). Sem arquivo no manifest, fica vazio. */
+const Selo: React.FC<{ claro: boolean }> = ({ claro: c }) => {
+  const arq = c ? LOGO_AGI.positivo : LOGO_AGI.negativo;
   return (
-    <div
-      style={{
-        position: "absolute",
-        left: 0,
-        right: 0,
-        bottom: 0,
-        height: 64,
-        backgroundColor: cor.branco,
-        overflow: "hidden",
-        display: "flex",
-        alignItems: "center",
-        fontFamily,
-        fontWeight: 500,
-        fontSize: 26,
-        color: cor.azul,
-      }}
-    >
-      <div style={{ display: "flex", translate: `${-((frame / fps) * VEL) % 1800}px 0` }}>
-        {[0, 1, 2, 3].map(bloco)}
-      </div>
+    <div data-camada="logo agi" style={{ position: "absolute", left: RELOGIO.x, top: 64, width: 120, height: 52 }}>
+      {arq && <Logo arquivo={arq} versao={c ? "positiva" : "negativa"} altura={52} />}
     </div>
   );
 };
@@ -99,7 +58,7 @@ const Slot: React.FC<{ children: React.ReactNode; style?: React.CSSProperties }>
       left: SLOT.x,
       width: SLOT.largura,
       top: 0,
-      bottom: 64,
+      bottom: 0,
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
@@ -127,36 +86,52 @@ const Entra: React.FC<{ delay?: number; children: React.ReactNode; style?: React
 // ---------------------------------------------------------------- telas
 const Abertura: React.FC = () => (
   <Slot>
-    <Entra delay={6}>
-      <Logo arquivo={LOGO_MSJ.negativo} versao="negativa" altura={190} />
-    </Entra>
+    <LogoMSJAnimado versao="negativa" altura={190} delay={6} />
   </Slot>
 );
 
-const Respiro: React.FC<{ c: Extract<Conteudo, { tipo: "respiro" }> }> = ({ c }) => (
-  <>
-    <div style={{ position: "absolute", left: 1330, top: 290 }}>
-      <MorphForma
-        formas={c.variante % 4 === 1 ? ["pentagon-05", "quadrilateral-05", "pentagon-03"] : ["quadrilateral-16", "pentagon-06", "triangle-02"]}
-        tamanho={460}
-        cor={cor.azul}
-        segurar={52}
-        morfar={20}
-        giro={4}
-      />
-    </div>
-    <Slot style={{ width: 620 }}>
-      <div style={{ fontSize: 60, lineHeight: 1.12, color: cor.azul }}>
-        <PalavrasReveal trechos={comDestaque(c.titulo, c.destaque, 300, 700)} delay={10} passo={5} />
-      </div>
-      {c.comLogo && (
-        <Entra delay={30} style={{ marginTop: 40 }}>
-          <Logo arquivo={LOGO_MSJ.positivo} versao="positiva" altura={80} />
-        </Entra>
-      )}
-    </Slot>
-  </>
-);
+/** Formas que morfam em volta do texto do respiro (único lugar do loop com morph). */
+const ORBITA: { x: number; y: number; tam: number; cor: string; formas: ShapeName[]; atraso: number; giro: number }[][] = [
+  [
+    { x: 700, y: 130, tam: 230, cor: cor.azul, formas: ["pentagon-05", "quadrilateral-05", "pentagon-03"], atraso: 0, giro: 3 },
+    { x: 1530, y: 300, tam: 320, cor: cor.azulMedio, formas: ["quadrilateral-16", "pentagon-06", "quadrilateral-01"], atraso: 26, giro: -2 },
+    { x: 1010, y: 790, tam: 170, cor: cor.verde, formas: ["triangle-02", "triangle-08", "triangle-01"], atraso: 48, giro: 5 },
+    { x: 1500, y: 90, tam: 110, cor: cor.azul, formas: ["triangle-01", "triangle-07", "triangle-02"], atraso: 14, giro: -6 },
+  ],
+  [
+    { x: 1480, y: 120, tam: 280, cor: cor.azulMedio, formas: ["pentagon-03", "pentagon-05", "quadrilateral-05"], atraso: 0, giro: -3 },
+    { x: 720, y: 760, tam: 220, cor: cor.azul, formas: ["quadrilateral-05", "quadrilateral-16", "pentagon-01"], atraso: 22, giro: 3 },
+    { x: 1600, y: 720, tam: 150, cor: cor.verde, formas: ["triangle-08", "triangle-02", "triangle-07"], atraso: 40, giro: 6 },
+    { x: 760, y: 140, tam: 120, cor: cor.azul, formas: ["triangle-07", "triangle-01", "triangle-08"], atraso: 10, giro: -5 },
+  ],
+];
+
+const Respiro: React.FC<{ c: Extract<Conteudo, { tipo: "respiro" }> }> = ({ c }) => {
+  const f = useCurrentFrame();
+  return (
+    <>
+      {ORBITA[c.variante % 2].map((o, i) => {
+        const d = [0, 3, 5, 6][i];
+        const v = easeEntra(interpolate(f, [4 + d, 26 + d], [0, 1], clamp));
+        return (
+          <div key={i} data-camada={`forma r${i + 1} · ${o.formas[0]}`} style={{ position: "absolute", left: o.x, top: o.y, opacity: v, scale: String(0.6 + 0.4 * v) }}>
+            <MorphForma formas={o.formas} tamanho={o.tam} cor={o.cor} segurar={46} morfar={20} atraso={o.atraso} giro={o.giro} />
+          </div>
+        );
+      })}
+      <Slot style={{ left: 900, width: 600 }}>
+        <div style={{ fontSize: 60, lineHeight: 1.12, color: cor.azul }}>
+          <PalavrasReveal trechos={comDestaque(c.titulo, c.destaque, 300, 700)} delay={10} passo={5} />
+        </div>
+        {c.comLogo && (
+          <Entra delay={30} style={{ marginTop: 40 }}>
+            <Logo arquivo={LOGO_MSJ.positivo} versao="positiva" altura={80} />
+          </Entra>
+        )}
+      </Slot>
+    </>
+  );
+};
 
 const Destaques: React.FC<{ c: Extract<Conteudo, { tipo: "destaques" }>; frames: number }> = ({ c, frames }) => {
   const f = useCurrentFrame();
@@ -347,7 +322,7 @@ const TelaV1: React.FC<TelaProps> = ({ c, frames, inicio, total }) => {
   );
 };
 
-/** Moldura fixa (letreiro) + os 10s finais: o slot recebe o logo MSJ e uma forma em outline morfando. */
+/** Os 10s finais: o slot recebe o logo MSJ com a entrada montada letra a letra. */
 const RelogioV1: React.FC<RelogioProps> = ({ segundosNoInicio }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -358,13 +333,8 @@ const RelogioV1: React.FC<RelogioProps> = ({ segundosNoInicio }) => {
     <AbsoluteFill style={{ pointerEvents: "none" }}>
       {final && (
         <AbsoluteFill style={{ backgroundColor: cor.azul }}>
-          <div style={{ position: "absolute", left: 1480, top: 330 }}>
-            <MorphForma formas={["pentagon-01", "pentagon-05", "quadrilateral-05", "pentagon-03"]} tamanho={340} cor={cor.verde} modo="outline" segurar={40} morfar={18} giro={6} />
-          </div>
           <Slot>
-            <Entra delay={0}>
-              <Logo arquivo={LOGO_MSJ.negativo} versao="negativa" altura={170} />
-            </Entra>
+            <LogoMSJAnimado versao="negativa" altura={170} delay={4} />
           </Slot>
           <Selo claro={false} />
           <div style={{ position: "absolute", left: RELOGIO.x, top: 540, translate: "0 -50%" }}>
@@ -372,7 +342,6 @@ const RelogioV1: React.FC<RelogioProps> = ({ segundosNoInicio }) => {
           </div>
         </AbsoluteFill>
       )}
-      <Letreiro />
     </AbsoluteFill>
   );
 };

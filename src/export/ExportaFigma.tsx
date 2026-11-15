@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { AbsoluteFill, continueRender, delayRender, Freeze } from "remotion";
 import { MSJComposition } from "../Composition";
+import { V1NuDay } from "../versoes/v1/V1NuDay";
 
 /**
  * Exportação para Figma (ajuste fino de layout).
@@ -8,7 +9,7 @@ import { MSJComposition } from "../Composition";
  * (formas, módulos, logos, textos) para o coletor local (scripts/figma/coletor.mjs),
  * que monta um SVG editável por tela. Não entra no render do vídeo.
  */
-type Props = { frame: number; tela: string; coletor: string };
+type Props = { frame: number; tela: string; coletor: string; /** "v1" exporta a Versão 1 (NuDay); padrão = vinheta clássica. */ versao?: string };
 
 type No = Record<string, unknown>;
 
@@ -251,7 +252,7 @@ const extrair = (raiz: HTMLElement): No[] => {
   return nos;
 };
 
-export const ExportaFigma: React.FC<Props> = ({ frame, tela, coletor }) => {
+export const ExportaFigma: React.FC<Props> = ({ frame, tela, coletor, versao }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [handle] = React.useState(() => delayRender("exporta-figma"));
 
@@ -274,7 +275,7 @@ export const ExportaFigma: React.FC<Props> = ({ frame, tela, coletor }) => {
   return (
     <AbsoluteFill ref={ref}>
       <Freeze frame={frame}>
-        <MSJComposition />
+        {versao === "v1" ? <V1NuDay /> : <MSJComposition />}
       </Freeze>
     </AbsoluteFill>
   );

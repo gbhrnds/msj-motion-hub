@@ -39,6 +39,12 @@ export const LOGO_MSJ = {
   positivo: manifest.geral?.logo_msj_positivo ?? "",
 };
 
+/** Logo agi (versão reduzida). Vem do manifest ("geral"); vazio até o arquivo oficial ser adicionado. */
+export const LOGO_AGI = {
+  negativo: manifest.geral?.logo_agi_negativo ?? "",
+  positivo: manifest.geral?.logo_agi_positivo ?? "",
+};
+
 /** Conteúdo de cada tela já resolvido (texto da redação + arquivos do manifest). */
 export type Conteudo =
   | { tipo: "abertura"; id: string }
