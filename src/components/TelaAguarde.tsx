@@ -81,6 +81,7 @@ export const TelaAguarde: React.FC<TelaAguardeProps> = ({
         zonasLivres={zonasAguarde(Boolean(logoMsj))}
         duracaoFrames={duracaoFrames}
         mascaras={[{ ...MASCARA, cor: cor.cinzaClaro }]}
+        coresMorph={[cor.azul, corOutline === cor.amarelo ? cor.verde : cor.amarelo]}
       />
 
       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>

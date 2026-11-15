@@ -17,6 +17,8 @@ type Props = {
    * que abre um respiro no outline onde o texto passa (padrão do Figma aprovado).
    */
   mascaras?: (ZonaLivre & { cor: string })[];
+  /** Cores extras que as formas percorrem no morph (depois da própria cor). */
+  coresMorph?: string[];
 };
 
 /**
@@ -30,6 +32,7 @@ export const CamadaGrafismos: React.FC<Props> = ({
   duracaoFrames,
   comContador = true,
   mascaras = [],
+  coresMorph,
 }) => {
   const erros = conflitos(formas, zonasLivres, comContador);
   const seguras = parceirasSeguras(formas, zonasLivres, comContador);
@@ -60,6 +63,7 @@ export const CamadaGrafismos: React.FC<Props> = ({
               delayFrames={g.delayFrames}
               duracaoFrames={duracaoFrames}
               alternativas={seguras[g.id]}
+              cores={coresMorph && [g.cor, ...coresMorph]}
             />
           ) : (
             <FormaViva
@@ -71,6 +75,7 @@ export const CamadaGrafismos: React.FC<Props> = ({
               espelhar={g.espelhar}
               fase={g.fase}
               alternativas={seguras[g.id]}
+              cores={coresMorph && [g.cor, ...coresMorph]}
             />
           )}
           </div>

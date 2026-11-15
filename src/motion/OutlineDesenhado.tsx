@@ -18,6 +18,8 @@ type Props = {
   duracaoFrames?: number;
   /** Formas oficiais validadas na tela para o morph (só no respiro, estilo refinado). */
   alternativas?: ShapeName[];
+  /** Cores que acompanham o morph (a primeira deve ser `cor`). */
+  cores?: string[];
 };
 
 /**
@@ -33,6 +35,7 @@ export const OutlineDesenhado: React.FC<Props> = ({
   delayFrames = 0,
   duracaoFrames,
   alternativas = [],
+  cores,
 }) => {
   const frame = useCurrentFrame() - delayFrames;
   const { fps } = useVideoConfig();
@@ -75,6 +78,7 @@ export const OutlineDesenhado: React.FC<Props> = ({
               formas={[nome, ...alternativas.slice(0, 2)]}
               tamanho={lado}
               cor={cor}
+              cores={cores}
               modo="outline"
               rotacao={rotacao}
               segurar={Math.round(fps * 2.5)}

@@ -46,7 +46,9 @@ que está escrito) e do que a vinheta de Outubro/2026 faz. Complementa o
   as que passam na checagem daquela tela (`parceirasSeguras`).
   **Onde (decisão do usuário, 2026-11-15):** só nas telas de **respiro**, com as
   formas em volta do texto, e nas **transições** entre telas. Nas demais telas as
-  formas ficam estáticas (contexto `MorphPermitido`, aberto só pelo respiro).
+  formas ficam estáticas (contexto `MorphPermitido`, aberto pelo respiro e pelas
+  telas de contagem). Na troca de forma a cor também troca (`coresMorph`): contagem
+  verde → branco → amarelo sobre azul; respiro cor do outline → azul → verde/amarelo.
 - **Outline sem trim path nas versões novas:** o contorno entra inteiro (fade +
   escala) para a forma ser reconhecida; o trim path fica só na vinheta clássica.
 - **Cores (p.47):** monocromático azul ou verde sobre branco; duas/três cores

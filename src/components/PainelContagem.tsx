@@ -5,7 +5,7 @@ import { cor } from "../brand/theme";
 import { Logo } from "../brand/Logo";
 import { CamadaGrafismos } from "../motion/CamadaGrafismos";
 import { TextReveal } from "../motion/TextReveal";
-import { useRefinado } from "../motion/estilo";
+import { MorphPermitido, useRefinado } from "../motion/estilo";
 import { Numero } from "./contagem/base";
 import type { GrafismoSpec, ZonaLivre } from "../brand/grafismos";
 
@@ -66,6 +66,7 @@ export const PainelContagem: React.FC<Props> = ({
   const noSegundo = frame - Math.ceil(Math.floor(frame / fps) * fps);
 
   return (
+    <MorphPermitido.Provider value>
     <AbsoluteFill style={{ backgroundColor: cor.azul }}>
       <CamadaGrafismos
         tela={id}
@@ -74,6 +75,7 @@ export const PainelContagem: React.FC<Props> = ({
         duracaoFrames={duracaoFrames}
         comContador={false}
         mascaras={[{ ...MASCARA, cor: cor.azul }]}
+        coresMorph={[cor.branco, cor.amarelo]}
       />
 
       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
@@ -104,5 +106,6 @@ export const PainelContagem: React.FC<Props> = ({
         </TextReveal>
       </div>
     </AbsoluteFill>
+    </MorphPermitido.Provider>
   );
 };

@@ -15,6 +15,8 @@ type Props = {
   fase?: number;
   /** Formas oficiais para onde ela pode morfar (validadas na tela). Vazio = não morfa. */
   alternativas?: ShapeName[];
+  /** Cores que acompanham o morph (a primeira deve ser `cor`). */
+  cores?: string[];
 };
 
 /**
@@ -22,7 +24,7 @@ type Props = {
  * formas oficiais de proporção parecida e volta — ocupando a mesma caixa
  * (mesmo centro e tamanho), então a composição validada não muda.
  */
-export const FormaViva: React.FC<Props> = ({ nome, largura, cor, modo, rotacao = 0, espelhar, fase = 0, alternativas }) => {
+export const FormaViva: React.FC<Props> = ({ nome, largura, cor, modo, rotacao = 0, espelhar, fase = 0, alternativas, cores }) => {
   const refinado = useMorph();
   const alts = alternativas ?? parceiras(nome).slice(0, 2);
   if (!refinado || alts.length === 0) {
@@ -38,6 +40,7 @@ export const FormaViva: React.FC<Props> = ({ nome, largura, cor, modo, rotacao =
           formas={[nome, ...alts.slice(0, 2)]}
           tamanho={lado}
           cor={cor}
+          cores={cores}
           modo={modo}
           rotacao={rotacao}
           segurar={84}
