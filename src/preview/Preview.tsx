@@ -4,7 +4,7 @@ import { Player, PlayerRef } from "@remotion/player";
 import tokens from "../../brand/tokens.json";
 import { V1NuDay } from "../versoes/v1/V1NuDay";
 import { RELOGIO_NO_LOOP_V3, V3Refinado } from "../versoes/v3/V3Refinado";
-import { VinhetaCompletaV3, framesFase1, framesFase2 } from "../fases/VinhetaCompleta";
+import { VinhetaCompletaV1, VinhetaCompletaV3, framesFase1, framesFase2 } from "../fases/VinhetaCompleta";
 import { duracaoReview, montarReview, SEGUNDOS_FINAIS } from "../versoes/VersaoBase";
 import { roteiro } from "../dados";
 
@@ -71,6 +71,19 @@ const montarVersoes = (): Versao[] => {
       capitulos: [
         { nome: "Abertura (10:00)", frame: 0 },
         ...capsV3.slice(1, -1),
+        { nome: "10s finais", frame: framesFase1(fps) - Math.round(SEGUNDOS_FINAIS * fps) },
+        { nome: "Fase 2 · logo", frame: framesFase1(fps) },
+      ],
+    },
+    {
+      id: "v1-completa",
+      titulo: "V1 · vinheta completa (15 min)",
+      nota: "Fase 1: loop de 10 minutos. Fase 2: 5 minutos só com o logo MSJ.",
+      component: VinhetaCompletaV1 as React.FC<Record<string, unknown>>,
+      frames: framesFase1(fps) + framesFase2(fps),
+      capitulos: [
+        { nome: "Abertura (10:00)", frame: 0 },
+        ...caps.slice(1, -1),
         { nome: "10s finais", frame: framesFase1(fps) - Math.round(SEGUNDOS_FINAIS * fps) },
         { nome: "Fase 2 · logo", frame: framesFase1(fps) },
       ],

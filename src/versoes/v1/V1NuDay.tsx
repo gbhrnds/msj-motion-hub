@@ -434,8 +434,9 @@ const RelogioV1: React.FC<RelogioProps> = ({ segundosNoInicio }) => {
   );
 };
 
-export const V1NuDay: React.FC = () => (
+export const V1NuDay: React.FC<{ duracao?: number }> = ({ duracao }) => (
   <VersaoBase
+    duracao={duracao}
     Tela={TelaV1}
     Relogio={RelogioV1}
     fundo={fundoV1}
