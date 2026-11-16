@@ -55,6 +55,7 @@ type NumeroProps = {
 };
 
 const ROLAGEM = 10; // frames (~0,4s): troca curta, entra com ease-out
+const CASCATA = 2; // frames entre um dígito e o próximo à esquerda (todos ainda em movimento juntos)
 
 /**
  * Número mm:ss com dígitos de largura fixa. Com `rolar`, cada dígito que muda
@@ -71,9 +72,18 @@ export const Numero: React.FC<NumeroProps> = ({
 }) => {
   const atual = mmss(segundos);
   const anterior = mmss(segundos + 1);
-  const p = rolar
-    ? easeEntra(interpolate(noSegundo, [0, ROLAGEM], [0, 1], clamp))
-    : 1;
+  // Quando vários dígitos mudam juntos (ex.: 10:00 → 09:59), eles rolam em
+  // cascata da direita para a esquerda, como um odômetro, e não todos de uma vez.
+  const ordem = atual
+    .split("")
+    .map((c, i) => (c !== anterior[i] ? i : -1))
+    .filter((i) => i >= 0)
+    .reverse();
+  const pDe = (i: number) => {
+    if (!rolar) return 1;
+    const atraso = Math.max(0, ordem.indexOf(i)) * CASCATA;
+    return easeEntra(interpolate(noSegundo, [atraso, atraso + ROLAGEM], [0, 1], clamp));
+  };
   return (
     <div
       style={{
@@ -89,6 +99,7 @@ export const Numero: React.FC<NumeroProps> = ({
       }}
     >
       {atual.split("").map((c, i) => {
+        const p = pDe(i);
         const mudou = rolar && c !== anterior[i] && p < 1;
         return (
           <span

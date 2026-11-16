@@ -1,11 +1,11 @@
 import React from "react";
-import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { cor } from "../../brand/theme";
 import { fontFamily } from "../../fonts";
 import { Logo } from "../../brand/Logo";
 import { Icone } from "../../brand/Icone";
 import { BrandShape, ShapeName } from "../../brand/BrandShape";
-import { FotoNaForma } from "../../brand/FotoNaForma";
+import shapesData from "../../shapesData.json";
 import { quebraBoa } from "../../brand/quebraDeLinha";
 import { MorphForma } from "../../motion/MorphForma";
 import { comDestaque, PalavrasReveal } from "../../motion/PalavrasReveal";
@@ -26,7 +26,60 @@ import { RelogioProps, SEGUNDOS_FINAIS, TelaProps, VersaoBase } from "../VersaoB
 const SLOT = { x: 660, largura: 1140 };
 const RELOGIO = { x: 120, tam: 150 };
 const claro = (c: Conteudo) => c.tipo === "respiro";
-export const fundoV1 = (c: Conteudo) => (claro(c) ? cor.branco : cor.azul);
+export const fundoV1 = (c: Conteudo) => (claro(c) ? cor.cinzaClaro : cor.azul);
+/** Espessura dos outlines da V1. */
+const TRACO = 3; // Figma: traço de 6px por dentro, com máscara = 3px visíveis (token)
+
+/**
+ * Forma oficial posicionada como no Figma (caixa x/y/largura + rotação) e
+ * desenhada pelo MorphForma, que pode trocar de forma oficial no lugar.
+ */
+type Caixa = { nome: ShapeName; x: number; y: number; largura: number; rotacao: number };
+const FormaNaCaixa: React.FC<{
+  caixa: Caixa;
+  cor: string;
+  modo?: "preenchida" | "outline";
+  outras?: ShapeName[];
+  cores?: string[];
+  delay?: number;
+  segurar?: number;
+}> = ({ caixa, cor: c, modo = "preenchida", outras = [], cores, delay = 0, segurar = 70 }) => {
+  const f = useCurrentFrame();
+  const sd = shapesData[caixa.nome];
+  const altura = (caixa.largura * sd.h) / sd.w;
+  const lado = Math.max(caixa.largura, altura);
+  // entrada sem fade: a forma cresce do zero (ease-out)
+  const v = easeEntra(interpolate(f, [delay, delay + 22], [0, 1], clamp));
+  return (
+    <div
+      data-camada={`forma · ${caixa.nome}`}
+      style={{
+        position: "absolute",
+        left: caixa.x + caixa.largura / 2 - lado / 2,
+        top: caixa.y + altura / 2 - lado / 2,
+        scale: String(v),
+      }}
+    >
+      <MorphForma
+        formas={[caixa.nome, ...outras]}
+        tamanho={lado}
+        cor={c}
+        cores={cores}
+        modo={modo}
+        rotacao={caixa.rotacao}
+        espessura={TRACO}
+        segurar={segurar}
+        morfar={20}
+        atraso={-delay}
+      />
+    </div>
+  );
+};
+
+/** Máscara na cor do fundo: o outline passa por trás do texto sem cruzá-lo. */
+const Mascara: React.FC<{ x: number; y: number; w: number; h: number; cor: string }> = ({ x, y, w, h, cor: c }) => (
+  <div style={{ position: "absolute", left: x, top: y, width: w, height: h, backgroundColor: c }} />
+);
 
 /** Relógio da grade: mesma posição e tamanho em todas as telas (só a cor acompanha o fundo). */
 const RelogioFixo: React.FC<{ inicio: number; total: number; corTexto: string }> = ({ inicio, total, corTexto }) => {
@@ -45,7 +98,7 @@ const RelogioFixo: React.FC<{ inicio: number; total: number; corTexto: string }>
 const Selo: React.FC<{ claro: boolean }> = ({ claro: c }) => {
   const arq = c ? LOGO_AGI.positivo : LOGO_AGI.negativo;
   return (
-    <div data-camada="logo agi" style={{ position: "absolute", left: RELOGIO.x, top: 64, width: 120, height: 52 }}>
+    <div data-camada="logo agi" style={{ position: "absolute", left: RELOGIO.x, top: 64, height: 52 }}>
       {arq && <Logo arquivo={arq} versao={c ? "positiva" : "negativa"} altura={52} />}
     </div>
   );
@@ -84,51 +137,61 @@ const Entra: React.FC<{ delay?: number; children: React.ReactNode; style?: React
 };
 
 // ---------------------------------------------------------------- telas
-const Abertura: React.FC = () => (
-  <Slot>
-    <LogoMSJAnimado versao="negativa" altura={190} delay={6} />
-  </Slot>
+/** Outline grande atrás do logo MSJ (abertura e 10s finais), posição do Figma. */
+const OUTLINE_LOGO: Caixa = { nome: "quadrilateral-05", x: 682, y: -156, largura: 999, rotacao: 312 };
+const MASCARA_LOGO = { x: 648, y: 436, w: 706, h: 213 };
+
+const LogoComOutline: React.FC<{ altura: number; delay: number }> = ({ altura, delay }) => (
+  <>
+    <FormaNaCaixa caixa={OUTLINE_LOGO} cor={cor.verde} modo="outline" delay={delay + 10} segurar={100000} />
+    <Mascara {...MASCARA_LOGO} cor={cor.azul} />
+    <Slot>
+      <LogoMSJAnimado versao="negativa" altura={altura} delay={delay} />
+    </Slot>
+  </>
 );
 
-/** Formas que morfam em volta do texto do respiro (único lugar do loop com morph). */
-const ORBITA: { x: number; y: number; tam: number; cor: string; formas: ShapeName[]; atraso: number; giro: number }[][] = [
-  [
-    { x: 700, y: 130, tam: 230, cor: cor.azul, formas: ["pentagon-05", "quadrilateral-05", "pentagon-03"], atraso: 0, giro: 3 },
-    { x: 1530, y: 300, tam: 320, cor: cor.azulMedio, formas: ["quadrilateral-16", "pentagon-06", "quadrilateral-01"], atraso: 26, giro: -2 },
-    { x: 1010, y: 790, tam: 170, cor: cor.verde, formas: ["triangle-02", "triangle-08", "triangle-01"], atraso: 48, giro: 5 },
-    { x: 1500, y: 90, tam: 110, cor: cor.azul, formas: ["triangle-01", "triangle-07", "triangle-02"], atraso: 14, giro: -6 },
-  ],
-  [
-    { x: 1480, y: 120, tam: 280, cor: cor.azulMedio, formas: ["pentagon-03", "pentagon-05", "quadrilateral-05"], atraso: 0, giro: -3 },
-    { x: 720, y: 760, tam: 220, cor: cor.azul, formas: ["quadrilateral-05", "quadrilateral-16", "pentagon-01"], atraso: 22, giro: 3 },
-    { x: 1600, y: 720, tam: 150, cor: cor.verde, formas: ["triangle-08", "triangle-02", "triangle-07"], atraso: 40, giro: 6 },
-    { x: 760, y: 140, tam: 120, cor: cor.azul, formas: ["triangle-07", "triangle-01", "triangle-08"], atraso: 10, giro: -5 },
-  ],
+const Abertura: React.FC = () => <LogoComOutline altura={190} delay={6} />;
+
+/**
+ * Respiro (ajuste do Figma): fundo cinza claro e um único outline oficial em
+ * volta do texto, com máscara na cor do fundo atrás das linhas. O outline
+ * morfa entre formas oficiais (morph só nos respiros) trocando de cor.
+ */
+const RESPIRO = [
+  {
+    outline: { nome: "pentagon-01", x: 954, y: 340, largura: 428, rotacao: 21 } as Caixa,
+    outras: ["pentagon-03", "quadrilateral-16"] as ShapeName[],
+    cores: [cor.azulMedio, cor.azul, cor.verde],
+    mascara: { x: 884, y: 457, w: 559, h: 166 },
+    texto: { x: 890, y: 470 },
+  },
+  {
+    outline: { nome: "quadrilateral-16", x: 830, y: 249, largura: 424, rotacao: 0 } as Caixa,
+    outras: ["pentagon-01", "quadrilateral-05"] as ShapeName[],
+    cores: [cor.amarelo, cor.azulMedio, cor.azul],
+    mascara: { x: 807, y: 399, w: 559, h: 166 },
+    texto: { x: 843, y: 412 },
+  },
 ];
 
 const Respiro: React.FC<{ c: Extract<Conteudo, { tipo: "respiro" }> }> = ({ c }) => {
-  const f = useCurrentFrame();
+  const r = RESPIRO[c.comLogo ? 1 : 0];
   return (
     <>
-      {ORBITA[c.variante % 2].map((o, i) => {
-        const d = [0, 3, 5, 6][i];
-        const v = easeEntra(interpolate(f, [4 + d, 26 + d], [0, 1], clamp));
-        return (
-          <div key={i} data-camada={`forma r${i + 1} · ${o.formas[0]}`} style={{ position: "absolute", left: o.x, top: o.y, opacity: v, scale: String(0.6 + 0.4 * v) }}>
-            <MorphForma formas={o.formas} tamanho={o.tam} cor={o.cor} segurar={46} morfar={20} atraso={o.atraso} giro={o.giro} />
-          </div>
-        );
-      })}
-      <Slot style={{ left: 900, width: 600 }}>
-        <div style={{ fontSize: 60, lineHeight: 1.12, color: cor.azul }}>
+      <FormaNaCaixa caixa={r.outline} cor={r.cores[0]} cores={r.cores} outras={r.outras} modo="outline" delay={4} segurar={60} />
+      <Mascara {...r.mascara} cor={cor.cinzaClaro} />
+      {c.comLogo && <Mascara x={r.texto.x + 40} y={r.texto.y + 228} w={200} h={96} cor={cor.cinzaClaro} />}
+      <div style={{ position: "absolute", left: r.texto.x, top: r.texto.y, width: 600, fontFamily }}>
+        <div style={{ fontSize: 60, lineHeight: 1.08, color: cor.azul }}>
           <PalavrasReveal trechos={comDestaque(c.titulo, c.destaque, 300, 700)} delay={10} passo={5} />
         </div>
         {c.comLogo && (
-          <Entra delay={30} style={{ marginTop: 40 }}>
-            <Logo arquivo={LOGO_MSJ.positivo} versao="positiva" altura={80} />
+          <Entra delay={30} style={{ marginTop: 92, marginLeft: 57 }}>
+            <Logo arquivo={LOGO_MSJ.positivo} versao="positiva" altura={70} />
           </Entra>
         )}
-      </Slot>
+      </div>
     </>
   );
 };
@@ -139,10 +202,13 @@ const Destaques: React.FC<{ c: Extract<Conteudo, { tipo: "destaques" }>; frames:
   const s = (x: number) => Math.round(x * fps);
   const fimNomes = frames - s(3);
   const COLS = 4;
-  const LINHA = 52;
-  const JAN = { y: 250, h: 620 };
+  const LINHA = 52; // como no Figma
+  // Efeito de créditos: a grade sobe sem parar, em opacidade total, cortada
+  // por baixo do título (JANELA) e saindo pela base do quadro.
+  const JANELA = 222;
   const linhas = Math.ceil(c.nomes.length / COLS);
-  const topo = interpolate(f, [s(7), fimNomes], [JAN.y + JAN.h, JAN.y - linhas * LINHA], clamp);
+  const TOPO = interpolate(f, [s(6.8), fimNomes], [900, JANELA - linhas * LINHA - 20], clamp);
+  const COL = 291;
   return (
     <>
       {f < s(4.8) && (
@@ -169,40 +235,32 @@ const Destaques: React.FC<{ c: Extract<Conteudo, { tipo: "destaques" }>; frames:
               <Logo arquivo={c.logoDestaques} versao="negativa" altura={72} />
             </Entra>
           </div>
+          <div style={{ position: "absolute", left: 0, right: 0, top: JANELA, bottom: 0, overflow: "hidden" }}>
           <div
             style={{
               position: "absolute",
               left: SLOT.x,
-              width: SLOT.largura,
-              top: 0,
+              top: TOPO - JANELA,
               display: "grid",
-              gridTemplateColumns: `repeat(${COLS}, 1fr)`,
-              columnGap: 24,
-              translate: `0 ${topo}px`,
+              gridTemplateColumns: `repeat(${COLS}, ${COL}px)`,
               fontFamily,
               fontSize: 22,
               fontWeight: 400,
               color: cor.branco,
             }}
           >
-            {c.nomes.map((n, i) => {
-              const y = topo + Math.floor(i / COLS) * LINHA + LINHA / 2;
-              const op = Math.min(
-                interpolate(y, [JAN.y, JAN.y + 60], [0, 1], clamp),
-                interpolate(y, [JAN.y + JAN.h - 60, JAN.y + JAN.h], [1, 0], clamp),
-              );
-              return (
-                <div key={n} style={{ height: LINHA, display: "flex", alignItems: "center", whiteSpace: "nowrap", opacity: op }}>
-                  {n}
-                </div>
-              );
-            })}
+            {c.nomes.map((n) => (
+              <div key={n} style={{ height: LINHA, display: "flex", alignItems: "center", whiteSpace: "nowrap" }}>
+                {n}
+              </div>
+            ))}
+          </div>
           </div>
         </>
       )}
       {f >= fimNomes && (
         <Slot>
-          <div style={{ display: "flex", alignItems: "center", gap: 26 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 64 }}>
             <div style={{ fontSize: 72, color: cor.branco }}>
               <PalavrasReveal trechos={[{ texto: c.fechamento, peso: 700 }]} delay={fimNomes} passo={4} />
             </div>
@@ -225,56 +283,63 @@ const separar = (b: string): [string, string] => {
   return m ? [m[1], m[2]] : [b, ""];
 };
 
-const Indicacao: React.FC<{ c: Extract<Conteudo, { tipo: "indicacao" }> }> = ({ c }) => (
-  <>
-    <Entra delay={8} style={{ position: "absolute", inset: 0 }}>
-      <FotoNaForma
-        forma="pentagon-06"
-        x={1380}
-        y={250}
-        largura={440}
-        foto={c.foto}
-        recorte={c.recorte}
-        imagem={{ x: 1180, y: 196, largura: 840, altura: 560 }}
-      />
-    </Entra>
-    <Slot style={{ width: 660 }}>
-      <Entra>
-        <Logo arquivo={c.logo} versao="negativa" altura={92} />
-      </Entra>
-      <div style={{ fontSize: 40, lineHeight: 1.22, color: cor.branco, marginTop: 34 }}>
-        <PalavrasReveal trechos={[{ texto: c.corpo, peso: 300 }]} delay={10} passo={2.2} modo="fade" />
+/**
+ * Indicação (Figma 2026-11-16): foto sangrando numa coluna à direita, outline
+ * verde (pentagon-02) passando por trás da pessoa recortada, número em verde.
+ */
+const PAINEL_FOTO = { x: 1288 };
+const IMAGEM = { x: 767, y: -84, largura: 1774, altura: 1183 };
+const OUTLINE_IND: Caixa = { nome: "pentagon-02", x: 1184, y: 145, largura: 895, rotacao: 300 };
+
+const Indicacao: React.FC<{ c: Extract<Conteudo, { tipo: "indicacao" }> }> = ({ c }) => {
+  const f = useCurrentFrame();
+  // painel entra como cortina da direita (sem fade)
+  const v = easeEntra(interpolate(f, [2, 22], [0, 1], clamp));
+  const img = (arq: string) => (
+    <Img src={staticFile(arq)} style={{ position: "absolute", left: IMAGEM.x, top: IMAGEM.y, width: IMAGEM.largura, height: IMAGEM.altura }} />
+  );
+  const [n, r] = separar(c.bullets[0] ?? "");
+  return (
+    <>
+      <div style={{ position: "absolute", left: PAINEL_FOTO.x, top: 0, right: 0, bottom: 0, overflow: "hidden", clipPath: `inset(0 0 0 ${(1 - v) * 100}%)` }}>
+        <div style={{ position: "absolute", left: -PAINEL_FOTO.x, top: 0 }}>{img(c.foto)}</div>
       </div>
-      <div style={{ display: "flex", gap: 44, marginTop: 52 }}>
-        {c.bullets.map((b, i) => {
-          const [n, r] = separar(b);
-          return (
-            <Entra key={b} delay={30 + [0, 4, 7][i % 3]} style={{ width: 190 }}>
-              <div style={{ fontSize: 92, fontWeight: 800, lineHeight: 1, color: cor.branco }}>{n}</div>
-              <div style={{ fontSize: 24, fontWeight: 400, lineHeight: 1.2, color: cor.branco, marginTop: 10 }}>{quebraBoa(r)}</div>
-            </Entra>
-          );
-        })}
+      <FormaNaCaixa caixa={OUTLINE_IND} cor={cor.verde} modo="outline" delay={14} segurar={100000} />
+      <Mascara x={660} y={400} w={578} h={305} cor={cor.azul} />
+      {c.recorte && <div style={{ position: "absolute", inset: 0, clipPath: `inset(0 0 0 ${(1 - v) * 100}%)` }}>{img(c.recorte)}</div>}
+      <div style={{ position: "absolute", left: SLOT.x, top: 298, width: 600, fontFamily }}>
+        <Entra>
+          <Logo arquivo={c.logo} versao="negativa" altura={92} />
+        </Entra>
+        <div style={{ fontSize: 40, lineHeight: 1.22, color: cor.branco, marginTop: 36 }}>
+          <PalavrasReveal trechos={[{ texto: c.corpo, peso: 300 }]} delay={10} passo={2.2} modo="fade" />
+        </div>
+        {n && (
+          <Entra delay={30} style={{ display: "flex", alignItems: "center", gap: 20, marginTop: 56 }}>
+            <div style={{ fontSize: 80, fontWeight: 700, lineHeight: 1, color: cor.verde }}>{n}</div>
+            <div style={{ fontSize: 20, fontWeight: 400, lineHeight: 1.2, color: cor.branco, width: 150 }}>{quebraBoa(r)}</div>
+          </Entra>
+        )}
       </div>
-    </Slot>
-  </>
-);
+    </>
+  );
+};
 
 const ConteudoTela: React.FC<{ c: Extract<Conteudo, { tipo: "conteudo" }> }> = ({ c }) => (
-  <Slot style={{ flexDirection: "row", alignItems: "center", gap: 70 }}>
+  <Slot style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-start", paddingTop: 390, gap: 70 }}>
     <div style={{ width: 500 }}>
       {c.logo && (
         <Entra>
           <Logo arquivo={c.logo} versao="negativa" altura={70} />
         </Entra>
       )}
-      <div style={{ fontSize: 40, lineHeight: 1.22, color: cor.branco, marginTop: 34 }}>
+      <div style={{ fontSize: 40, lineHeight: 1.22, color: cor.branco, marginTop: 30 }}>
         <PalavrasReveal trechos={[{ texto: c.corpo, peso: 300 }]} delay={8} passo={2.4} modo="fade" />
       </div>
     </div>
     <div style={{ width: 570 }}>
       <Entra delay={20}>
-        <div style={{ fontSize: 36, fontWeight: 700, lineHeight: 1.15, color: cor.branco, marginBottom: 30 }}>{quebraBoa(c.chamadaLista)}</div>
+        <div style={{ fontSize: 34, fontWeight: 700, lineHeight: 1.15, color: cor.verde, marginTop: 8, marginBottom: 50 }}>{quebraBoa(c.chamadaLista)}</div>
       </Entra>
       {c.bullets.map((b, i) => (
         <Entra key={b} delay={28 + [0, 4, 7, 9, 11][i % 5]} style={{ display: "flex", alignItems: "center", gap: 18, marginBottom: 18 }}>
@@ -291,9 +356,20 @@ const dividirCampanha = (t: string) => {
   return i > 0 ? [t.slice(0, i + 1), t.slice(i + 1)] : ["", t];
 };
 
+const FORMAS_CAMPANHA: { caixa: Caixa; cor: string; delay: number }[] = [
+  { caixa: { nome: "pentagon-03", x: 1475, y: 734, largura: 729, rotacao: 141 }, cor: cor.azulMedio, delay: 2 },
+  { caixa: { nome: "quadrilateral-05", x: 1594, y: 246, largura: 386, rotacao: 222 }, cor: cor.branco, delay: 6 },
+  { caixa: { nome: "quadrilateral-16", x: 1711, y: 88, largura: 205, rotacao: 9 }, cor: cor.verde, delay: 10 },
+  { caixa: { nome: "triangle-10", x: 1475, y: 822, largura: 52, rotacao: 252 }, cor: cor.amarelo, delay: 14 },
+];
+
 const Campanha: React.FC<{ c: Extract<Conteudo, { tipo: "campanha" }> }> = ({ c }) => {
   const [leve, forte] = dividirCampanha(c.chamada);
   return (
+    <>
+    {FORMAS_CAMPANHA.map((g) => (
+      <FormaNaCaixa key={g.caixa.nome} caixa={g.caixa} cor={g.cor} delay={g.delay} segurar={100000} />
+    ))}
     <Slot style={{ width: 1000 }}>
       <div style={{ fontSize: 76, lineHeight: 1.08, color: cor.branco }}>
         <PalavrasReveal trechos={[{ texto: leve, peso: 300 }, { texto: forte, peso: 700 }].filter((t) => t.texto)} delay={8} passo={4} />
@@ -302,6 +378,7 @@ const Campanha: React.FC<{ c: Extract<Conteudo, { tipo: "campanha" }> }> = ({ c 
         <PalavrasReveal trechos={[{ texto: c.corpo, peso: 300 }]} delay={34} passo={2} modo="fade" />
       </div>
     </Slot>
+    </>
   );
 };
 
@@ -333,9 +410,7 @@ const RelogioV1: React.FC<RelogioProps> = ({ segundosNoInicio }) => {
     <AbsoluteFill style={{ pointerEvents: "none" }}>
       {final && (
         <AbsoluteFill style={{ backgroundColor: cor.azul }}>
-          <Slot>
-            <LogoMSJAnimado versao="negativa" altura={170} delay={4} />
-          </Slot>
+          <LogoComOutline altura={170} delay={4} />
           <Selo claro={false} />
           <div style={{ position: "absolute", left: RELOGIO.x, top: 540, translate: "0 -50%" }}>
             <Numero segundos={seg} noSegundo={frame - Math.ceil(Math.floor(frame / fps) * fps)} tamanho={RELOGIO.tam} cor={cor.branco} rolar />

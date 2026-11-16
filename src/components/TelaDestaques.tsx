@@ -1,3 +1,4 @@
+import { useRefinado } from "../motion/estilo";
 import React from "react";
 import { quebraBoa } from "../brand/quebraDeLinha";
 import {
@@ -133,6 +134,7 @@ export const TelaDestaques: React.FC<TelaDestaquesProps> = ({
   const fimNomes = duracaoFrames - s(T.fechamentoAntesDoFim);
 
   // --- Logo O jeito agi
+  const refinado = useRefinado();
   const jeitoIn = interpolate(
     frame,
     [s(T.jeitoEntra), s(T.jeitoEntra) + 20],
@@ -205,7 +207,7 @@ export const TelaDestaques: React.FC<TelaDestaquesProps> = ({
           left: mover(cfg.centro.x, cfg.canto.x, mov),
           top: mover(cfg.centro.y, cfg.canto.y, mov),
           translate: "-50% -50%",
-          opacity: entrada,
+          ...(refinado ? { clipPath: `inset(${(1 - entrada) * 100}% 0 0 0)` } : { opacity: entrada }),
           scale: String(mover(0.96, 1, entrada) * (h / cfg.centro.h)),
         }}
       >

@@ -18,6 +18,8 @@ type CountdownOverlayProps = {
   durationInSeconds: number; // Tempo total da fase de conteudo (ex: 600s para 10min)
   /** Frames iniciais em que o overlay não aparece (a tela de abertura já mostra o relógio). */
   ocultarAteFrame?: number;
+  /** Trechos [início, fim) em que a tela já é o relógio (tela do relógio no loop). */
+  ocultar?: [number, number][];
   logoMsj: string;
 };
 
@@ -32,6 +34,7 @@ const SEGUNDOS_HERO = 10;
 export const CountdownOverlay: React.FC<CountdownOverlayProps> = ({
   durationInSeconds,
   ocultarAteFrame = 0,
+  ocultar = [],
   logoMsj,
 }) => {
   const frame = useCurrentFrame();
@@ -41,6 +44,7 @@ export const CountdownOverlay: React.FC<CountdownOverlayProps> = ({
 
   const refinado = useRefinado();
   if (frame < ocultarAteFrame) return null;
+  if (frame < inicioHero && ocultar.some(([a, b]) => frame >= a && frame < b)) return null;
   const noSegundo = frame - Math.ceil(Math.floor(frame / fps) * fps);
 
   if (frame >= inicioHero) {

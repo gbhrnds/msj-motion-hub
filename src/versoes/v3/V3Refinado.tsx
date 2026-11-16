@@ -3,6 +3,7 @@ import { useVideoConfig } from "remotion";
 import { cor } from "../../brand/theme";
 import { renderTela } from "../../Composition";
 import { CountdownOverlay } from "../../components/CountdownOverlay";
+import { PainelContagem } from "../../components/PainelContagem";
 import { Conteudo, LOGO_MSJ, roteiro } from "../../dados";
 import { EstiloMotion } from "../../motion/estilo";
 import { RelogioProps, TelaProps, VersaoBase } from "../VersaoBase";
@@ -26,19 +27,36 @@ const FUNDO: Record<Conteudo["tipo"], string> = {
   campanha: cor.azul,
 };
 
-const TelaV3: React.FC<TelaProps> = ({ c, frames, rep, total }) => {
+const TelaV3: React.FC<TelaProps> = ({ c, frames, rep, total, inicio }) => {
   const { fps } = useVideoConfig();
   const tela = roteiro.telas.find((t) => t.id === c.id)!;
+  if (c.tipo === "abertura" && inicio > 0) {
+    // tela do relógio dentro do loop: mesmo painel da abertura, contando o tempo global
+    return (
+      <PainelContagem
+        id={`${tela.id}_loop`}
+        segundosNoInicio={Math.round(total / fps)}
+        frameGlobalInicio={inicio}
+        logoMsj={LOGO_MSJ.negativo}
+        duracaoFrames={frames}
+      />
+    );
+  }
   return <>{renderTela(tela, frames, rep, Math.round(total / fps))}</>;
 };
 
-const RelogioV3: React.FC<RelogioProps> = ({ segundosNoInicio, ocultarAte }) => (
-  <CountdownOverlay durationInSeconds={segundosNoInicio} ocultarAteFrame={ocultarAte} logoMsj={LOGO_MSJ.negativo} />
+const RelogioV3: React.FC<RelogioProps> = ({ segundosNoInicio, ocultarAte, ocultar }) => (
+  <CountdownOverlay durationInSeconds={segundosNoInicio} ocultarAteFrame={ocultarAte} ocultar={ocultar} logoMsj={LOGO_MSJ.negativo} />
 );
 
-export const V3Refinado: React.FC = () => (
+/** A tela só do relógio volta no meio de cada volta do loop, depois da Indicação. */
+export const RELOGIO_NO_LOOP_V3 = "tela_04";
+
+export const V3Refinado: React.FC<{ duracao?: number }> = ({ duracao }) => (
   <EstiloMotion.Provider value="refinado">
     <VersaoBase
+      duracao={duracao}
+      relogioApos={RELOGIO_NO_LOOP_V3}
       Tela={TelaV3}
       Relogio={RelogioV3}
       fundo={(c) => FUNDO[c.tipo]}

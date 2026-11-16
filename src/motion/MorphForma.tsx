@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { interpolate as morph } from "flubber";
-import { Easing, interpolate, useCurrentFrame } from "remotion";
+import { Easing, interpolate, interpolateColors, useCurrentFrame } from "remotion";
 import shapesData from "../shapesData.json";
 import type { ShapeName } from "../brand/BrandShape";
 import { pontosDoPath } from "../brand/grafismos";
@@ -34,6 +34,8 @@ type Props = {
   /** Lado da caixa em px (o lado maior da forma). */
   tamanho: number;
   cor: string;
+  /** Cores que acompanham a troca de forma (uma por forma, em ciclo). Sem isso, usa `cor`. */
+  cores?: string[];
   modo?: "preenchida" | "outline";
   /** Frames parado em cada forma oficial. */
   segurar?: number;
@@ -47,6 +49,8 @@ type Props = {
   fps?: number;
   /** Trim path (outline que se desenha): fração visível e deslocamento. */
   trim?: { visivel: number; deslocamento: number };
+  /** Espessura do outline em px (padrão: tokens.shapes.outlineConversion). */
+  espessura?: number;
   style?: React.CSSProperties;
 };
 
@@ -59,7 +63,8 @@ type Props = {
 export const MorphForma: React.FC<Props> = ({
   formas,
   tamanho,
-  cor,
+  cor: corBase,
+  cores,
   modo = "preenchida",
   segurar = 60,
   morfar = 18,
@@ -68,6 +73,7 @@ export const MorphForma: React.FC<Props> = ({
   giro = 0,
   fps = 23.976,
   trim,
+  espessura = strokeOutline,
   style,
 }) => {
   const frame = useCurrentFrame() + atraso;
@@ -82,8 +88,12 @@ export const MorphForma: React.FC<Props> = ({
     [de, para, p],
   );
   const caminho = p >= 1 ? null : d;
+  const cor =
+    cores && cores.length > 0
+      ? interpolateColors(p, [0, 1], [cores[i % cores.length], cores[(i + 1) % cores.length]])
+      : corBase;
   const outline = modo === "outline";
-  const sw = (strokeOutline * 100) / tamanho;
+  const sw = (espessura * 100) / tamanho;
   return (
     <svg
       width={tamanho}

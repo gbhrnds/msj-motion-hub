@@ -2,7 +2,7 @@ import React from "react";
 import shapesData from "../shapesData.json";
 import { BrandShape, ShapeName } from "../brand/BrandShape";
 import { MorphForma } from "./MorphForma";
-import { parceiras, useRefinado } from "./estilo";
+import { parceiras, useMorph } from "./estilo";
 
 type Props = {
   nome: ShapeName;
@@ -15,15 +15,17 @@ type Props = {
   fase?: number;
   /** Formas oficiais para onde ela pode morfar (validadas na tela). Vazio = não morfa. */
   alternativas?: ShapeName[];
+  /** Cores que acompanham o morph (a primeira deve ser `cor`). */
+  cores?: string[];
 };
 
 /**
- * Forma oficial. No estilo "refinado" ela morfa de tempos em tempos para
+ * Forma oficial. No estilo "refinado", dentro de uma tela de respiro, ela morfa de tempos em tempos para
  * formas oficiais de proporção parecida e volta — ocupando a mesma caixa
  * (mesmo centro e tamanho), então a composição validada não muda.
  */
-export const FormaViva: React.FC<Props> = ({ nome, largura, cor, modo, rotacao = 0, espelhar, fase = 0, alternativas }) => {
-  const refinado = useRefinado();
+export const FormaViva: React.FC<Props> = ({ nome, largura, cor, modo, rotacao = 0, espelhar, fase = 0, alternativas, cores }) => {
+  const refinado = useMorph();
   const alts = alternativas ?? parceiras(nome).slice(0, 2);
   if (!refinado || alts.length === 0) {
     return <BrandShape nome={nome} largura={largura} cor={cor} modo={modo} rotacao={rotacao} espelhar={espelhar} />;
@@ -38,6 +40,7 @@ export const FormaViva: React.FC<Props> = ({ nome, largura, cor, modo, rotacao =
           formas={[nome, ...alts.slice(0, 2)]}
           tamanho={lado}
           cor={cor}
+          cores={cores}
           modo={modo}
           rotacao={rotacao}
           segurar={84}
