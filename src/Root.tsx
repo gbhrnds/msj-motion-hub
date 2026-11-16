@@ -8,7 +8,7 @@ import { duracaoReview } from "./versoes/VersaoBase";
 import { V1NuDay } from "./versoes/v1/V1NuDay";
 import { V2Modulos } from "./versoes/v2/V2Modulos";
 import { RELOGIO_NO_LOOP_V3, V3Refinado } from "./versoes/v3/V3Refinado";
-import { framesFase1, framesFase2, VinhetaCompletaV3 } from "./fases/VinhetaCompleta";
+import { framesFase1, framesFase2, VinhetaCompletaV1, VinhetaCompletaV3 } from "./fases/VinhetaCompleta";
 import tokens from "../brand/tokens.json";
 
 const fps = tokens.video.fps;
@@ -72,6 +72,15 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="MSJ-2025-11-Abertura-V3-Completa"
         component={VinhetaCompletaV3}
+        durationInFrames={framesFase1(fps) + framesFase2(fps)}
+        fps={fps}
+        width={tokens.video.resolution.width}
+        height={tokens.video.resolution.height}
+      />
+      {/* Vinheta final da V1: Fase 1 (10 min) + Fase 2 (5 min só logo) = 15 min */}
+      <Composition
+        id="MSJ-2025-11-Abertura-V1-Completa"
+        component={VinhetaCompletaV1}
         durationInFrames={framesFase1(fps) + framesFase2(fps)}
         fps={fps}
         width={tokens.video.resolution.width}

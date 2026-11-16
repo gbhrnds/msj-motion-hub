@@ -9,7 +9,36 @@ const saida = path.join(raiz, "out/preview");
 fs.rmSync(saida, { recursive: true, force: true });
 fs.mkdirSync(saida, { recursive: true });
 
+// Arquivos embutidos no bundle (data: URI), na ordem em que staticFile() os pede
+const mime = { ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".woff2": "font/woff2" };
+const embutidos = {};
+const embutir = (rel) => {
+  const buf = fs.readFileSync(path.join(raiz, rel));
+  embutidos[rel] = `data:${mime[path.extname(rel).toLowerCase()]};base64,${buf.toString("base64")}`;
+};
+for (const f of fs.readdirSync(path.join(raiz, "brand/logos"))) if (/\.svg$/i.test(f) && !/-rgb\.svg$/.test(f)) embutir(`brand/logos/${f}`);
+for (const m of fs.readFileSync(path.join(raiz, "projects/2025-11_abertura/manifest.json"), "utf8").matchAll(/"(brand\/icons\/[^"]+)"/g)) embutir(m[1]);
+for (const f of fs.readdirSync(path.join(raiz, "projects/2025-11_abertura/fotos"))) if (/\.(jpg|png)$/i.test(f)) embutir(`projects/2025-11_abertura/fotos/${f}`);
+
+const shim = path.join(raiz, "src/preview/remotion-shim.ts");
+const pluginArquivos = {
+  name: "arquivos-embutidos",
+  setup(b) {
+    b.onResolve({ filter: /^preview-arquivos$/ }, () => ({ path: "preview-arquivos", namespace: "arquivos" }));
+    b.onLoad({ filter: /.*/, namespace: "arquivos" }, () => ({ contents: JSON.stringify(embutidos), loader: "json" }));
+    // o código do projeto importa "remotion": troca por um shim com staticFile() embutido
+    b.onResolve({ filter: /^remotion$/ }, (args) =>
+      args.importer.startsWith(path.join(raiz, "src")) ? { path: shim } : undefined,
+    );
+    b.onResolve({ filter: /^remotion-original$/ }, async (args) => {
+      const r = await b.resolve("remotion", { resolveDir: args.resolveDir, kind: "import-statement" });
+      return { path: r.path };
+    });
+  },
+};
+
 await build({
+  plugins: [pluginArquivos],
   entryPoints: [path.join(raiz, "src/preview/Preview.tsx")],
   bundle: true,
   minify: true,

@@ -8,6 +8,7 @@ import { BrandShape, ShapeName } from "../../brand/BrandShape";
 import shapesData from "../../shapesData.json";
 import { quebraBoa } from "../../brand/quebraDeLinha";
 import { MorphForma } from "../../motion/MorphForma";
+import { parceiras } from "../../brand/grafismos";
 import { comDestaque, PalavrasReveal } from "../../motion/PalavrasReveal";
 import { Conteudo, LOGO_AGI, LOGO_MSJ } from "../../dados";
 import { LogoMSJAnimado } from "../../motion/LogoMSJAnimado";
@@ -43,7 +44,9 @@ const FormaNaCaixa: React.FC<{
   cores?: string[];
   delay?: number;
   segurar?: number;
-}> = ({ caixa, cor: c, modo = "preenchida", outras = [], cores, delay = 0, segurar = 70 }) => {
+}> = ({ caixa, cor: c, modo = "preenchida", outras, cores, delay = 0, segurar = 70 }) => {
+  // na V1, todo outline morfa entre formas oficiais (parceiras de proporção parecida)
+  const alternativas = outras ?? (modo === "outline" ? parceiras(caixa.nome, 2) : []);
   const f = useCurrentFrame();
   const sd = shapesData[caixa.nome];
   const altura = (caixa.largura * sd.h) / sd.w;
@@ -61,7 +64,7 @@ const FormaNaCaixa: React.FC<{
       }}
     >
       <MorphForma
-        formas={[caixa.nome, ...outras]}
+        formas={[caixa.nome, ...alternativas]}
         tamanho={lado}
         cor={c}
         cores={cores}
@@ -140,11 +143,14 @@ const Entra: React.FC<{ delay?: number; children: React.ReactNode; style?: React
 /** Outline grande atrás do logo MSJ (abertura e 10s finais), posição do Figma. */
 const OUTLINE_LOGO: Caixa = { nome: "quadrilateral-05", x: 682, y: -156, largura: 999, rotacao: 312 };
 const MASCARA_LOGO = { x: 648, y: 436, w: 706, h: 213 };
+/** Atrás do relógio fixo: o outline que morfa nunca cruza os números. */
+const MASCARA_RELOGIO = { x: 96, y: 450, w: 400, h: 180 };
 
 const LogoComOutline: React.FC<{ altura: number; delay: number }> = ({ altura, delay }) => (
   <>
-    <FormaNaCaixa caixa={OUTLINE_LOGO} cor={cor.verde} modo="outline" delay={delay + 10} segurar={100000} />
+    <FormaNaCaixa caixa={OUTLINE_LOGO} cor={cor.verde} cores={[cor.verde, cor.branco, cor.amarelo]} modo="outline" delay={delay + 10} segurar={60} />
     <Mascara {...MASCARA_LOGO} cor={cor.azul} />
+    <Mascara {...MASCARA_RELOGIO} cor={cor.azul} />
     <Slot>
       <LogoMSJAnimado versao="negativa" altura={altura} delay={delay} />
     </Slot>
@@ -207,7 +213,9 @@ const Destaques: React.FC<{ c: Extract<Conteudo, { tipo: "destaques" }>; frames:
   // por baixo do título (JANELA) e saindo pela base do quadro.
   const JANELA = 222;
   const linhas = Math.ceil(c.nomes.length / COLS);
-  const TOPO = interpolate(f, [s(6.8), fimNomes], [900, JANELA - linhas * LINHA - 20], clamp);
+  const TOPO = interpolate(f, [s(6.8), fimNomes], [980, JANELA - linhas * LINHA - 20], clamp);
+  // cada linha aparece (sobe por máscara) ao passar por y≈1000, enquanto a grade sobe
+  const REVELA = 1000;
   const COL = 291;
   return (
     <>
@@ -249,11 +257,15 @@ const Destaques: React.FC<{ c: Extract<Conteudo, { tipo: "destaques" }>; frames:
               color: cor.branco,
             }}
           >
-            {c.nomes.map((n) => (
-              <div key={n} style={{ height: LINHA, display: "flex", alignItems: "center", whiteSpace: "nowrap" }}>
-                {n}
-              </div>
-            ))}
+            {c.nomes.map((n, i) => {
+              const yLinha = TOPO + Math.floor(i / COLS) * LINHA;
+              const v = easeEntra(interpolate(REVELA - yLinha, [0, LINHA * 1.4], [0, 1], clamp));
+              return (
+                <div key={n} style={{ height: LINHA, overflow: "hidden", display: "flex", alignItems: "center", whiteSpace: "nowrap" }}>
+                  <span style={{ translate: `0 ${(1 - v) * LINHA}px` }}>{n}</span>
+                </div>
+              );
+            })}
           </div>
           </div>
         </>
@@ -304,8 +316,9 @@ const Indicacao: React.FC<{ c: Extract<Conteudo, { tipo: "indicacao" }> }> = ({ 
       <div style={{ position: "absolute", left: PAINEL_FOTO.x, top: 0, right: 0, bottom: 0, overflow: "hidden", clipPath: `inset(0 0 0 ${(1 - v) * 100}%)` }}>
         <div style={{ position: "absolute", left: -PAINEL_FOTO.x, top: 0 }}>{img(c.foto)}</div>
       </div>
-      <FormaNaCaixa caixa={OUTLINE_IND} cor={cor.verde} modo="outline" delay={14} segurar={100000} />
-      <Mascara x={660} y={400} w={578} h={305} cor={cor.azul} />
+      <FormaNaCaixa caixa={OUTLINE_IND} cor={cor.verde} cores={[cor.verde, cor.branco, cor.amarelo]} modo="outline" delay={14} segurar={60} />
+      <Mascara x={660} y={286} w={578} h={420} cor={cor.azul} />
+      <Mascara {...MASCARA_RELOGIO} cor={cor.azul} />
       {c.recorte && <div style={{ position: "absolute", inset: 0, clipPath: `inset(0 0 0 ${(1 - v) * 100}%)` }}>{img(c.recorte)}</div>}
       <div style={{ position: "absolute", left: SLOT.x, top: 298, width: 600, fontFamily }}>
         <Entra>
@@ -421,8 +434,9 @@ const RelogioV1: React.FC<RelogioProps> = ({ segundosNoInicio }) => {
   );
 };
 
-export const V1NuDay: React.FC = () => (
+export const V1NuDay: React.FC<{ duracao?: number }> = ({ duracao }) => (
   <VersaoBase
+    duracao={duracao}
     Tela={TelaV1}
     Relogio={RelogioV1}
     fundo={fundoV1}

@@ -59,7 +59,7 @@
     {
       "id": "tela_02",
       "tipo": "tela_destaques",
-      "duracaoSegundos": 18,
+      "duracaoSegundos": 24,
       "textos": {
         "titulo": null,
         "corpo": "Quem luta pelo nosso propósito com o Jeito Agi de verdade, se destaca!\n\nParabéns, Destaques do Ciclo",
@@ -317,7 +317,7 @@
       "semLogoTelas01e05": "intencional; fundo alterado para cinza claro (#F3F3F3) no ajuste do Figma",
       "schemaTela02": "adaptado para array de logos + campo icone, aprovado",
       "layoutTela06": "dois módulos (azul + azul médio) com divisão diagonal, ajuste do Figma",
-      "duracaoTela02": "18s — cada nome ~3,6s na tela (pedido: 3–4s); limite aprovado para telas com nomes: até 30s",
+      "duracaoTela02": "24s (revisão de 16/11: créditos mais lentos, linha a linha) — cada nome ~6s na tela; limite aprovado para telas com nomes: até 30s",
       "quebrasDeLinha": "sem artigo/preposição no fim da linha e sem viúva (src/brand/quebraDeLinha.ts)"
     },
     "assuncoesParaConfirmar": [

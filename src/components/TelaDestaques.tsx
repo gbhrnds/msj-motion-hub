@@ -42,7 +42,6 @@ const T = {
 const COLUNAS = 4;
 const LINHA = 56;
 const JANELA = { x: 260, y: 250, largura: 1400, altura: 710 };
-const FADE_BORDA = 70;
 const CANTO_Y = 118;
 const JEITO = {
   centro: { x: 960, y: 470, h: 150 },
@@ -178,9 +177,11 @@ export const TelaDestaques: React.FC<TelaDestaquesProps> = ({
   const topoLista = interpolate(
     frame,
     [s(T.nomesInicio), fimNomes],
-    [JANELA.y + JANELA.altura, JANELA.y - linhas * LINHA],
+    [JANELA.y + JANELA.altura - LINHA, JANELA.y - linhas * LINHA],
     clamp,
   );
+  // cada linha é revelada (sobe por máscara) ao passar pela base da janela
+  const REVELA = JANELA.y + JANELA.altura - LINHA * 0.5;
   // --- Fechamento
   const fechIn = interpolate(frame, [fimNomes, fimNomes + 18], [0, 1], {
     ...clamp,
@@ -265,51 +266,43 @@ export const TelaDestaques: React.FC<TelaDestaquesProps> = ({
 
       {/* Ato 3 — créditos */}
       {frame >= s(T.nomesInicio) && frame < fimNomes && (
-        <div
-          style={{
-            position: "absolute",
-            left: JANELA.x,
-            top: 0,
-            width: JANELA.largura,
-            display: "grid",
-            gridTemplateColumns: `repeat(${COLUNAS}, 1fr)`,
-            translate: `0px ${topoLista}px`,
-          }}
-        >
-          {nomes.map((n, i) => {
-            const y = topoLista + Math.floor(i / COLUNAS) * LINHA + LINHA / 2;
-            const op = Math.min(
-              interpolate(y, [JANELA.y, JANELA.y + FADE_BORDA], [0, 1], clamp),
-              interpolate(
-                y,
-                [
-                  JANELA.y + JANELA.altura - FADE_BORDA,
-                  JANELA.y + JANELA.altura,
-                ],
-                [1, 0],
-                clamp,
-              ),
-            );
-            return (
-              <div
-                key={n}
-                style={{
-                  height: LINHA,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontFamily,
-                  fontWeight: 300,
-                  fontSize: 28,
-                  color: cor.azul,
-                  whiteSpace: "nowrap",
-                  opacity: op,
-                }}
-              >
-                {n}
-              </div>
-            );
-          })}
+        // créditos: sem fade nas bordas, a janela corta; as linhas aparecem uma a uma
+        <div style={{ position: "absolute", left: JANELA.x, top: JANELA.y, width: JANELA.largura, height: JANELA.altura, overflow: "hidden" }}>
+          <div
+            style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              width: JANELA.largura,
+              display: "grid",
+              gridTemplateColumns: `repeat(${COLUNAS}, 1fr)`,
+              translate: `0px ${topoLista - JANELA.y}px`,
+            }}
+          >
+            {nomes.map((n, i) => {
+              const yLinha = topoLista + Math.floor(i / COLUNAS) * LINHA;
+              const v = easeEntra(interpolate(REVELA - yLinha, [0, LINHA * 1.4], [0, 1], clamp));
+              return (
+                <div
+                  key={n}
+                  style={{
+                    height: LINHA,
+                    overflow: "hidden",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontFamily,
+                    fontWeight: 300,
+                    fontSize: 28,
+                    color: cor.azul,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <span style={{ translate: `0 ${(1 - v) * LINHA}px` }}>{n}</span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
 
