@@ -202,10 +202,12 @@ const Destaques: React.FC<{ c: Extract<Conteudo, { tipo: "destaques" }>; frames:
   const s = (x: number) => Math.round(x * fps);
   const fimNomes = frames - s(3);
   const COLS = 4;
-  // 52px como no Figma; com mais nomes, a linha aperta para a grade caber até y≈1010
-  const LINHA = Math.min(52, Math.floor(770 / Math.ceil(c.nomes.length / COLS)));
-  // Figma (2026-11-16): grade inteira parada, todos os nomes com opacidade total
-  const TOPO = 244;
+  const LINHA = 52; // como no Figma
+  // Efeito de créditos: a grade sobe sem parar, em opacidade total, cortada
+  // por baixo do título (JANELA) e saindo pela base do quadro.
+  const JANELA = 222;
+  const linhas = Math.ceil(c.nomes.length / COLS);
+  const TOPO = interpolate(f, [s(6.8), fimNomes], [900, JANELA - linhas * LINHA - 20], clamp);
   const COL = 291;
   return (
     <>
@@ -233,11 +235,12 @@ const Destaques: React.FC<{ c: Extract<Conteudo, { tipo: "destaques" }>; frames:
               <Logo arquivo={c.logoDestaques} versao="negativa" altura={72} />
             </Entra>
           </div>
+          <div style={{ position: "absolute", left: 0, right: 0, top: JANELA, bottom: 0, overflow: "hidden" }}>
           <div
             style={{
               position: "absolute",
               left: SLOT.x,
-              top: TOPO,
+              top: TOPO - JANELA,
               display: "grid",
               gridTemplateColumns: `repeat(${COLS}, ${COL}px)`,
               fontFamily,
@@ -246,16 +249,12 @@ const Destaques: React.FC<{ c: Extract<Conteudo, { tipo: "destaques" }>; frames:
               color: cor.branco,
             }}
           >
-            {c.nomes.map((n, i) => {
-              // cada linha sobe de dentro da própria caixa (máscara), em cascata
-              const linha = Math.floor(i / COLS);
-              const v = easeEntra(interpolate(f, [s(7) + linha * 2, s(7) + linha * 2 + 14], [0, 1], clamp));
-              return (
-                <div key={n} style={{ height: LINHA, overflow: "hidden", display: "flex", alignItems: "center", whiteSpace: "nowrap" }}>
-                  <span style={{ translate: `0 ${(1 - v) * LINHA}px` }}>{n}</span>
-                </div>
-              );
-            })}
+            {c.nomes.map((n) => (
+              <div key={n} style={{ height: LINHA, display: "flex", alignItems: "center", whiteSpace: "nowrap" }}>
+                {n}
+              </div>
+            ))}
+          </div>
           </div>
         </>
       )}

@@ -7,7 +7,7 @@ import { ExportaFigma } from "./export/ExportaFigma";
 import { duracaoReview } from "./versoes/VersaoBase";
 import { V1NuDay } from "./versoes/v1/V1NuDay";
 import { V2Modulos } from "./versoes/v2/V2Modulos";
-import { V3Refinado } from "./versoes/v3/V3Refinado";
+import { RELOGIO_NO_LOOP_V3, V3Refinado } from "./versoes/v3/V3Refinado";
 import { framesFase1, framesFase2, VinhetaCompletaV3 } from "./fases/VinhetaCompleta";
 import tokens from "../brand/tokens.json";
 
@@ -63,7 +63,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="Versao3-MotionRefinado"
         component={V3Refinado}
-        durationInFrames={duracaoReview(fps)}
+        durationInFrames={duracaoReview(fps, RELOGIO_NO_LOOP_V3)}
         fps={fps}
         width={tokens.video.resolution.width}
         height={tokens.video.resolution.height}

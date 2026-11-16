@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { Player, PlayerRef } from "@remotion/player";
 import tokens from "../../brand/tokens.json";
 import { V1NuDay } from "../versoes/v1/V1NuDay";
-import { V3Refinado } from "../versoes/v3/V3Refinado";
+import { RELOGIO_NO_LOOP_V3, V3Refinado } from "../versoes/v3/V3Refinado";
 import { VinhetaCompletaV3, framesFase1, framesFase2 } from "../fases/VinhetaCompleta";
 import { duracaoReview, montarReview, SEGUNDOS_FINAIS } from "../versoes/VersaoBase";
 import { roteiro } from "../dados";
@@ -21,7 +21,7 @@ const H = tokens.video.resolution.height;
 type Capitulo = { nome: string; frame: number };
 
 const NOMES: Record<string, string> = {
-  tela_inicio_contagem: "Abertura",
+  tela_inicio_contagem: "Relógio",
   tela_aguarde: "Respiro",
   tela_destaques: "Destaques do Ciclo",
   tela_indicacao_metricas: "Programa de Indicação",
@@ -29,8 +29,8 @@ const NOMES: Record<string, string> = {
   tela_campanha: "Campanha",
 };
 
-const capitulosReview = (): Capitulo[] => {
-  const { seq, total } = montarReview(fps);
+const capitulosReview = (relogioApos?: string): Capitulo[] => {
+  const { seq, total } = montarReview(fps, relogioApos);
   let acc = 0;
   const caps = seq.map((s) => {
     const t = roteiro.telas.find((x) => s.key.startsWith(x.id))!;
@@ -59,6 +59,8 @@ type Versao = {
 const montarVersoes = (): Versao[] => {
   const review = duracaoReview(fps);
   const caps = capitulosReview();
+  const reviewV3 = duracaoReview(fps, RELOGIO_NO_LOOP_V3);
+  const capsV3 = capitulosReview(RELOGIO_NO_LOOP_V3);
   return [
     {
       id: "v3-completa",
@@ -68,7 +70,7 @@ const montarVersoes = (): Versao[] => {
       frames: framesFase1(fps) + framesFase2(fps),
       capitulos: [
         { nome: "Abertura (10:00)", frame: 0 },
-        ...caps.slice(1, -1).map((c) => ({ ...c, nome: `${c.nome}` })),
+        ...capsV3.slice(1, -1),
         { nome: "10s finais", frame: framesFase1(fps) - Math.round(SEGUNDOS_FINAIS * fps) },
         { nome: "Fase 2 · logo", frame: framesFase1(fps) },
       ],
@@ -78,8 +80,8 @@ const montarVersoes = (): Versao[] => {
       titulo: "V3 · motion refinado (uma volta)",
       nota: "Abertura, uma volta do loop e os 10 segundos finais.",
       component: V3Refinado as React.FC<Record<string, unknown>>,
-      frames: review,
-      capitulos: caps,
+      frames: reviewV3,
+      capitulos: capsV3,
     },
     {
       id: "v1",

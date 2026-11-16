@@ -15,6 +15,8 @@ type Props = {
   logoMsj: string;
   duracaoFrames: number;
   id?: string;
+  /** Frame global em que o painel começa: os segundos trocam junto com o relógio do canto. */
+  frameGlobalInicio?: number;
 };
 
 export const formatarTempo = (s: number) =>
@@ -58,8 +60,9 @@ export const PainelContagem: React.FC<Props> = ({
   logoMsj,
   duracaoFrames,
   id = "painel_contagem",
+  frameGlobalInicio = 0,
 }) => {
-  const frame = useCurrentFrame();
+  const frame = useCurrentFrame() + frameGlobalInicio;
   const { fps } = useVideoConfig();
   const restante = Math.max(0, segundosNoInicio - Math.floor(frame / fps));
   const refinado = useRefinado();

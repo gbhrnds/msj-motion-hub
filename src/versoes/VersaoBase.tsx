@@ -8,31 +8,49 @@ import { MorphForma } from "../motion/MorphForma";
 export const SEGUNDOS_FINAIS = 10;
 
 export type TelaProps = { c: Conteudo; frames: number; rep: number; /** frame global em que a tela começa (para o relógio). */ inicio: number; /** frames totais da contagem. */ total: number };
-export type RelogioProps = { segundosNoInicio: number; ocultarAte: number };
+export type RelogioProps = {
+  segundosNoInicio: number;
+  ocultarAte: number;
+  /** Trechos [início, fim) em que a própria tela é o relógio (o do canto se esconde). */
+  ocultar?: [number, number][];
+};
 
 type Montagem = { key: string; c: Conteudo; frames: number; rep: number };
 
 /** Abertura (1x) + uma volta do loop + 10s finais — a duração de review de uma versão. */
-export const montarReview = (fps: number) => {
+/**
+ * Telas do loop. Com `relogioApos`, a tela só do relógio (a mesma da abertura)
+ * também entra no loop, logo depois da tela indicada.
+ */
+const telasDoLoop = (relogioApos?: string) => {
+  const telas = roteiro.telas;
+  const loop = telas.filter((t) => t.exibicao !== "uma_vez");
+  const relogio = telas.find((t) => t.tipo === "tela_inicio_contagem");
+  if (!relogioApos || !relogio) return loop;
+  const i = loop.findIndex((t) => t.id === relogioApos);
+  return i < 0 ? loop : [...loop.slice(0, i + 1), relogio, ...loop.slice(i + 1)];
+};
+
+export const montarReview = (fps: number, relogioApos?: string) => {
   const telas = roteiro.telas;
   const seq: Montagem[] = [];
   const add = (t: (typeof telas)[number], rep: number) =>
-    seq.push({ key: `${t.id}-${rep}`, c: conteudoDe(t), frames: Math.round(t.duracaoSegundos * fps), rep });
+    seq.push({ key: `${t.id}-${rep}${seq.some((s) => s.key === `${t.id}-${rep}`) ? "b" : ""}`, c: conteudoDe(t), frames: Math.round(t.duracaoSegundos * fps), rep });
   telas.filter((t) => t.exibicao === "uma_vez").forEach((t) => add(t, 0));
   const abertura = seq.reduce((a, s) => a + s.frames, 0);
-  telas.filter((t) => t.exibicao !== "uma_vez").forEach((t) => add(t, 0));
+  telasDoLoop(relogioApos).forEach((t) => add(t, 0));
   const conteudo = seq.reduce((a, s) => a + s.frames, 0);
   const final = Math.round(SEGUNDOS_FINAIS * fps);
   return { seq, abertura, total: conteudo + final };
 };
 
-export const duracaoReview = (fps: number) => montarReview(fps).total;
+export const duracaoReview = (fps: number, relogioApos?: string) => montarReview(fps, relogioApos).total;
 
 /**
  * Fase 1 completa: abertura (1x) + o loop repetido até preencher `total` frames.
  * A última tela é cortada no fim, por baixo do painel dos 10s finais.
  */
-export const montarCompleta = (fps: number, total: number) => {
+export const montarCompleta = (fps: number, total: number, relogioApos?: string) => {
   const telas = roteiro.telas;
   const seq: Montagem[] = [];
   let acc = 0;
@@ -40,12 +58,13 @@ export const montarCompleta = (fps: number, total: number) => {
     const resta = total - acc;
     if (resta <= 0) return;
     const f = Math.min(Math.round(t.duracaoSegundos * fps), resta);
-    seq.push({ key: `${t.id}-${rep}`, c: conteudoDe(t), frames: f, rep });
+    const key = `${t.id}-${rep}`;
+    seq.push({ key: seq.some((s) => s.key === key) ? `${key}b` : key, c: conteudoDe(t), frames: f, rep });
     acc += f;
   };
   telas.filter((t) => t.exibicao === "uma_vez").forEach((t) => add(t, 0));
   const abertura = acc;
-  const loop = telas.filter((t) => t.exibicao !== "uma_vez");
+  const loop = telasDoLoop(relogioApos);
   for (let rep = 0; acc < total && loop.length > 0; rep++) loop.forEach((t) => add(t, rep));
   return { seq, abertura, total };
 };
@@ -85,6 +104,8 @@ type VersaoProps = {
   durTransicao?: number;
   /** Duração total em frames (Fase 1 completa). Sem isso: montagem de review (1 volta). */
   duracao?: number;
+  /** Id da tela depois da qual a tela do relógio entra no loop (sem isso, ela só aparece na abertura). */
+  relogioApos?: string;
 };
 
 export const VersaoBase: React.FC<VersaoProps> = ({
@@ -94,10 +115,11 @@ export const VersaoBase: React.FC<VersaoProps> = ({
   formasTransicao = [["pentagon-05", "quadrilateral-05"], ["quadrilateral-16", "pentagon-03"], ["pentagon-06", "quadrilateral-01"]],
   durTransicao = 20,
   duracao,
+  relogioApos,
 }) => {
   const { fps, durationInFrames: duracaoComp } = useVideoConfig();
   const durationInFrames = duracao ?? duracaoComp;
-  const { seq, abertura } = duracao ? montarCompleta(fps, duracao) : montarReview(fps);
+  const { seq, abertura } = duracao ? montarCompleta(fps, duracao, relogioApos) : montarReview(fps, relogioApos);
   const cortes: { frame: number; cor: string }[] = [];
   let acc = 0;
   seq.forEach((s, i) => {
@@ -120,7 +142,11 @@ export const VersaoBase: React.FC<VersaoProps> = ({
           <TransicaoForma cor={k.cor} formas={formasTransicao[i % formasTransicao.length]} dur={durTransicao} rotacao={i * 37} />
         </Sequence>
       ))}
-      <Relogio segundosNoInicio={Math.round(durationInFrames / fps)} ocultarAte={abertura} />
+      <Relogio
+        segundosNoInicio={Math.round(durationInFrames / fps)}
+        ocultarAte={abertura}
+        ocultar={seq.flatMap((s, i) => (s.c.tipo === "abertura" ? [[inicios[i], inicios[i] + s.frames] as [number, number]] : []))}
+      />
     </AbsoluteFill>
   );
 };
