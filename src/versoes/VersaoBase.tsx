@@ -15,7 +15,7 @@ export type RelogioProps = {
   ocultar?: [number, number][];
 };
 
-type Montagem = { key: string; c: Conteudo; frames: number; rep: number };
+type Montagem = { key: string; c: Conteudo; frames: number; rep: number; natural?: number };
 
 /** Abertura (1x) + uma volta do loop + 10s finais — a duração de review de uma versão. */
 /**
@@ -59,7 +59,10 @@ export const montarCompleta = (fps: number, total: number, relogioApos?: string)
     if (resta <= 0) return;
     const f = Math.min(Math.round(t.duracaoSegundos * fps), resta);
     const key = `${t.id}-${rep}`;
-    seq.push({ key: seq.some((s) => s.key === key) ? `${key}b` : key, c: conteudoDe(t), frames: f, rep });
+    // a última tela pode ser cortada pelo fim da Fase 1: ela segue animando no tempo
+    // natural (`natural`) e só é interrompida pelo corte, sem comprimir a coreografia
+    const natural = Math.round(t.duracaoSegundos * fps);
+    seq.push({ key: seq.some((s) => s.key === key) ? `${key}b` : key, c: conteudoDe(t), frames: f, rep, natural });
     acc += f;
   };
   telas.filter((t) => t.exibicao === "uma_vez").forEach((t) => add(t, 0));
@@ -133,7 +136,7 @@ export const VersaoBase: React.FC<VersaoProps> = ({
       <Series>
         {seq.map((s, i) => (
           <Series.Sequence key={s.key} durationInFrames={s.frames} name={s.key}>
-            <Tela c={s.c} frames={s.frames} rep={s.rep} inicio={inicios[i]} total={durationInFrames} />
+            <Tela c={s.c} frames={s.natural ?? s.frames} rep={s.rep} inicio={inicios[i]} total={durationInFrames} />
           </Series.Sequence>
         ))}
       </Series>
