@@ -64,12 +64,11 @@ export const OutlineDesenhado: React.FC<Props> = ({
   const refinado = useRefinado();
   const morph = useMorph();
   if (refinado) {
-    // V3: sem trim path — o contorno entra inteiro (fade + escala), para a forma
+    // V3: sem trim path e sem fade — o contorno entra inteiro crescendo, para a forma
     // ser lida; no respiro ele morfa entre formas oficiais em volta do texto.
     const entra = interpolate(frame, [0, entrada], [0, 1], { ...clamp, easing: Easing.bezier(0.23, 1, 0.32, 1) });
-    const sai = duracaoFrames ? interpolate(frame, [duracaoFrames - delayFrames - 12, duracaoFrames - delayFrames - 2], [1, 0], clamp) : 1;
     const lado = Math.max(largura, altura);
-    const caixa: React.CSSProperties = { width: largura, height: altura, position: "relative", opacity: entra * sai, scale: String(0.92 + 0.08 * entra) };
+    const caixa: React.CSSProperties = { width: largura, height: altura, position: "relative", scale: String(entra) };
     if (morph && alternativas.length > 0) {
       return (
         <div style={caixa}>

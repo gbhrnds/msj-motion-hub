@@ -185,9 +185,7 @@
         "titulo": null,
         "corpo": "Juntos, encontramos os melhores caminhos e novos Agilizados para crescer com a gente.",
         "bullets": [
-          "10 ganhadores no 2º trimestre",
-          "XX indicados",
-          "XX% indicações contratadas"
+          "10 ganhadores no 2º trimestre"
         ]
       },
       "midia": {
@@ -197,7 +195,7 @@
       },
       "flags": {
         "midiaPendente": false,
-        "dadoPendente": true,
+        "dadoPendente": false,
         "requerComposicaoExtra": false
       },
       "observacoesOriginais": "[ foto do programa de indicacao ] [ logo programa de indicacao ]"
@@ -308,11 +306,12 @@
   "resumoParaRevisao": {
     "midiasPendentes": [],
     "dadosPendentes": [
-      "tela_04: 'XX indicados' e 'XX% indicações contratadas' — placeholder intencional confirmado pelo usuário, substituir pelos dados oficiais antes do render final"
+      "tela_04: 'XX indicados' e 'XX% indicações contratadas' retirados pelo usuário no layout final do Figma (2026-11-16); fica só '10 ganhadores no 2º trimestre'"
     ],
     "telasQueRequerComposicaoExtra": [],
     "telasAcimaDe20Segundos": [],
     "decisoesAprovadasPeloUsuario": {
+      "tela04Metricas": "2026-11-16: layout final do Figma (V1 e V3) mostra só '10 ganhadores no 2º trimestre'; métricas XX retiradas",
       "data": "2026-11-14",
       "logoMsjTelas03e07": "logo_msj_positivo sobre fundo #F3F3F3",
       "semLogoTelas01e05": "intencional; fundo alterado para cinza claro (#F3F3F3) no ajuste do Figma",

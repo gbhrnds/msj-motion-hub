@@ -49,6 +49,8 @@ type Props = {
   fps?: number;
   /** Trim path (outline que se desenha): fração visível e deslocamento. */
   trim?: { visivel: number; deslocamento: number };
+  /** Espessura do outline em px (padrão: tokens.shapes.outlineConversion). */
+  espessura?: number;
   style?: React.CSSProperties;
 };
 
@@ -71,6 +73,7 @@ export const MorphForma: React.FC<Props> = ({
   giro = 0,
   fps = 23.976,
   trim,
+  espessura = strokeOutline,
   style,
 }) => {
   const frame = useCurrentFrame() + atraso;
@@ -90,7 +93,7 @@ export const MorphForma: React.FC<Props> = ({
       ? interpolateColors(p, [0, 1], [cores[i % cores.length], cores[(i + 1) % cores.length]])
       : corBase;
   const outline = modo === "outline";
-  const sw = (strokeOutline * 100) / tamanho;
+  const sw = (espessura * 100) / tamanho;
   return (
     <svg
       width={tamanho}

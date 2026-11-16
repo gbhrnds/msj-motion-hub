@@ -66,12 +66,11 @@ const TransicaoForma: React.FC<{ cor: string; formas: ShapeName[]; dur: number; 
 }) => {
   const frame = useCurrentFrame();
   const p = easeMove(interpolate(frame, [0, dur], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
-  const tam = 140 + (4600 - 140) * p;
+  const tam = 4600 * p;
   return (
     <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", pointerEvents: "none" }}>
-      <div style={{ opacity: Math.min(1, p * 6) }}>
-        <MorphForma formas={formas} tamanho={tam} cor={cor} segurar={0} morfar={dur} rotacao={rotacao + p * 40} />
-      </div>
+      {/* sem fade: a forma já nasce pequena e cresce cobrindo o quadro */}
+      <MorphForma formas={formas} tamanho={tam} cor={cor} segurar={0} morfar={dur} rotacao={rotacao + p * 40} />
     </AbsoluteFill>
   );
 };

@@ -1,3 +1,4 @@
+import { useRefinado } from "./estilo";
 import React from "react";
 import { Easing, interpolate, useCurrentFrame } from "remotion";
 import { motionTokens } from "../brand/theme";
@@ -37,6 +38,8 @@ export const Grafismo: React.FC<GrafismoProps> = ({
     easing: Easing.bezier(x1, y1, x2, y2),
   } as const;
   const t = frame - delayFrames;
+  // V3: sem fade nas entradas (a transição por forma já faz a troca); a forma cresce do zero
+  const refinado = useRefinado();
 
   return (
     <div
@@ -44,11 +47,11 @@ export const Grafismo: React.FC<GrafismoProps> = ({
         position: "absolute",
         left: x,
         top: y,
-        opacity: interpolate(t, [0, ent.durationFrames], [0, 1], opts),
+        opacity: refinado ? undefined : interpolate(t, [0, ent.durationFrames], [0, 1], opts),
         scale: interpolate(
           t,
           [0, ent.durationFrames],
-          [ent.scaleFrom, 1],
+          [refinado ? 0 : ent.scaleFrom, 1],
           opts,
         ),
       }}

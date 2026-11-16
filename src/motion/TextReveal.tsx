@@ -43,6 +43,10 @@ export const TextReveal: React.FC<TextRevealProps> = ({
       </div>
     );
   }
+  if (refinado) {
+    // sem fade: o bloco é revelado por máscara, de baixo para cima
+    return <div style={{ clipPath: `inset(${(1 - progress) * 100}% 0 0 0)`, ...style }}>{children}</div>;
+  }
   return (
     <div
       style={{
