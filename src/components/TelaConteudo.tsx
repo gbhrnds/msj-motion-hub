@@ -56,7 +56,8 @@ export const TelaConteudo: React.FC<TelaConteudoProps> = ({
 }) => {
   return (
     <AbsoluteFill style={{ backgroundColor: cor.branco }}>
-      <TextReveal distancia={0} style={{ position: "absolute", inset: 0 }}>
+      {/* os módulos entram primeiro e rápido: o texto branco só aparece com o fundo azul já no lugar */}
+      <TextReveal durationFrames={14} distancia={0} style={{ position: "absolute", inset: 0 }}>
         <svg width={1920} height={1080}>
           {MODULOS.map((m) => (
             <path
@@ -79,13 +80,13 @@ export const TelaConteudo: React.FC<TelaConteudoProps> = ({
       {/* lado azul */}
       {logo && (
         <div style={{ position: "absolute", left: 160, top: 324 }}>
-          <TextReveal distancia={0}>
+          <TextReveal delayFrames={10} distancia={0}>
             <Logo arquivo={logo} versao="negativa" altura={74} />
           </TextReveal>
         </div>
       )}
       <TextReveal
-        delayFrames={6}
+        delayFrames={14}
         distancia={28}
         style={{ position: "absolute", left: 160, top: 441, width: 560 }}
       >
@@ -106,7 +107,7 @@ export const TelaConteudo: React.FC<TelaConteudoProps> = ({
       {/* lado branco */}
       <div style={{ position: "absolute", left: 1090, top: 300, width: 720 }}>
         {chamadaLista && (
-          <TextReveal delayFrames={12} distancia={20}>
+          <TextReveal delayFrames={18} distancia={20}>
             <h2
               style={{
                 fontFamily,
@@ -125,7 +126,7 @@ export const TelaConteudo: React.FC<TelaConteudoProps> = ({
         {bullets.map((b, i) => (
           <TextReveal
             key={b}
-            delayFrames={18 + STAGGER[Math.min(i, STAGGER.length - 1)]}
+            delayFrames={24 + STAGGER[Math.min(i, STAGGER.length - 1)]}
             distancia={14}
           >
             <div

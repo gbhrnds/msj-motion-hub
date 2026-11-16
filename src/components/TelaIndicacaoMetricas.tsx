@@ -24,8 +24,10 @@ const MODULO_NUMERO =
   "M138 678C138 668.611 145.611 661 155 661H316.553C323.473 661 329.702 665.195 332.305 671.607L387.505 807.607C392.042 818.785 383.817 831 371.753 831H155C145.611 831 138 823.389 138 814V678Z";
 const MODULO_ROTULO =
   "M374.527 684.862C369.57 673.625 377.799 661 390.081 661H772C781.389 661 789 668.611 789 678V814C789 823.389 781.389 831 772 831H450.081C443.346 831 437.246 827.024 434.527 820.862L374.527 684.862Z";
+// caixa que contém os dois módulos (a revelação acontece dentro dela)
+const METRICA = { x: 138, y: 661, largura: 651, altura: 170 };
 const Modulo: React.FC<{ d: string; cor: string }> = ({ d, cor: c }) => (
-  <svg width={1920} height={1080} viewBox="0 0 1920 1080" style={{ position: "absolute", inset: 0 }}>
+  <svg width={1920} height={1080} viewBox="0 0 1920 1080" style={{ position: "absolute", left: -METRICA.x, top: -METRICA.y }}>
     <path d={d} fill={c} />
   </svg>
 );
@@ -111,18 +113,24 @@ export const TelaIndicacaoMetricas: React.FC<TelaIndicacaoMetricasProps> = ({
         const [numero, rotulo] = separar(b);
         return (
           <React.Fragment key={b}>
-            <TextReveal delayFrames={18} distancia={0} style={{ position: "absolute", inset: 0 }}>
+            {/* módulos primeiro, revelados dentro da própria caixa; o texto só
+                entra quando o módulo de fundo já está inteiro */}
+            <TextReveal delayFrames={12} durationFrames={14} distancia={0} style={{ position: "absolute", left: METRICA.x, top: METRICA.y, width: METRICA.largura, height: METRICA.altura }}>
               <Modulo d={MODULO_NUMERO} cor={cor.azulMedio} />
             </TextReveal>
-            <TextReveal delayFrames={22} distancia={0} style={{ position: "absolute", inset: 0 }}>
+            <TextReveal delayFrames={16} durationFrames={14} distancia={0} style={{ position: "absolute", left: METRICA.x, top: METRICA.y, width: METRICA.largura, height: METRICA.altura }}>
               <Modulo d={MODULO_ROTULO} cor={cor.verde} />
             </TextReveal>
-            <TextReveal delayFrames={24} distancia={20} style={{ position: "absolute", left: 138, top: 661, width: 236, height: 170, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <div style={{ fontFamily, fontWeight: 700, fontSize: 86, lineHeight: 1, color: cor.verde, letterSpacing: -1 }}>{numero}</div>
-            </TextReveal>
-            <TextReveal delayFrames={28} distancia={20} style={{ position: "absolute", left: 420, top: 661, width: 352, height: 170, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <div style={{ fontFamily, fontWeight: 600, fontSize: 30, lineHeight: 1.25, color: cor.azulEscuro, textAlign: "center" }}>{quebraBoa(rotulo)}</div>
-            </TextReveal>
+            <div style={{ position: "absolute", left: 138, top: 661, width: 236, height: 170, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <TextReveal delayFrames={24} distancia={20}>
+                <div style={{ fontFamily, fontWeight: 700, fontSize: 86, lineHeight: 1, color: cor.verde, letterSpacing: -1 }}>{numero}</div>
+              </TextReveal>
+            </div>
+            <div style={{ position: "absolute", left: 420, top: 661, width: 352, height: 170, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <TextReveal delayFrames={28} distancia={20}>
+                <div style={{ fontFamily, fontWeight: 600, fontSize: 30, lineHeight: 1.25, color: cor.azulEscuro, textAlign: "center" }}>{quebraBoa(rotulo)}</div>
+              </TextReveal>
+            </div>
           </React.Fragment>
         );
       })}

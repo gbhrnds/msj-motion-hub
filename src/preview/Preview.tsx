@@ -128,6 +128,8 @@ const App: React.FC = () => {
     const p = ref.current;
     if (!p) return;
     const on = (e: { detail: { frame: number } }) => setFrame(e.detail.frame);
+    // gancho para testes automatizados da página
+    (window as unknown as { __seek?: (f: number) => void }).__seek = (f) => p.seekTo(f);
     p.addEventListener("frameupdate", on);
     return () => p.removeEventListener("frameupdate", on);
   }, [atual]);

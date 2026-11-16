@@ -303,6 +303,16 @@ const PAINEL_FOTO = { x: 1288 };
 const IMAGEM = { x: 767, y: -84, largura: 1774, altura: 1183 };
 const OUTLINE_IND: Caixa = { nome: "pentagon-02", x: 1184, y: 145, largura: 895, rotacao: 300 };
 
+/**
+ * Janela vertical da borda `esquerda` até a direita da tela. Feita com overflow
+ * (sem clip-path), que é renderizado igual em qualquer navegador do player.
+ */
+const Cortina: React.FC<{ esquerda: number; children: React.ReactNode }> = ({ esquerda, children }) => (
+  <div style={{ position: "absolute", left: esquerda, top: 0, right: 0, bottom: 0, overflow: "hidden" }}>
+    <div style={{ position: "absolute", left: -esquerda, top: 0, width: 1920, height: 1080 }}>{children}</div>
+  </div>
+);
+
 const Indicacao: React.FC<{ c: Extract<Conteudo, { tipo: "indicacao" }> }> = ({ c }) => {
   const f = useCurrentFrame();
   // painel entra como cortina da direita (sem fade)
@@ -313,13 +323,11 @@ const Indicacao: React.FC<{ c: Extract<Conteudo, { tipo: "indicacao" }> }> = ({ 
   const [n, r] = separar(c.bullets[0] ?? "");
   return (
     <>
-      <div style={{ position: "absolute", left: PAINEL_FOTO.x, top: 0, right: 0, bottom: 0, overflow: "hidden", clipPath: `inset(0 0 0 ${(1 - v) * 100}%)` }}>
-        <div style={{ position: "absolute", left: -PAINEL_FOTO.x, top: 0 }}>{img(c.foto)}</div>
-      </div>
+      <Cortina esquerda={PAINEL_FOTO.x + (1 - v) * (1920 - PAINEL_FOTO.x)}>{img(c.foto)}</Cortina>
       <FormaNaCaixa caixa={OUTLINE_IND} cor={cor.verde} cores={[cor.verde, cor.branco, cor.amarelo]} modo="outline" delay={14} segurar={60} />
       <Mascara x={660} y={286} w={578} h={420} cor={cor.azul} />
       <Mascara {...MASCARA_RELOGIO} cor={cor.azul} />
-      {c.recorte && <div style={{ position: "absolute", inset: 0, clipPath: `inset(0 0 0 ${(1 - v) * 100}%)` }}>{img(c.recorte)}</div>}
+      {c.recorte && <Cortina esquerda={(1 - v) * 1920}>{img(c.recorte)}</Cortina>}
       <div style={{ position: "absolute", left: SLOT.x, top: 298, width: 600, fontFamily }}>
         <Entra>
           <Logo arquivo={c.logo} versao="negativa" altura={92} />
