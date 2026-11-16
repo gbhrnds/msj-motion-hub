@@ -261,10 +261,17 @@ export const conflitos = (
 };
 
 /** Formas oficiais de proporção parecida (candidatas a morph sem mudar o "tamanho"). */
+/**
+ * Formas da pasta oficial que não entram no morph: a quadrilateral-08 tem um
+ * lado cortado reto no arquivo e, girada, não parece um dos cacos da marca
+ * (apontado na revisão de 16/11).
+ */
+export const FORA_DO_MORPH: ShapeName[] = ["quadrilateral-08"];
+
 export const parceiras = (nome: ShapeName, n = 3): ShapeName[] => {
   const r = shapesData[nome].w / shapesData[nome].h;
   return (Object.keys(shapesData) as ShapeName[])
-    .filter((k) => k !== nome)
+    .filter((k) => k !== nome && !FORA_DO_MORPH.includes(k))
     .map((k) => ({ k, d: Math.abs(shapesData[k].w / shapesData[k].h - r) }))
     .sort((a, b) => a.d - b.d)
     .slice(0, n)
