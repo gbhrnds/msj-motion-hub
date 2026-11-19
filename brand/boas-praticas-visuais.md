@@ -106,3 +106,5 @@ que está escrito) e do que a vinheta de Outubro/2026 faz. Complementa o
 | 2026-11-14 | Coração amarelo sobre cinza (ícone decorativo, ao lado do texto azul) | fechamento Destaques |
 | 2026-11-14 | Foto recortada por forma oficial (pentagon-06) com a pessoa recortada saindo da forma | tela Indicação |
 | 2026-11-14 | Azul + amarelo **sem verde**, com amarelo predominante entre os grafismos (Brandbook p.47 pede amarelo em menor proporção e com verde) — precedente na vinheta de Outubro | Tela Destaques do Ciclo |
+| 2026-11-19 | Cacos amarelos sobre cinza claro (texto e logo da cena em azul Agibank) | Minuto Jeito Agi · Cena 03 |
+| 2026-11-19 | Logo Agibank centralizado, tamanho pequeno/moderado (regra geral: canto inferior direito) | Minuto Jeito Agi · Encerramento |

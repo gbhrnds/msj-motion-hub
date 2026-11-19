@@ -1,0 +1,15 @@
+{
+  "projeto": "2025-11_minuto-jeito-agi",
+  "video": "video/minuto-jeito-agi-novembro.mp4 (aguardando envio; fora do git)",
+  "logos": {
+    "01a": "brand/logos/agi-negative.svg",
+    "01b": "brand/logos/agi-negative.svg",
+    "01c": "brand/logos/agi-negative.svg",
+    "02": "brand/logos/agir_como_empreendedor_positivo.svg",
+    "03": "brand/logos/crescer_na_jornada_positivo.svg",
+    "04": "brand/logos/viver_pelo_cliente_positivo.svg",
+    "05": "brand/logos/minuto-jeito-agi-negative.svg",
+    "enc": "brand/logos/agibank-negative-rgb.svg"
+  },
+  "formas": "brand/shapes (oficiais, cacos)"
+}

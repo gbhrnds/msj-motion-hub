@@ -1,0 +1,273 @@
+{
+  "projeto": "2025-11_minuto-jeito-agi",
+  "fonte": "roteiro.md (round 2026-11-19)",
+  "video": {
+    "arquivo": "video/minuto-jeito-agi-novembro.mp4",
+    "duracao": "00:02:21.933",
+    "frames": 3403,
+    "fps": "24000/1001",
+    "resolucao": [
+      1920,
+      1080
+    ],
+    "audio": "voz original do vídeo (manter)"
+  },
+  "estiloVisual": "V3 (motion refinado da vinheta MSJ de abertura)",
+  "cenas": [
+    {
+      "id": "01a",
+      "nome": "Abertura",
+      "timecode": [
+        "00:00.000",
+        "00:04.000"
+      ],
+      "frames": [
+        0,
+        96
+      ],
+      "duracaoSegundos": 4.004,
+      "sincronismo": "voz — All Type palavra a palavra",
+      "fundo": "azulAgibank",
+      "texto": {
+        "linhas": [
+          "Em um ano, a gente viu o Jeito Agi",
+          "acontecer de verdade."
+        ],
+        "alinhamento": "centro",
+        "pesos": "Light e Bold — palavras em Bold: PENDENTE"
+      },
+      "logo": {
+        "arquivo": "agi-negative.svg",
+        "posicao": "canto superior"
+      }
+    },
+    {
+      "id": "01b",
+      "nome": "Abertura",
+      "timecode": [
+        "00:05.000",
+        "00:06.000"
+      ],
+      "frames": [
+        120,
+        144
+      ],
+      "duracaoSegundos": 1.001,
+      "sincronismo": "voz — All Type palavra a palavra",
+      "fundo": "azulAgibank",
+      "texto": {
+        "linhas": [
+          "Não em apresentações ou falas."
+        ],
+        "alinhamento": "centro",
+        "pesos": "Light e Bold — palavras em Bold: PENDENTE"
+      },
+      "logo": {
+        "arquivo": "agi-negative.svg",
+        "posicao": "canto superior"
+      }
+    },
+    {
+      "id": "01c",
+      "nome": "Abertura",
+      "timecode": [
+        "00:07.000",
+        "00:08.000"
+      ],
+      "frames": [
+        168,
+        192
+      ],
+      "duracaoSegundos": 1.001,
+      "sincronismo": "voz — All Type palavra a palavra",
+      "fundo": "azulAgibank",
+      "texto": {
+        "linhas": [
+          "Mas em pessoas."
+        ],
+        "alinhamento": "centro",
+        "pesos": "Light e Bold — palavras em Bold: PENDENTE"
+      },
+      "logo": {
+        "arquivo": "agi-negative.svg",
+        "posicao": "canto superior"
+      }
+    },
+    {
+      "id": "02",
+      "nome": "Agir como empreendedor",
+      "timecode": [
+        "00:29.320",
+        "00:36.953"
+      ],
+      "frames": [
+        703,
+        886
+      ],
+      "duracaoSegundos": 7.633,
+      "sincronismo": "silêncio",
+      "fundo": "cinzaClaro",
+      "texto": {
+        "linhas": [
+          "Aqui, você age como dono porque já é ou porque sonha em ser o próximo."
+        ],
+        "cor": "azulAgibank",
+        "pesos": "Light e Bold — palavras em Bold: PENDENTE"
+      },
+      "logo": {
+        "arquivo": "agir_como_empreendedor_positivo.svg",
+        "posicao": "topo"
+      },
+      "formas": {
+        "posicao": "cacos no canto inferior",
+        "cor": "verde"
+      }
+    },
+    {
+      "id": "03",
+      "nome": "Crescer na jornada",
+      "timecode": [
+        "01:01.686",
+        "01:11.362"
+      ],
+      "frames": [
+        1479,
+        1711
+      ],
+      "duracaoSegundos": 9.676,
+      "sincronismo": "silêncio",
+      "fundo": "cinzaClaro",
+      "texto": {
+        "linhas": [
+          "Crescer na jornada.",
+          "E na vida."
+        ],
+        "alinhamento": "centro",
+        "cor": "azulAgibank",
+        "pesos": [
+          "Regular/Light",
+          "Bold, maior"
+        ]
+      },
+      "logo": {
+        "arquivo": "crescer_na_jornada_positivo.svg",
+        "posicao": "topo",
+        "alturaPx": 84
+      },
+      "formas": {
+        "posicao": "cacos no canto inferior",
+        "cor": "amarelo",
+        "excecao": "amarelo sobre cinza claro, aprovada em 2026-11-19"
+      }
+    },
+    {
+      "id": "04",
+      "nome": "Viver pelo cliente",
+      "timecode": [
+        "01:36.429",
+        "01:44.437"
+      ],
+      "frames": [
+        2312,
+        2504
+      ],
+      "duracaoSegundos": 8.008,
+      "sincronismo": "silêncio",
+      "fundo": "cinzaClaro",
+      "texto": {
+        "linhas": [
+          "Vivendo pelo cliente,",
+          "acolhemos e encorajamos",
+          "milhares de brasileiros."
+        ],
+        "alinhamento": "centro",
+        "cor": "azulAgibank",
+        "pesos": "Light e Bold — palavras em Bold: PENDENTE"
+      },
+      "logo": {
+        "arquivo": "viver_pelo_cliente_positivo.svg",
+        "posicao": "topo",
+        "alturaPx": 84
+      },
+      "formas": {
+        "posicao": "cacos no canto inferior",
+        "cor": "azulMedio"
+      }
+    },
+    {
+      "id": "05",
+      "nome": "Fechamento de chamada",
+      "timecode": [
+        "02:12.000",
+        "02:17.000"
+      ],
+      "frames": [
+        3165,
+        3285
+      ],
+      "duracaoSegundos": 5.005,
+      "sincronismo": "timecode fixo (sem sync com a voz)",
+      "fundo": "azulAgibank",
+      "texto": {
+        "linhas": [
+          "Sua jornada tem O Jeito Agi?",
+          "A próxima história pode ser a sua."
+        ],
+        "alinhamento": "centro, abaixo do logo",
+        "pesos": [
+          "Light",
+          "Bold"
+        ]
+      },
+      "logo": {
+        "arquivo": "minuto-jeito-agi-negative.svg",
+        "posicao": "centro, maior, bloco logo+texto centralizado"
+      },
+      "continuidade": "mesma base azul do Encerramento, transição interna"
+    },
+    {
+      "id": "enc",
+      "nome": "Encerramento",
+      "timecode": [
+        "02:18.100",
+        "02:21.933"
+      ],
+      "frames": [
+        3311,
+        3403
+      ],
+      "duracaoSegundos": 3.837,
+      "sincronismo": "silêncio total",
+      "fundo": "azulAgibank",
+      "texto": null,
+      "logo": {
+        "arquivo": "agibank-negative-rgb.svg",
+        "posicao": "centro, pequeno/moderado",
+        "excecao": "centralizado, aprovada em 2026-11-19 (regra geral: canto inferior direito)"
+      },
+      "animacao": "só o logo anima (entrada); fundo azul permanece"
+    }
+  ],
+  "framesPretosNoVideo": [
+    [
+      0,
+      8.3
+    ],
+    [
+      29.3,
+      37.0
+    ],
+    [
+      61.7,
+      71.4
+    ],
+    [
+      96.4,
+      104.4
+    ]
+  ],
+  "silencioFinal": [
+    138.1,
+    141.9
+  ]
+}

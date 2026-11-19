@@ -4,3 +4,6 @@ out/
 
 # Render final completo (15 min) passa de 100 MB, limite do GitHub: entregar fora do git
 projects/*/render/MSJ_*_v*.mp4
+projects/*/video/
+projects/*/render/*.mp4
+projects/*/render/*.mov
