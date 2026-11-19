@@ -541,7 +541,8 @@ const Cena05Enc: React.FC<{ fimBloco: number; inicioEnc: number }> = ({ fimBloco
 
 /* ----------------------------------------------------------- composição */
 
-export const MinutoJeitoAgi: React.FC = () => {
+/** `comVideo: false` → só o motion, fundo transparente (camada RGB+alfa para o Premiere). */
+export const MinutoJeitoAgi: React.FC<{ comVideo?: boolean }> = ({ comVideo = true }) => {
   const c01 = { de: 0, ate: Math.round(8.3 * 23.976) };
   const c02 = cena("02").frames;
   const c03 = cena("03").frames;
@@ -550,8 +551,8 @@ export const MinutoJeitoAgi: React.FC = () => {
   const enc = cena("enc").frames;
   const SAI = 14;
   return (
-    <AbsoluteFill style={{ backgroundColor: "#000" }}>
-      <OffthreadVideo src={staticFile(VIDEO)} />
+    <AbsoluteFill style={{ backgroundColor: comVideo ? "#000" : "transparent" }}>
+      {comVideo && <OffthreadVideo src={staticFile(VIDEO)} />}
 
       <Cartela de={c01.de} ate={c01.ate} fundo={cor.azul} antes={0} saida={{ forma: "pentagon-05", dur: SAI, rot: 10 }}>
         <Cena01 />

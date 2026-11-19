@@ -96,6 +96,16 @@ export const RemotionRoot: React.FC = () => {
         width={tokens.video.resolution.width}
         height={tokens.video.resolution.height}
       />
+      {/* Só o motion do Minuto Jeito Agi, com alfa (render em PNG → .mov QuickTime Animation) */}
+      <Composition
+        id="MJA-2025-11-Motion-Alpha"
+        component={MinutoJeitoAgi}
+        durationInFrames={FRAMES_MJA}
+        fps={fps}
+        width={tokens.video.resolution.width}
+        height={tokens.video.resolution.height}
+        defaultProps={{ comVideo: false }}
+      />
       {/* Só para exportar telas ao Figma (npm run figma:exporta) */}
       <Composition
         id="ExportaFigma"
