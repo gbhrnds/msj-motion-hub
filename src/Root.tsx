@@ -10,6 +10,7 @@ import { V2Modulos } from "./versoes/v2/V2Modulos";
 import { RELOGIO_NO_LOOP_V3, V3Refinado } from "./versoes/v3/V3Refinado";
 import { framesFase1, framesFase2, VinhetaCompletaV1, VinhetaCompletaV3 } from "./fases/VinhetaCompleta";
 import tokens from "../brand/tokens.json";
+import { FRAMES_MJA, MinutoJeitoAgi } from "./minuto-jeito-agi/MinutoJeitoAgi";
 
 const fps = tokens.video.fps;
 // Fase 1 completa: 10 minutos de loop de conteudo (CLAUDE.md / tokens.json).
@@ -82,6 +83,15 @@ export const RemotionRoot: React.FC = () => {
         id="MSJ-2025-11-Abertura-V1-Completa"
         component={VinhetaCompletaV1}
         durationInFrames={framesFase1(fps) + framesFase2(fps)}
+        fps={fps}
+        width={tokens.video.resolution.width}
+        height={tokens.video.resolution.height}
+      />
+      {/* Minuto Jeito Agi (nov): vídeo editado + cartelas animadas, com a voz */}
+      <Composition
+        id="MJA-2025-11-Final"
+        component={MinutoJeitoAgi}
+        durationInFrames={FRAMES_MJA}
         fps={fps}
         width={tokens.video.resolution.width}
         height={tokens.video.resolution.height}
