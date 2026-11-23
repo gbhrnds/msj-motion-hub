@@ -20,7 +20,7 @@ material, analisa, propõe, anima dentro do Brandbook e entrega arquivos prontos
 | Padrão | Uso |
 |---|---|
 | **V1 · NuDay** | Exclusivo do **Momento Sempre Juntos** |
-| **V3 · Refinado** | Padrão para **outros tipos de live** (além do MSJ) |
+| **V3 · Refinado** | Padrão para **outros tipos de live** (além do MSJ). Entre eventos muda só o **logo do evento**; a duração é sempre 10 min de vinheta + 5 min de segurança |
 
 Direção: ficar **independente do Figma**. Telas criadas e ajustadas dentro do próprio editor de
 motion, sem a ida e volta pelo Figma descrita em 3.2, passo 4.
