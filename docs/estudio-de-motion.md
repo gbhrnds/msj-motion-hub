@@ -15,6 +15,16 @@ material, analisa, propõe, anima dentro do Brandbook e entrega arquivos prontos
 | Composições | `MSJ-2025-11-Abertura-V1-Completa`, `MSJ-2025-11-Abertura-V3-Completa` | `MJA-2025-11-Final`, `MJA-2025-11-Motion-Alpha` |
 | Código | `src/versoes/`, `src/components/`, `src/fases/` | `src/minuto-jeito-agi/MinutoJeitoAgi.tsx` |
 
+### Padrões de vinheta (decisão do usuário, 2026-11-23)
+
+| Padrão | Uso |
+|---|---|
+| **V1 · NuDay** | Exclusivo do **Momento Sempre Juntos** |
+| **V3 · Refinado** | Padrão para **outros tipos de live** (além do MSJ) |
+
+Direção: ficar **independente do Figma**. Telas criadas e ajustadas dentro do próprio editor de
+motion, sem a ida e volta pelo Figma descrita em 3.2, passo 4.
+
 ---
 
 ## 1. Fontes da verdade (o que o agente lê antes de qualquer coisa)
