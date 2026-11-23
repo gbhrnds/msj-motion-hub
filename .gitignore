@@ -8,3 +8,7 @@ projects/*/video/
 projects/*/render/*.mp4
 projects/*/render/*.mov
 projects/*/analise/audio.wav
+
+.env
+app/.build/
+projects/*/render/props.json

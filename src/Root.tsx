@@ -89,6 +89,25 @@ export const RemotionRoot: React.FC = () => {
         width={tokens.video.resolution.width}
         height={tokens.video.resolution.height}
       />
+      {/* Vinhetas genéricas do app (projeto do evento chega por props) */}
+      <Composition
+        id="Vinheta-V1-Completa"
+        component={VinhetaCompletaV1}
+        durationInFrames={framesFase1(fps) + framesFase2(fps)}
+        fps={fps}
+        width={tokens.video.resolution.width}
+        height={tokens.video.resolution.height}
+        defaultProps={{}}
+      />
+      <Composition
+        id="Vinheta-V3-Completa"
+        component={VinhetaCompletaV3}
+        durationInFrames={framesFase1(fps) + framesFase2(fps)}
+        fps={fps}
+        width={tokens.video.resolution.width}
+        height={tokens.video.resolution.height}
+        defaultProps={{}}
+      />
       {/* Editor de layout da V1 (sem Figma): ajuste no painel Props e "Salvar layout" no quadro */}
       <Composition
         id="V1-Editor-Respiro"

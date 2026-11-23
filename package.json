@@ -9,7 +9,8 @@
     "lint": "eslint src && tsc",
     "checa:formas": "remotion still src/index.ts ChecaFormas out/checa-formas.png",
     "figma:coletor": "node scripts/figma/coletor.mjs out/figma 4599",
-    "figma:svg": "node scripts/figma/monta-svg.mjs out/figma"
+    "figma:svg": "node scripts/figma/monta-svg.mjs out/figma",
+    "app": "node app/servidor.mjs"
   },
   "repository": {},
   "license": "UNLICENSED",
