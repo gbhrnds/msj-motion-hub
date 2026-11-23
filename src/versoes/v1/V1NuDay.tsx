@@ -10,7 +10,7 @@ import { quebraBoa } from "../../brand/quebraDeLinha";
 import { MorphForma } from "../../motion/MorphForma";
 import { parceiras } from "../../brand/grafismos";
 import { comDestaque, PalavrasReveal } from "../../motion/PalavrasReveal";
-import { Conteudo, LOGO_AGI, LOGO_MSJ } from "../../dados";
+import { Conteudo, LOGO_AGI, LOGO_MSJ, Projeto, usarProjeto } from "../../dados";
 import { LogoMSJAnimado } from "../../motion/LogoMSJAnimado";
 import { clamp, easeEntra, Numero } from "../../components/contagem/base";
 import { RelogioProps, SEGUNDOS_FINAIS, TelaProps, VersaoBase } from "../VersaoBase";
@@ -429,7 +429,9 @@ const RelogioV1: React.FC<RelogioProps> = ({ segundosNoInicio }) => {
   );
 };
 
-export const V1NuDay: React.FC<{ duracao?: number }> = ({ duracao }) => (
+export const V1NuDay: React.FC<{ duracao?: number; projeto?: Projeto }> = ({ duracao, projeto }) => {
+  if (projeto) usarProjeto(projeto);
+  return (
   <VersaoBase
     duracao={duracao}
     Tela={TelaV1}
@@ -438,4 +440,4 @@ export const V1NuDay: React.FC<{ duracao?: number }> = ({ duracao }) => (
     formasTransicao={[["pentagon-05", "quadrilateral-05"], ["quadrilateral-16", "pentagon-06"], ["pentagon-03", "triangle-02"]]}
   />
 );
-
+};

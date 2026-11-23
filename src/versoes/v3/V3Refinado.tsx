@@ -4,7 +4,7 @@ import { cor } from "../../brand/theme";
 import { renderTela } from "../../Composition";
 import { CountdownOverlay } from "../../components/CountdownOverlay";
 import { PainelContagem } from "../../components/PainelContagem";
-import { Conteudo, LOGO_MSJ, roteiro } from "../../dados";
+import { Conteudo, LOGO_MSJ, Projeto, roteiro, usarProjeto } from "../../dados";
 import { EstiloMotion } from "../../motion/estilo";
 import { RelogioProps, TelaProps, VersaoBase } from "../VersaoBase";
 
@@ -49,14 +49,21 @@ const RelogioV3: React.FC<RelogioProps> = ({ segundosNoInicio, ocultarAte, ocult
   <CountdownOverlay durationInSeconds={segundosNoInicio} ocultarAteFrame={ocultarAte} ocultar={ocultar} logoMsj={LOGO_MSJ.negativo} />
 );
 
-/** A tela só do relógio volta no meio de cada volta do loop, depois da Indicação. */
+/** A tela só do relógio volta no meio de cada volta do loop, depois da Indicação (ou da tela do meio). */
 export const RELOGIO_NO_LOOP_V3 = "tela_04";
+export const relogioNoLoopV3 = () => {
+  const loop = roteiro.telas.filter((t) => t.exibicao !== "uma_vez");
+  const ind = loop.find((t) => t.tipo === "tela_indicacao_metricas");
+  return (ind ?? loop[Math.floor((loop.length - 1) / 2)])?.id;
+};
 
-export const V3Refinado: React.FC<{ duracao?: number }> = ({ duracao }) => (
+export const V3Refinado: React.FC<{ duracao?: number; projeto?: Projeto }> = ({ duracao, projeto }) => {
+  if (projeto) usarProjeto(projeto);
+  return (
   <EstiloMotion.Provider value="refinado">
     <VersaoBase
       duracao={duracao}
-      relogioApos={RELOGIO_NO_LOOP_V3}
+      relogioApos={relogioNoLoopV3()}
       Tela={TelaV3}
       Relogio={RelogioV3}
       fundo={(c) => FUNDO[c.tipo]}
@@ -64,3 +71,4 @@ export const V3Refinado: React.FC<{ duracao?: number }> = ({ duracao }) => (
     />
   </EstiloMotion.Provider>
 );
+};

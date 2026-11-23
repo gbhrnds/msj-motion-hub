@@ -24,25 +24,71 @@ export type Tela = {
   layout?: { corOutline?: keyof typeof cor; destaque?: string };
 };
 
-export const roteiro = roteiroData as unknown as { telas: Tela[] };
-const manifest = manifestData as unknown as Record<string, Record<string, string>>;
+export type Manifest = Record<string, Record<string, string>>;
+/** Conteúdo de um evento: roteiro (telas) + manifest (arquivos por tela). */
+export type Projeto = { roteiro: { telas: Tela[] }; manifest: Manifest };
+
+/** Projeto de referência (abertura de novembro), usado quando nenhuma prop é passada. */
+export const PROJETO_PADRAO: Projeto = {
+  roteiro: roteiroData as unknown as { telas: Tela[] },
+  manifest: manifestData as unknown as Manifest,
+};
+
+/*
+ * Projeto ativo: as composições da vinheta recebem o projeto do evento por
+ * props (app local / render com --props) e chamam usarProjeto() antes de
+ * renderizar as telas. Sem props, vale o projeto de referência.
+ */
+let atual: Projeto = PROJETO_PADRAO;
+export const usarProjeto = (p?: Projeto | null) => {
+  atual = p && p.roteiro?.telas?.length ? p : PROJETO_PADRAO;
+};
+export const roteiro = {
+  get telas(): Tela[] {
+    return atual.roteiro.telas;
+  },
+};
+const manifestAtual = () => atual.manifest;
+
+/**
+ * Logo do evento (V3 para outras lives): manifest.geral.logo_evento_negativo /
+ * _positivo. Quando existe, ocupa o lugar do logo MSJ em todas as telas e na
+ * Fase 2. Projetos da V1 (exclusiva do MSJ) não definem logo de evento.
+ */
+const logoEvento = (versao: "negativo" | "positivo") => {
+  const g = manifestAtual().geral ?? {};
+  return versao === "negativo" ? g.logo_evento_negativo || "" : g.logo_evento_positivo || g.logo_evento_negativo || "";
+};
+export const temLogoEvento = () => Boolean(logoEvento("negativo"));
 
 /** Chave do roteiro → caminho do arquivo (manifest da tela, depois "geral"). */
-export const midia = (chave: string, telaId: string): string =>
-  manifest[telaId]?.[chave] ?? manifest.geral?.[chave] ?? "";
+export const midia = (chave: string, telaId: string): string => {
+  if (chave === "logo_msj_negativo" && temLogoEvento()) return logoEvento("negativo");
+  if (chave === "logo_msj_positivo" && temLogoEvento()) return logoEvento("positivo");
+  return manifestAtual()[telaId]?.[chave] ?? manifestAtual().geral?.[chave] ?? "";
+};
 
 /** Separa os parágrafos do campo "corpo" (texto intacto, só dividido). */
 export const paragrafos = (corpo: string | null) => (corpo ?? "").split("\n\n");
 
+/** Logo principal da vinheta: MSJ, ou o logo do evento quando definido (V3). */
 export const LOGO_MSJ = {
-  negativo: manifest.geral?.logo_msj_negativo ?? "",
-  positivo: manifest.geral?.logo_msj_positivo ?? "",
+  get negativo() {
+    return midia("logo_msj_negativo", "geral") || "brand/logos/logo-msj-negative.svg";
+  },
+  get positivo() {
+    return midia("logo_msj_positivo", "geral") || "brand/logos/logo-msj-positive.svg";
+  },
 };
 
-/** Logo agi (versão reduzida). Vem do manifest ("geral"); vazio até o arquivo oficial ser adicionado. */
+/** Logo agi (versão reduzida). */
 export const LOGO_AGI = {
-  negativo: manifest.geral?.logo_agi_negativo ?? "",
-  positivo: manifest.geral?.logo_agi_positivo ?? "",
+  get negativo() {
+    return manifestAtual().geral?.logo_agi_negativo ?? "brand/logos/agi-negative.svg";
+  },
+  get positivo() {
+    return manifestAtual().geral?.logo_agi_positivo ?? "brand/logos/agi-positive.svg";
+  },
 };
 
 /** Conteúdo de cada tela já resolvido (texto da redação + arquivos do manifest). */
