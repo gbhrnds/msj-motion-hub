@@ -1,0 +1,62 @@
+{
+  "respiro": {
+    "semLogo": {
+      "forma": {
+        "nome": "pentagon-01",
+        "x": 954,
+        "y": 340,
+        "largura": 428,
+        "rotacao": 21
+      },
+      "morfaPara": [
+        "pentagon-03",
+        "quadrilateral-16"
+      ],
+      "cores": [
+        "azulMedio",
+        "azul",
+        "verde"
+      ],
+      "mascara": {
+        "x": 884,
+        "y": 457,
+        "largura": 559,
+        "altura": 166
+      },
+      "texto": {
+        "x": 890,
+        "y": 470,
+        "tamanho": 60
+      }
+    },
+    "comLogo": {
+      "forma": {
+        "nome": "quadrilateral-16",
+        "x": 830,
+        "y": 249,
+        "largura": 424,
+        "rotacao": 0
+      },
+      "morfaPara": [
+        "pentagon-01",
+        "quadrilateral-05"
+      ],
+      "cores": [
+        "amarelo",
+        "azulMedio",
+        "azul"
+      ],
+      "mascara": {
+        "x": 807,
+        "y": 399,
+        "largura": 559,
+        "altura": 166
+      },
+      "texto": {
+        "x": 843,
+        "y": 412,
+        "tamanho": 60
+      }
+    }
+  }
+}

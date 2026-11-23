@@ -25,6 +25,29 @@ material, analisa, propõe, anima dentro do Brandbook e entrega arquivos prontos
 Direção: ficar **independente do Figma**. Telas criadas e ajustadas dentro do próprio editor de
 motion, sem a ida e volta pelo Figma descrita em 3.2, passo 4.
 
+### Editor de layout sem Figma (piloto: respiro da V1)
+
+- **Onde:** `npm run dev` → composição **`V1-Editor-Respiro`**.
+- **Como:** o painel **Props**, à direita, mostra cada valor do layout:
+  - forma oficial (lista com as 40 de `brand/shapes`);
+  - X, Y, largura e rotação;
+  - formas do morph;
+  - cores (só as da paleta);
+  - caixa da máscara;
+  - posição e tamanho do texto.
+- **Variante:** escolha `semLogo` ou `comLogo`.
+- **Guias:** com `mostrarGuias` ligado, aparecem tracejadas a máscara, a caixa do texto e o contorno
+  da forma.
+- **Salvar:** o botão **"Salvar layout"**, no canto do quadro, grava em
+  `src/versoes/v1/layout-v1.json`. É o mesmo arquivo que a vinheta usa, então a mudança vale em
+  todos os renders.
+- **Aviso do Studio:** a mensagem "Can't save default props" pode ser ignorada. O salvamento é
+  feito pelo botão do quadro.
+- **O que não se edita aqui:** o texto. Ele continua vindo da redação (`roteiro.json`). Guias e
+  botão nunca aparecem no render.
+- **Arquivos:** `layoutV1.ts` (schema que limita os campos ao que a marca permite) e `EditorV1.tsx`
+  (composição do editor).
+
 ---
 
 ## 1. Fontes da verdade (o que o agente lê antes de qualquer coisa)

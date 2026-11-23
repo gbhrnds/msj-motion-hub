@@ -14,6 +14,7 @@ import { Conteudo, LOGO_AGI, LOGO_MSJ } from "../../dados";
 import { LogoMSJAnimado } from "../../motion/LogoMSJAnimado";
 import { clamp, easeEntra, Numero } from "../../components/contagem/base";
 import { RelogioProps, SEGUNDOS_FINAIS, TelaProps, VersaoBase } from "../VersaoBase";
+import { hexDe, useLayoutV1 } from "./layoutV1";
 
 /*
  * VERSÃO 1 — inspirada no #NuDay (projetos_referencia/analise_nova).
@@ -164,32 +165,18 @@ const Abertura: React.FC = () => <LogoComOutline altura={190} delay={6} />;
  * volta do texto, com máscara na cor do fundo atrás das linhas. O outline
  * morfa entre formas oficiais (morph só nos respiros) trocando de cor.
  */
-const RESPIRO = [
-  {
-    outline: { nome: "pentagon-01", x: 954, y: 340, largura: 428, rotacao: 21 } as Caixa,
-    outras: ["pentagon-03", "quadrilateral-16"] as ShapeName[],
-    cores: [cor.azulMedio, cor.azul, cor.verde],
-    mascara: { x: 884, y: 457, w: 559, h: 166 },
-    texto: { x: 890, y: 470 },
-  },
-  {
-    outline: { nome: "quadrilateral-16", x: 830, y: 249, largura: 424, rotacao: 0 } as Caixa,
-    outras: ["pentagon-01", "quadrilateral-05"] as ShapeName[],
-    cores: [cor.amarelo, cor.azulMedio, cor.azul],
-    mascara: { x: 807, y: 399, w: 559, h: 166 },
-    texto: { x: 843, y: 412 },
-  },
-];
-
 const Respiro: React.FC<{ c: Extract<Conteudo, { tipo: "respiro" }> }> = ({ c }) => {
-  const r = RESPIRO[c.comLogo ? 1 : 0];
+  // layout editável no Studio (V1-Editor-Respiro), salvo em layout-v1.json
+  const r = useLayoutV1().respiro[c.comLogo ? "comLogo" : "semLogo"];
+  const caixa: Caixa = r.forma;
+  const cores = r.cores.map(hexDe);
   return (
     <>
-      <FormaNaCaixa caixa={r.outline} cor={r.cores[0]} cores={r.cores} outras={r.outras} modo="outline" delay={4} segurar={60} />
-      <Mascara {...r.mascara} cor={cor.cinzaClaro} />
+      <FormaNaCaixa caixa={caixa} cor={cores[0]} cores={cores} outras={r.morfaPara} modo="outline" delay={4} segurar={60} />
+      <Mascara x={r.mascara.x} y={r.mascara.y} w={r.mascara.largura} h={r.mascara.altura} cor={cor.cinzaClaro} />
       {c.comLogo && <Mascara x={r.texto.x + 40} y={r.texto.y + 228} w={200} h={96} cor={cor.cinzaClaro} />}
       <div style={{ position: "absolute", left: r.texto.x, top: r.texto.y, width: 600, fontFamily }}>
-        <div style={{ fontSize: 60, lineHeight: 1.08, color: cor.azul }}>
+        <div style={{ fontSize: r.texto.tamanho, lineHeight: 1.08, color: cor.azul }}>
           <PalavrasReveal trechos={comDestaque(c.titulo, c.destaque, 300, 700)} delay={10} passo={5} />
         </div>
         {c.comLogo && (
@@ -403,7 +390,7 @@ const Campanha: React.FC<{ c: Extract<Conteudo, { tipo: "campanha" }> }> = ({ c 
   );
 };
 
-const TelaV1: React.FC<TelaProps> = ({ c, frames, inicio, total }) => {
+export const TelaV1: React.FC<TelaProps> = ({ c, frames, inicio, total }) => {
   const bg = fundoV1(c);
   const c1 = claro(c);
   return (

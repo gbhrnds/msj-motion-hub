@@ -10,6 +10,8 @@ import { V2Modulos } from "./versoes/v2/V2Modulos";
 import { RELOGIO_NO_LOOP_V3, V3Refinado } from "./versoes/v3/V3Refinado";
 import { framesFase1, framesFase2, VinhetaCompletaV1, VinhetaCompletaV3 } from "./fases/VinhetaCompleta";
 import tokens from "../brand/tokens.json";
+import { EditorRespiroV1, schemaEditorRespiro } from "./versoes/v1/EditorV1";
+import { LAYOUT_V1 } from "./versoes/v1/layoutV1";
 import { FRAMES_MJA, MinutoJeitoAgi } from "./minuto-jeito-agi/MinutoJeitoAgi";
 
 const fps = tokens.video.fps;
@@ -86,6 +88,17 @@ export const RemotionRoot: React.FC = () => {
         fps={fps}
         width={tokens.video.resolution.width}
         height={tokens.video.resolution.height}
+      />
+      {/* Editor de layout da V1 (sem Figma): ajuste no painel Props e "Salvar layout" no quadro */}
+      <Composition
+        id="V1-Editor-Respiro"
+        component={EditorRespiroV1}
+        schema={schemaEditorRespiro}
+        durationInFrames={Math.round(10 * fps)}
+        fps={fps}
+        width={tokens.video.resolution.width}
+        height={tokens.video.resolution.height}
+        defaultProps={{ variante: "semLogo" as const, mostrarGuias: true, layout: LAYOUT_V1 }}
       />
       {/* Minuto Jeito Agi (nov): vídeo editado + cartelas animadas, com a voz */}
       <Composition
