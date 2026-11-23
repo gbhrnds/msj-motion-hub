@@ -1,0 +1,399 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Animatic Retrospectiva 2026</title>
+<style>
+/* Player linear (46 beats) simulando o ritmo plano-limpo/rajada da referência
+   Nu: palco 16:9 fixo no topo, controles + timeline por tipo abaixo dele. */
+:root{
+  --bg:#F2F4FA; --surface:#FFFFFF; --fg:#10162A; --muted:#5B6578; --line:#E1E5F0;
+  --accent:#0064F5; --accent-soft:#E8EFFE;
+  --azulAgibank:#0064F5; --azulMedio:#0033B0; --azulEscuro:#000F44;
+  --verde:#77DF40; --verdeClaro:#C9FF90; --amarelo:#FFD600; --cinzaClaro:#F3F3F3;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#0A0E1A; --surface:#121829; --fg:#EDEFF6; --muted:#9BA4B8; --line:#242C42; --accent:#6C9DFF; --accent-soft:#17213B; color-scheme:dark; }
+}
+:root[data-theme="dark"]{ --bg:#0A0E1A; --surface:#121829; --fg:#EDEFF6; --muted:#9BA4B8; --line:#242C42; --accent:#6C9DFF; --accent-soft:#17213B; color-scheme:dark; }
+
+@font-face{font-family:"Agibank Sans";src:url("assets/fonts/AgibankSans-Regular.woff2") format("woff2");font-weight:400;font-display:swap;}
+@font-face{font-family:"Agibank Sans";src:url("assets/fonts/AgibankSans-Medium.woff2") format("woff2");font-weight:500;font-display:swap;}
+@font-face{font-family:"Agibank Sans";src:url("assets/fonts/AgibankSans-Bold.woff2") format("woff2");font-weight:700;font-display:swap;}
+@font-face{font-family:"Agibank Sans";src:url("assets/fonts/AgibankSans-ExtraBold.woff2") format("woff2");font-weight:800;font-display:swap;}
+
+*{box-sizing:border-box}
+code{color:inherit;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--accent-soft);padding:1px 5px;border-radius:4px;font-size:.92em}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px));}
+.wrap{max-width:960px;margin:0 auto;padding-block:26px 60px}
+a{color:var(--accent)}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{font-family:"Agibank Sans",sans-serif;font-weight:800;font-size:clamp(24px,4.6vw,34px);margin:4px 0 8px;text-wrap:balance}
+.lede{color:var(--muted);max-width:66ch;line-height:1.55;font-size:14.5px;margin:0 0 6px}
+.lede a{font-weight:600}
+
+/* ---- palco ---- */
+.stage-wrap{margin-top:20px}
+.stage{position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:var(--azulEscuro);
+  box-shadow:0 1px 0 var(--line), 0 18px 40px -24px rgba(0,20,60,.35)}
+.stage .beat{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:6%;font-family:"Agibank Sans",sans-serif}
+.progress{position:absolute;top:0;left:0;height:3px;background:rgba(255,255,255,.75);width:0%;z-index:5}
+.beat-tag{position:absolute;top:14px;left:16px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  background:rgba(0,0,0,.45);color:#fff;padding:3px 9px;border-radius:999px;z-index:4;font-family:-apple-system,sans-serif}
+.wipe{position:absolute;inset:0;background:var(--azulAgibank);transform:translateX(-100%);z-index:10;pointer-events:none}
+
+/* tipos de fundo de beat — todos sólidos, nunca degradê */
+.b-blue{background:var(--azulAgibank);color:#fff}
+.b-mid{background:var(--azulMedio);color:#fff}
+.b-dark{background:var(--azulEscuro);color:#fff}
+.b-white{background:#fff;color:var(--azulEscuro)}
+.b-gray{background:var(--cinzaClaro);color:var(--azulEscuro)}
+
+/* texto / cards */
+.eyebrow2{font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;opacity:.85}
+.big{font-weight:800;line-height:1;font-variant-numeric:tabular-nums;margin:6px 0;font-size:clamp(28px,7vw,54px)}
+.from{font-weight:500;opacity:.7;text-decoration:line-through;margin-right:10px;font-size:.5em;vertical-align:middle}
+.arrowchip{display:inline-flex;align-items:center;gap:5px;font-weight:700;border-radius:999px;padding:5px 13px;width:fit-content;font-size:14px;background:rgba(255,255,255,.2)}
+.b-white .arrowchip,.b-gray .arrowchip{background:#E9F6DD;color:#1E7A2F}
+.periodo{font-size:12px;opacity:.75;margin-top:8px}
+.letter{font-weight:500;line-height:1.3;font-size:clamp(18px,4.2vw,30px)}
+.letter b{font-weight:800}
+.pendlbl{opacity:.65;font-style:italic;font-size:14px;margin-top:8px}
+
+/* câmera / b-roll: slate calmo, nunca compete com o grafismo */
+.camera{align-items:center;text-align:center;gap:6px}
+.camera .who{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;opacity:.7}
+.camera .quote{font-size:clamp(14px,2.6vw,20px);font-weight:500;max-width:80%;line-height:1.4}
+.camera .refrao{font-weight:800}
+
+/* formas planas (ilustração) */
+.art-shapes{position:absolute;inset:0}
+.shp{position:absolute}
+.illus-txt{position:relative;z-index:2;align-self:flex-start;margin-top:auto}
+.illus-scrim{position:absolute;inset:auto 0 0 0;height:42%;background:rgba(0,0,0,.55);z-index:1}
+.illus-label{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:rgba(0,0,0,.4);padding:3px 9px;border-radius:999px;display:inline-block;margin-bottom:6px}
+.illus-concept{font-size:clamp(13px,2.4vw,17px);font-weight:600;max-width:80%}
+
+/* mídia */
+.midia-row{display:flex;flex-wrap:wrap;gap:10px;align-content:center}
+.midia-chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);border-radius:9px;padding:8px 14px;font-size:14px;font-weight:600}
+
+/* encerramento */
+.closing{align-items:center;text-align:center;gap:10px}
+.closing svg{width:120px}
+.closing .cta{font-size:16px;font-weight:600;opacity:.92}
+
+/* animações — fade + leve crescimento de escala, nunca bounce (estilo-tipografia-cinetica.md) */
+@keyframes reveal{from{opacity:0;transform:scale(.92)} to{opacity:1;transform:scale(1)}}
+@keyframes shapeIn{from{opacity:0;transform:scale(.95)} to{opacity:1;transform:scale(1)}}
+@keyframes calmIn{from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)}}
+@media (prefers-reduced-motion: reduce){ *{animation-duration:.001ms!important;animation-delay:0s!important;transition:none!important} }
+
+/* ---- controles ---- */
+.controls{display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+.controls button{font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid var(--line);
+  background:var(--surface);color:var(--fg);padding:9px 16px;border-radius:999px;display:flex;align-items:center;gap:6px}
+.controls button.primary{background:var(--azulAgibank);border-color:var(--azulAgibank);color:#fff}
+.controls button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+.now{margin-left:auto;font-size:12.5px;color:var(--muted);text-align:right}
+.now b{color:var(--fg);font-weight:700}
+
+.timeline{display:flex;gap:3px;flex-wrap:wrap;margin-top:16px}
+.tick{width:11px;height:11px;border-radius:3px;cursor:pointer;border:1.5px solid transparent;background:var(--line);flex:0 0 auto}
+.tick[data-active="true"]{outline:2px solid var(--fg);outline-offset:1px}
+.legend2{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:11.5px;color:var(--muted)}
+.legend2 i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle}
+
+.footnote{font-size:12.5px;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:12px 16px;line-height:1.6;margin-top:26px}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Retrospectiva 2026 · Agibank / MSJ</div>
+  <h1>Animatic de ritmo — referência Nu</h1>
+  <p class="lede">Visualização animada da sequência de motion do roteiro, seguindo o padrão de montagem encontrado em <code>referencia/referencia-motion-nubank.md</code>: plano de câmera limpo (respiro) alternando com rajada de corte rápido, nunca os dois ao mesmo tempo. Cenas de câmera aqui são só um slate neutro — a imagem real vem do vídeo editado. Cores, formas e tipografia são as reais da marca; fundo é sempre sólido, sem degradê. Duração de cada beat é só ritmo de demonstração, não o timing final (que depende do vídeo base, ainda não entregue). Veja também o <a href="index.html">storyboard estático</a>.</p>
+
+  <div class="stage-wrap">
+    <div class="stage" id="stage">
+      <div class="progress" id="progress"></div>
+      <div class="wipe" id="wipe"></div>
+      <div id="beatHost"></div>
+    </div>
+    <div class="controls">
+      <button class="primary" id="playBtn">⏸ Pausar</button>
+      <button id="prevBtn">⏮ Anterior</button>
+      <button id="nextBtn">Próximo ⏭</button>
+      <button id="speedBtn">1×</button>
+      <div class="now" id="now"></div>
+    </div>
+    <div class="timeline" id="timeline"></div>
+    <div class="legend2" id="legend2"></div>
+  </div>
+
+  <p class="footnote">Isso é um animatic de ritmo pra discutir cadência e layout — não é Key Visual nem render final. O passo 2.5 oficial (<code>/gerar-storyboard</code>, Remotion, em <code>msj-motion-hub</code>) continua sendo onde o frame estático de cada cena é aprovado de verdade.</p>
+</div>
+
+<script>
+const LOGO_NEG = `<svg viewBox="0 0 1920 1082.79" xmlns="http://www.w3.org/2000/svg"><path d="M780.68,442.17h-42.88v25.92c-9.41-12.46-20.3-20.94-33.9-25.26-42.65-13.56-82.08-2.47-108.31,35.89-23.38,34.19-24.73,71.54-4.64,107.7,23.05,41.49,59.42,55.86,100.66,47.75,17.28-3.4,33.16-9.87,45.82-23.29,2.1,19.76-6.6,43.28-25.49,54.01-25.36,14.39-62.47,10.68-84.09-8.81-2.55-2.3-4.76-4.97-6.8-7.12-10.07,9.98-19.92,19.76-29.97,29.73.7.93,1.42,2.12,2.37,3.09,4.65,4.77,9.64,9.22,15.01,13.17,12.38,9.07,27.33,14.38,42.11,17.8,5.75,1.33,11.59,2.31,17.47,2.89,9.51.94,19.11.83,28.58-.52,25.74-3.67,52.29-17.48,66.35-40.02,12.86-20.62,17.37-43.54,17.52-67.33.34-53.78.15-107.55.15-161.33,0-1.48.15-2.97.05-4.26ZM678.38,597.91c-34.83-.07-60.21-25.77-60.28-61.04-.07-35.35,25.64-61.39,60.58-61.36,34.87.03,60.37,26.13,60.24,61.65-.13,35.15-25.7,60.81-60.54,60.74Z" style="fill:#fff"/><path d="M514.54,466.65c-9.76-10.71-20.35-19.12-33.41-23.73-37.76-13.35-81.3-4.09-109,35.42-29.82,42.55-21.76,103.58,18.44,136.78,29.72,24.54,63.19,26.86,98.06,12.89,9.25-3.71,17.38-10.21,26.36-15.63v19.42h41.83v-189.78h-42.28v24.63ZM455.23,597.9c-35.15.03-60.69-25.77-60.66-61.28.03-35.37,25.85-61.27,60.95-61.1,34.76.16,60.15,26.09,60.08,61.39-.06,35.26-25.5,60.97-60.37,61Z" style="fill:#fff"/><path d="M826.09,366.54c-15.21,0-27.64,12.32-27.65,27.41,0,15.2,12.26,27.35,27.61,27.36,14.95,0,27.19-12.09,27.39-27.06.19-15.04-12.3-27.71-27.35-27.72Z" style="fill:#76df40"/><path d="M804.69,441.52v183.65c0,1.04-.21,2.17,0,3.12v3.45h20.53c7.18.01,14.45,0,21.95,0v-190.53h-42.48v.3Z" style="fill:#fff"/><path d="M904.67,494.12c-1.13,1.5-2.44,2.91-4.53,5.37v-118.95h-6.32c-3.85-.14-7.75,0-11.75,0v253.13h18.07v-30.87c.96,1.05,1.46,1.56,1.83,2.09,25.1,36.47,77.87,40.24,111.99,14.61,39.19-29.45,42.82-93.99,8.03-130.6-30.37-31.96-88.49-33.32-117.32,5.22ZM1017.99,587.61c-12.89,22.36-39.39,34.77-64.88,30.37-25.92-4.48-46.12-23.96-51.92-49.51-4.24-18.66-1.35-38.74,8.34-55.28,22.36-38.16,76.31-41.46,103.21-6.3,17.21,22.5,19.4,56.15,5.25,80.71Z" style="fill:#fff"/><path d="M1205.09,467.1h-.17v31.29c-1.09-.18-4.51-3.95-6.03-5.84-8.47-10.58-19.08-18.13-31.81-22.82-39.04-14.36-82.31,4.09-99.55,42-17.35,38.16-8.98,93.3,35.27,115.26,31.53,15.65,76.27,11.7,99.79-21.72.51-.72,1.28-1.31,2.49-2.4v31.25h10.96c.31.02.62.03.93.06,1.12.12,2.02.09,2.76-.06h2.99v-167.01h-17.64ZM1205.09,560.57c-.9,7.9-3.09,15.67-6.89,23.26-10.88,21.73-32.16,34.79-56.43,34.73-32.12-.08-57.42-21.24-62.99-52.91-2.94-16.75-1.22-33.08,6.66-48.26,12.96-24.93,38.13-37.96,65.29-34.38,25.75,3.39,46.56,23.29,52.67,50.49.79,3.5,1.31,6.98,1.68,10.44.59,5.6.62,11.15,0,16.63Z" style="fill:#fff"/><path d="M1396.62,533.78c-.05-7.27-.78-14.61-1.99-21.78-4.3-25.53-18.26-41.75-40.9-45.56-28.95-4.87-54.06,3.05-73.68,25.74-1.61,1.86-3.15,3.8-5.66,6.84v-31.92h-17.97v167.01h17.97v-.51h.08v-6.18c0-25.05-.08-50.11.06-75.16.03-5.89.34-11.84,1.25-17.65,5.36-34.28,33.63-56.12,67.07-52.1,16.19,1.94,27.32,10.47,31.6,26.18,2.34,8.61,3.43,17.8,3.56,26.75.42,30.61.17,61.24.18,91.86v6.45h18.58c-.04-1.94-.04-3.46-.04-4.98.01-31.66.12-63.33-.09-94.99Z" style="fill:#fff"/><path d="M1501.76,537.28c8.26-9.11,16.49-18.19,24.74-27.3l38.97-42.98h-23.11l-5.79,6.38c-1.52,1.39-3.02,2.9-4.49,4.59-4.78,5.46-9.6,10.88-14.44,16.29l-36.2,39.92h.02c-6.58,7.21-13.16,14.41-19.71,21.62-4.46,4.9-9.07,9.65-13.62,14.47-.42-.2-.84-.4-1.26-.61v-188.75h-17.5v253.17h17.61v-23.48c.04-2.94.05-5.88.16-8.82.11-2.66,1.3-5.78,3.04-7.78,8.82-10.08,18-19.85,27.04-29.74,3.72-4.06,7.42-8.14,11.62-12.75,2.91,4.11,5.44,7.56,7.84,11.1,7.57,11.19,15.13,22.4,22.69,33.6h0s1.53,2.26,1.53,2.26l21.74,31.94,2.49,3.65h19.73c.34,0,.64,0,.99,0-21.8-32.93-42.86-64.75-64.08-96.81Z" style="fill:#fff"/></svg>`;
+const SHAPES = [
+  {path:'M7.76,94.31l70.2,13.2c3.09.63,5.43-.84,7.41-5.56,6.08-14.47,7.46-18.1,14.48-35.3,2.01-4.94,2.03-10.29-1.98-14.2C81.24,36.25,59.08,14.09,45.86,1.39c-3.14-3.02-6.34-.56-10.04,1.88-7.05,4.64-14.83,9.45-19.92,12.77-3.66,2.39-4.87,5.95-5.98,11.49C6.72,43.4,2.44,70.02.13,84.58c-.78,4.87,2.03,8.8,7.64,9.73Z', vb:'0 0 101.18 107.64'},
+  {path:'M75.51,119.9c6.54-25.99,22.82-113.52,22.82-113.52,1.13-5.68-2.3-7.09-6.47-6.09-18.66,4.48-34.96,8.26-53.22,14.24-4.08,1.34-6.62,3.16-9.03,7.6L.88,78.57c-1.95,3.94-.72,7.91,4.25,10.45l61.79,33.13c5.84,2.96,7.5,2.14,8.6-2.24Z', vb:'0 0 98.55 123.9'},
+  {path:'M90.47,36.13C62.35,24.57,37.11,14.61,3.98.62.87-.69-1.05.1.61,2.72c11.91,18.25,35.97,54.93,53.52,81.58,2.14,3.22,4.78,2.42,7.43-.77,14.65-17.61,16.33-20.25,30.36-38.45,3.88-4.97,3.44-6.99-1.45-8.94Z', vb:'0 0 94.52 86.35'},
+];
+const GAPS = [170,125,125,85,85,85]; // frames 4·3·3·2·2·2 a 23.976fps, em ms
+const GAPS_FAST = [125,85,85,60,45,45]; // rajada de mídia — mais rápido (padrão Nu)
+const REVEAL_DUR = 650; // ~18 frames a 23.976fps (tokens.json.motion.textReveal)
+const HOLD = 650;  // pausa depois que o último elemento assenta, antes do corte
+const MIN_DUR = 1400; // piso — nenhum beat passa rápido demais pra ler
+
+function reveal(html, delay=0, dur=REVEAL_DUR){ return `<span style="display:inline-block;opacity:0;animation:reveal ${dur}ms cubic-bezier(.77,0,.175,1) ${delay}ms both">${html}</span>`; }
+function words(text, start=0, gaps=GAPS){
+  let d=start;
+  return text.split(' ').map((w,i)=>{ const out=reveal(w,d); d+=gaps[Math.min(i,gaps.length-1)]; return out; }).join(' ');
+}
+function wordCount(s){ return (s||'').trim().split(/\s+/).filter(Boolean).length || 1; }
+function gapsSum(n, gaps=GAPS){ let t=0; for(let i=0;i<n-1;i++) t+=gaps[Math.min(i,gaps.length-1)]; return t; }
+// tempo (ms) até a última palavra/unidade de `text` terminar de revelar — usado
+// tanto pra renderizar quanto pra calcular a duração real do beat (mesma conta).
+function spanFor(text, startDelay=0, gaps=GAPS, dur=REVEAL_DUR){ return startDelay + gapsSum(wordCount(text), gaps) + dur; }
+
+// forma plana com entrada fade+scale; posição/rotação ficam num wrapper estático
+// por fora (a animação mexe no transform do miolo, então uma rotação inline no
+// mesmo elemento seria substituída pelo keyframe assim que a entrada tocasse).
+function shapeDiv(s,i,delayBase=0){
+  const sh = SHAPES[s.idx ?? (i%3)];
+  const delay = delayBase+i*140;
+  const grow = (body,content='')=>`<div style="opacity:0;animation:shapeIn .9s cubic-bezier(.23,1,.32,1) ${delay}ms both;${body}">${content}</div>`;
+  const pos = `position:absolute;top:${s.top}%;left:${s.left}%${s.rot?`;transform:rotate(${s.rot}deg)`:''}`;
+  if(s.t==='circle') return `<div class="shp" style="${pos}">${grow(`width:${s.w}px;height:${s.w}px;background:${s.c};border-radius:50%`)}</div>`;
+  if(s.t==='rect') return `<div class="shp" style="${pos}">${grow(`width:${s.w}px;height:${s.h}px;background:${s.c};border-radius:${s.r||'6px 6px 2px 2px'}`)}</div>`;
+  if(s.t==='bar') return `<div class="shp" style="${pos}">${grow(`width:${s.w}px;height:${s.h}px;background:${s.c};border-radius:3px`)}</div>`;
+  if(s.t==='shape') return `<div class="shp" style="${pos}">${grow(`width:${s.w}px`,`<svg viewBox="${sh.vb}" style="display:block;width:100%"><path d="${sh.path}" fill="${s.c}"/></svg>`)}</div>`;
+  return '';
+}
+// duração real do beat = tempo até o último elemento assentar + HOLD — nunca
+// um número chutado, pra nenhuma frase ser cortada no meio da revelação.
+function computeDur(b){
+  let span = 0;
+  if(b.kind==='camera') span = Math.max(spanFor(b.who,0,GAPS,480), spanFor(b.quote,120));
+  else if(b.kind==='broll') span = Math.max(spanFor('B-ROLL — '+b.who,0,GAPS,480), spanFor(b.quote,140));
+  else if(b.kind==='card'){
+    if(b.letterA || b.letterB){
+      const aEnd = b.letterA ? spanFor(b.letterA,160) : 0;
+      const bStart = b.letterA ? aEnd+150 : 160;
+      span = Math.max(aEnd, spanFor(b.letterB||'', bStart));
+    } else if(b.pendente) span = Math.max(spanFor(b.rotulo||'',0), 260+560);
+    else span = Math.max(620, 220+620, b.variacao?560+620:0, b.periodo?700+480:0);
+  }
+  else if(b.kind==='illus') span = Math.max(60+(b.shapes.length-1)*140+900, 500+420, spanFor(b.concept,700));
+  else if(b.kind==='midia') span = Math.max(620, 100+(b.chips.length-1)*140+420);
+  else if(b.kind==='closing') span = Math.max(120+800, spanFor(b.quote,700,GAPS,560));
+  return Math.max(MIN_DUR, span+HOLD);
+}
+
+// ---- renderers por tipo de beat ----
+function rCamera(b){
+  return `<div class="beat camera b-gray">
+    <div class="who">${reveal(b.who,0,480)}</div>
+    <div class="quote">${words(b.quote,120)}</div>
+  </div>`;
+}
+function rBroll(b){
+  return `<div class="beat camera b-dark">
+    <div class="who">${reveal('B-ROLL — '+b.who,0,480)}</div>
+    <div class="quote" style="opacity:.85">${words(b.quote,140)}</div>
+  </div>`;
+}
+function rCard(b){
+  const bgClass = b.bg || 'b-blue';
+  let inner = `<div class="eyebrow2">${reveal(b.rotulo||'',0)}</div>`;
+  if(b.letterA || b.letterB){
+    inner += `<div class="letter">`;
+    if(b.letterA) inner += `<b>${words(b.letterA,160)}</b><br>`;
+    const bStart = b.letterA ? spanFor(b.letterA,160)+150 : 160;
+    inner += `${words(b.letterB||'', bStart)}</div>`;
+  } else if(b.pendente){
+    inner += `<div class="big">${reveal(b.pendente,260,560)}</div>`;
+  } else {
+    inner += `<div class="big">${reveal((b.de?`<span class="from">${b.de}</span>`:'')+(b.para||''),220)}</div>`;
+    if(b.variacao) inner += reveal(`<span class="arrowchip">${b.variacao.startsWith('-')?'↓':'↑'} ${b.variacao.replace(/^[+-]/,'')}</span>`,560);
+    if(b.periodo) inner += `<div class="periodo">${reveal(b.periodo,700,480)}</div>`;
+  }
+  return `<div class="beat ${bgClass}">${inner}</div>`;
+}
+function rIllus(b){
+  const shapes = b.shapes.map((s,i)=>shapeDiv(s,i,60)).join('');
+  return `<div class="beat" style="background:${b.bgColor};padding:0;color:#fff">
+    <div class="art-shapes">${shapes}</div>
+    <div class="illus-scrim"></div>
+    <div class="illus-txt" style="padding:6% 7%">
+      <div class="illus-label">${reveal(b.label,500,420)}</div><br>
+      <div class="illus-concept">${words(b.concept,700)}</div>
+    </div>
+  </div>`;
+}
+function rMidia(b){
+  const chips = b.chips.map((c,i)=>reveal(`<span class="midia-chip">${c}</span>`, 100+i*140, 420)).join('');
+  return `<div class="beat b-dark">
+    <div class="eyebrow2" style="margin-bottom:10px">${reveal(b.rotulo,0)}</div>
+    <div class="midia-row">${chips}</div>
+  </div>`;
+}
+function rClosing(){
+  return `<div class="beat closing b-blue">
+    <div style="opacity:0;animation:reveal .8s cubic-bezier(.77,0,.175,1) 120ms both">${LOGO_NEG}</div>
+    <div class="cta">${reveal('Nos vemos em 2027!',700,560)}</div>
+  </div>`;
+}
+
+// ---- dados: sequência linear completa do roteiro (câmera, b-roll e motion) ----
+const BEATS = [
+  {id:'cena-01', kind:'broll', who:'Marciano (off) · AGI2501-Opus_RS-E25-TW-Delivery.mp4', quote:'Muitas pessoas não se sentem vistas, respeitadas ou valorizadas pelo setor financeiro.', ato:'Abertura'},
+  {id:'cena-02', kind:'camera', who:'Marina', quote:'Por isso, o nosso propósito é claro: lutar por uma experiência bancária que acolhe e encoraja todos os brasileiros.', ato:'Abertura'},
+  {id:'cena-03', kind:'camera', who:'Marina', quote:'E, em 2026, seguimos firmes nessa luta, mesmo com tudo e todos jogando contra.', ato:'Abertura'},
+
+  {id:'cena-04', kind:'illus', ato:'Ato 1 — Propósito & Clientes', wipe:true, bgColor:'var(--azulAgibank)', label:'Ilustração customizada',
+    concept:'Várias lojas Agibank se reunindo até formar uma única loja', shapes:[
+      {t:'shape', idx:1, c:'var(--verdeClaro)', top:14, left:32, w:70},{t:'rect', c:'#fff', top:50, left:10, w:24, h:34},
+      {t:'rect', c:'#fff', top:52, left:68, w:22, h:32},{t:'shape', idx:2, c:'var(--verde)', top:8, left:46, w:16}]},
+  {id:'cena-05', kind:'camera', who:'Piu', quote:'Quando a gente tem propósito, a gente enxerga quem atendemos de um jeito diferente.', ato:'Ato 1 — Propósito & Clientes'},
+  {id:'cena-06a', kind:'card', ato:'Ato 1 — Propósito & Clientes', bg:'b-blue', rotulo:'NPS', de:'72', para:'77', variacao:'+7%', periodo:'2025 → 2026'},
+  {id:'cena-06b', kind:'card', bg:'b-white', letterA:'Reclame Aqui', letterB:'90,1% de problemas resolvidos'},
+  {id:'cena-06c', kind:'card', bg:'b-blue', rotulo:'Ranking de reclamações BCB', de:'4ª posição', para:'27ª posição', variacao:'-23 posições', periodo:'2025 → 2026'},
+  {id:'cena-07', kind:'camera', who:'Piu', quote:'Foi isso que nos fez continuar superando as expectativas dos nossos clientes,', ato:'Ato 1 — Propósito & Clientes'},
+  {id:'cena-08a', kind:'card', ato:'Ato 1 — Propósito & Clientes', bg:'b-blue', rotulo:'Clientes ativos', flag:true, de:'R$ 6,3 milhões', para:'R$ 8,3 milhões', variacao:'+29%', periodo:'2025 → 2026'},
+  {id:'cena-08b', kind:'card', bg:'b-white', letterB:'77% a mais de originação bruta em 2026'},
+  {id:'cena-08c', kind:'card', bg:'b-blue', rotulo:'Carteira de crédito', de:'R$ 34,4 milhões', para:'R$ 38,8 milhões', variacao:'+12%', periodo:'2025 → 2026'},
+  {id:'cena-09', kind:'broll', ato:'Ato 1 — Propósito & Clientes', who:'campanhas Simone / SJ da Thay e Santos', quote:'chegando a milhares de casas por todo o país'},
+  {id:'cena-10a', kind:'card', ato:'Ato 1 — Propósito & Clientes', bg:'b-gray', rotulo:'Agi+', pendente:'conteúdo a definir (relatório de resultados)'},
+  {id:'cena-10b', kind:'card', bg:'b-white', letterB:'Open finance, CDB e carteiras digitais para todos os clientes'},
+  {id:'cena-11a', kind:'card', ato:'Ato 1 — Propósito & Clientes', bg:'b-blue', rotulo:'Funding', de:'R$ 35,3 milhões', para:'R$ 40,8 milhões', variacao:'+15%', periodo:'2025 → 2026'},
+  {id:'cena-11b', kind:'card', bg:'b-white', letterA:'FIDC Agibank III', letterB:'R$ 2,1 bilhões'},
+
+  {id:'cena-12', kind:'illus', ato:'Ato 2 — Pessoas', wipe:true, bgColor:'var(--azulMedio)', label:'Ilustração customizada',
+    concept:'Milhares de pessoas acendendo, uma a uma', shapes:(()=>{
+      const out=[{t:'shape', idx:0, c:'var(--azulEscuro)', top:4, left:22, w:100}]; const cores=['#fff','var(--verdeClaro)'];
+      for(let i=0;i<10;i++){ const row=Math.floor(i/5), col=i%5; out.push({t:'circle', c:cores[i%2], top:38+row*30, left:16+col*17, w:13}); }
+      return out; })()},
+  {id:'cena-13', kind:'camera', who:'Marina', quote:'Quando a gente tem propósito, a gente tem pessoas bem direcionadas.', ato:'Ato 2 — Pessoas'},
+  {id:'cena-14', kind:'camera', who:'Piu', quote:'Pessoas que sabem a importância da nossa luta', ato:'Ato 2 — Pessoas'},
+  {id:'cena-15a', kind:'card', ato:'Ato 2 — Pessoas', bg:'b-blue', rotulo:'Programa de Estágio e de Devs — Inscritos / Efetivados', pendente:'valores pendentes'},
+  {id:'cena-15b', kind:'card', bg:'b-white', rotulo:'Treinamento e desenvolvimento — Horas totais / Qtd. total', pendente:'valores pendentes'},
+  {id:'cena-15c', kind:'card', bg:'b-blue', letterA:'Tô de Dono', letterB:'+ de 420 contemplados'},
+  {id:'cena-15d', kind:'card', bg:'b-white', rotulo:'Reconhecimentos — Total no ano / Promoções no ano', pendente:'valores pendentes'},
+  {id:'cena-16', kind:'broll', ato:'Ato 2 — Pessoas', who:'feiras + "notícia simulada"', quote:'ranking de empresas mais desejadas'},
+
+  {id:'cena-17', kind:'illus', ato:'Ato 3 — Resultados do negócio', wipe:true, bgColor:'var(--azulEscuro)', label:'Ilustração customizada — viabilidade fraca',
+    concept:'Mapa-múndi com países acendendo (sem precedente no Brandbook)', shapes:[
+      {t:'shape', idx:1, c:'#fff', top:14, left:8, w:50},{t:'shape', idx:2, c:'var(--verdeClaro)', top:50, left:48, w:30},{t:'shape', idx:0, c:'var(--amarelo)', top:10, left:68, w:22}]},
+  {id:'cena-18', kind:'camera', who:'Marina', quote:'Quando a gente tem propósito, a gente tem responsabilidade com os resultados do negócio.', ato:'Ato 3 — Resultados do negócio'},
+  {id:'cena-19a', kind:'card', ato:'Ato 3 — Resultados do negócio', bg:'b-blue', rotulo:'Lucro líquido', flag:true, de:'R$ 210,5 milhões', para:'R$ 8,3 milhões', variacao:'+31%', periodo:'2025 → 2026'},
+  {id:'cena-19b', kind:'card', bg:'b-white', letterA:'10% de market share', letterB:'Crédito Consignado INSS'},
+  {id:'cena-19c', kind:'card', bg:'b-blue', rotulo:'Ratings', flag:true, de:'R$ 34,4 milhões', para:'R$ 38,8 milhões'},
+  {id:'cena-20', kind:'camera', who:'Marina', quote:'Mas resultado não é só aquilo que a gente mede. É também o que se constrói,', ato:'Ato 3 — Resultados do negócio'},
+  {id:'cena-21', kind:'midia', ato:'Ato 3 — Resultados do negócio', rotulo:'Recortes de mídia', chips:['World’s Top Fintechs','MT Top Fintech Leaders']},
+
+  {id:'cena-22a', kind:'illus', ato:'Ato 4 — Inteligência / IA', wipe:true, bgColor:'var(--azulMedio)', label:'Opção A · exceção aprovada',
+    concept:'Robozinho mascote acenando', shapes:[
+      {t:'shape', idx:0, c:'var(--azulEscuro)', top:2, left:20, w:95},
+      {t:'circle', c:'#fff', top:16, left:36, w:32},{t:'rect', c:'#fff', top:46, left:29, w:46, h:38, r:'10px'},
+      {t:'circle', c:'var(--azulEscuro)', top:28, left:43, w:6},{t:'circle', c:'var(--azulEscuro)', top:28, left:56, w:6}]},
+  {id:'cena-22b', kind:'illus', wipe:true, bgColor:'var(--azulAgibank)', label:'Opção B · ilustração oficial (p.72)',
+    concept:'Pessoa saindo de dentro de uma tela de celular com check verde', shapes:[
+      {t:'shape', idx:0, c:'var(--azulMedio)', top:0, left:22, w:95},
+      {t:'rect', c:'#fff', top:9, left:33, w:38, h:70, r:'12px'},{t:'rect', c:'var(--azulAgibank)', top:15, left:36, w:32, h:56, r:'6px'},
+      {t:'bar', c:'var(--verde)', top:50, left:41, w:15, h:5, rot:45},{t:'bar', c:'var(--verde)', top:53, left:47, w:25, h:5, rot:-45}]},
+  {id:'cena-23', kind:'camera', who:'Piu', quote:'Quando a gente tem propósito, a gente descobre novas formas de entregar valor com inteligência,', ato:'Ato 4 — Inteligência / IA'},
+  {id:'cena-24', kind:'card', ato:'Ato 4 — Inteligência / IA', bg:'b-blue', rotulo:'Inteligência artificial', pendente:'números a definir'},
+  {id:'cena-25', kind:'camera', who:'Marina', quote:'o crescimento do Agi, das nossas pessoas e dos nossos clientes.', ato:'Ato 4 — Inteligência / IA'},
+
+  {id:'cena-26', kind:'broll', ato:'Ato 5 — NYSE', wipe:true, who:'Agi na NYSE', quote:'takes do vídeo oficial'},
+  {id:'cena-27', kind:'camera', who:'Piu', quote:'Quando a gente tem propósito, a gente chega à NYSE. E alguns podem chamar isso de meta, de oportunidade...', ato:'Ato 5 — NYSE'},
+  {id:'cena-28', kind:'camera', who:'Marina', quote:'Mas, pra nós, foi uma conquista que reforçou o nosso modelo único de negócio', ato:'Ato 5 — NYSE'},
+  {id:'cena-29', kind:'midia', ato:'Ato 5 — NYSE', rotulo:'Recortes de mídia', chips:['G1','Bloomberg Línea','Finsiders Brasil','Forbes Brasil','Infomoney']},
+  {id:'cena-30', kind:'midia', rotulo:'Recortes de mídia', chips:['Letsmoney','Money Times','Neofeed']},
+
+  {id:'cena-31', kind:'camera', who:'Marina', quote:'Avançamos muito em 2026, mas o problema que queremos resolver ainda é enorme.', ato:'Encerramento', wipe:true},
+  {id:'cena-32', kind:'camera', who:'Piu', quote:'Só que, quando a gente tem propósito, tem também a vontade de viver pelo cliente, de agir como empreendedor e de crescer na jornada.'},
+  {id:'cena-33', kind:'camera', who:'Marina', quote:'E quando a gente une tudo isso, a gente já venceu.'},
+  {id:'cena-34', kind:'closing', who:'Marina e Piu', quote:'Nos vemos em 2027!'},
+];
+
+const RENDER = {camera:rCamera, broll:rBroll, card:rCard, illus:rIllus, midia:rMidia, closing:rClosing};
+const TYPECOLOR = {camera:'var(--muted)', broll:'var(--azulEscuro)', card:'var(--accent)', illus:'#C77B00', midia:'var(--azulEscuro)', closing:'#0B6B30'};
+const TYPELABEL = {camera:'Câmera', broll:'B-roll', card:'Card de métrica', illus:'Ilustração', midia:'Mídia', closing:'Encerramento'};
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ---- player ----
+const host = document.getElementById('beatHost');
+const wipeEl = document.getElementById('wipe');
+const progress = document.getElementById('progress');
+const nowEl = document.getElementById('now');
+const playBtn = document.getElementById('playBtn');
+const speedBtn = document.getElementById('speedBtn');
+let idx = 0, playing = true, speed = 1, raf, startT;
+
+function paintTag(b){
+  document.querySelectorAll('.beat-tag').forEach(n=>n.remove());
+  const tag = document.createElement('div');
+  tag.className='beat-tag'; tag.textContent = `${b.id} · ${TYPELABEL[b.kind]}${b.flag?' · ⚠ pendência':''}`;
+  document.getElementById('stage').appendChild(tag);
+}
+function render(i, withWipe, onVisible){
+  const b = BEATS[i];
+  const go = ()=>{ host.innerHTML = RENDER[b.kind](b); paintTag(b); onVisible && onVisible(); };
+  if(withWipe && !reduced){
+    wipeEl.style.transition='none'; wipeEl.style.transform='translateX(-100%)'; wipeEl.getBoundingClientRect();
+    wipeEl.style.background = b.bgColor || getComputedStyle(document.documentElement).getPropertyValue('--azulAgibank');
+    requestAnimationFrame(()=>{
+      wipeEl.style.transition='transform .42s cubic-bezier(.77,0,.175,1)';
+      wipeEl.style.transform='translateX(0%)';
+      setTimeout(()=>{ go();
+        requestAnimationFrame(()=>{ wipeEl.style.transform='translateX(100%)';
+          setTimeout(()=>{ wipeEl.style.transition='none'; wipeEl.style.transform='translateX(-100%)'; },430);
+        });
+      },430);
+    });
+  } else { go(); }
+  nowEl.innerHTML = `<b>${b.ato || BEATS.slice(0,i+1).reverse().find(x=>x.ato)?.ato || ''}</b><br>beat ${i+1} / ${BEATS.length}`;
+  document.querySelectorAll('.tick').forEach((t,ti)=>t.dataset.active = (ti===i) ? 'true':'false');
+}
+function startProgress(dur){
+  cancelAnimationFrame(raf); startT = performance.now(); progress.style.width='0%';
+  function step(t){ const p = Math.min(1,(t-startT)/(dur/speed)); progress.style.width=(p*100)+'%';
+    if(p<1 && playing) raf = requestAnimationFrame(step); }
+  raf = requestAnimationFrame(step);
+}
+let advanceTimer;
+// o cronômetro (barra de progresso + avanço automático) só começa a contar
+// quando o conteúdo fica visível de verdade — nas cenas com wipe isso é ~430ms
+// depois do corte, senão um beat "pego" por detrás do wipe perderia quase meio
+// segundo do próprio tempo de leitura sem perceber.
+function goTo(i, withWipe){
+  idx = (i+BEATS.length)%BEATS.length;
+  clearTimeout(advanceTimer); cancelAnimationFrame(raf);
+  const dur = computeDur(BEATS[idx]);
+  render(idx, withWipe ?? BEATS[idx].wipe, ()=>{
+    startProgress(dur);
+    if(playing) advanceTimer = setTimeout(()=>goTo(idx+1), dur/speed);
+  });
+}
+playBtn.onclick = ()=>{
+  playing = !playing;
+  playBtn.textContent = playing ? '⏸ Pausar' : '▶ Tocar';
+  if(playing){ const dur=computeDur(BEATS[idx]); startProgress(dur); advanceTimer = setTimeout(()=>goTo(idx+1), dur/speed); }
+  else { clearTimeout(advanceTimer); cancelAnimationFrame(raf); }
+};
+document.getElementById('prevBtn').onclick = ()=>{ clearTimeout(advanceTimer); goTo(idx-1,false); if(!playing){ cancelAnimationFrame(raf); } };
+document.getElementById('nextBtn').onclick = ()=>{ clearTimeout(advanceTimer); goTo(idx+1,false); if(!playing){ cancelAnimationFrame(raf); } };
+speedBtn.onclick = ()=>{ speed = speed===1?2:1; speedBtn.textContent = speed+'×'; };
+
+const timeline = document.getElementById('timeline');
+BEATS.forEach((b,i)=>{
+  const t = document.createElement('div'); t.className='tick'; t.style.background=TYPECOLOR[b.kind];
+  t.title = `${b.id} · ${TYPELABEL[b.kind]}`;
+  t.onclick = ()=>{ clearTimeout(advanceTimer); goTo(i,false); };
+  timeline.appendChild(t);
+});
+const legend2 = document.getElementById('legend2');
+Object.keys(TYPELABEL).forEach(k=>{ const s=document.createElement('span'); s.innerHTML=`<i style="background:${TYPECOLOR[k]}"></i>${TYPELABEL[k]}`; legend2.appendChild(s); });
+
+goTo(0, false);
+</script>
