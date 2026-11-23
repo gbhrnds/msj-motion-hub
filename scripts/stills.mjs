@@ -11,5 +11,5 @@ const composition = await selectComposition({...opts, id: comp, inputProps});
 console.log('dur', composition.durationInFrames);
 for (const f of frames) {
   const fr = Number(f) < 0 ? composition.durationInFrames + Number(f) : Number(f);
-  await renderStill({...opts, composition, inputProps, frame: fr, output: path.join(outDir, `${comp}_${String(fr).padStart(5,'0')}.png`), scale: 0.5});
+  await renderStill({...opts, composition, inputProps, frame: fr, output: path.join(outDir, `${comp}_${String(fr).padStart(5,'0')}.png`), scale: Number(process.env.STILLS_SCALE ?? 0.5)});
 }

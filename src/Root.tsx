@@ -13,6 +13,7 @@ import tokens from "../brand/tokens.json";
 import { EditorRespiroV1, schemaEditorRespiro } from "./versoes/v1/EditorV1";
 import { LAYOUT_V1 } from "./versoes/v1/layoutV1";
 import { FRAMES_MJA, MinutoJeitoAgi } from "./minuto-jeito-agi/MinutoJeitoAgi";
+import { QUADRO, QUADROS, RetrospectivaStoryboard } from "./retrospectiva/Storyboard";
 
 const fps = tokens.video.fps;
 // Fase 1 completa: 10 minutos de loop de conteudo (CLAUDE.md / tokens.json).
@@ -137,6 +138,14 @@ export const RemotionRoot: React.FC = () => {
         width={tokens.video.resolution.width}
         height={tokens.video.resolution.height}
         defaultProps={{ comVideo: false }}
+      />
+      <Composition
+        id="RET-2026-Storyboard"
+        component={RetrospectivaStoryboard}
+        durationInFrames={QUADROS.length * QUADRO}
+        fps={fps}
+        width={tokens.video.resolution.width}
+        height={tokens.video.resolution.height}
       />
       {/* Só para exportar telas ao Figma (npm run figma:exporta) */}
       <Composition
