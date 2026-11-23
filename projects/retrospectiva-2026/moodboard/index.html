@@ -1,0 +1,511 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Motion Retrospectiva 2026</title>
+<style>
+/* Moodboard acima, storyboard abaixo por Ato narrativo; cada cena é um
+   "quadro de TV" 16:9 preenchido com conteúdo real; rajadas viram filminas. */
+:root{
+  --bg:#F2F4FA; --surface:#FFFFFF; --surface-2:#FBFCFE; --fg:#10162A; --muted:#5B6578;
+  --line:#E1E5F0; --accent:#0064F5; --accent-soft:#E8EFFE; --warn:#92400E; --warn-soft:#FBF1DE;
+  --ok:#0B6B30;
+  --azulAgibank:#0064F5; --azulMedio:#0033B0; --azulEscuro:#000F44;
+  --verde:#77DF40; --verdeClaro:#C9FF90; --amarelo:#FFD600; --cinzaClaro:#F3F3F3;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0A0E1A; --surface:#121829; --surface-2:#0E1322; --fg:#EDEFF6; --muted:#9BA4B8;
+    --line:#242C42; --accent:#6C9DFF; --accent-soft:#17213B; --warn:#E3A93C; --warn-soft:#2C2412;
+    --ok:#3FCB7A; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0A0E1A; --surface:#121829; --surface-2:#0E1322; --fg:#EDEFF6; --muted:#9BA4B8;
+  --line:#242C42; --accent:#6C9DFF; --accent-soft:#17213B; --warn:#E3A93C; --warn-soft:#2C2412;
+  --ok:#3FCB7A; color-scheme:dark;
+}
+@font-face{font-family:"Agibank Sans";src:url("assets/fonts/AgibankSans-Light.woff2") format("woff2");font-weight:300;font-display:swap;}
+@font-face{font-family:"Agibank Sans";src:url("assets/fonts/AgibankSans-Regular.woff2") format("woff2");font-weight:400;font-display:swap;}
+@font-face{font-family:"Agibank Sans";src:url("assets/fonts/AgibankSans-Medium.woff2") format("woff2");font-weight:500;font-display:swap;}
+@font-face{font-family:"Agibank Sans";src:url("assets/fonts/AgibankSans-Bold.woff2") format("woff2");font-weight:700;font-display:swap;}
+@font-face{font-family:"Agibank Sans";src:url("assets/fonts/AgibankSans-ExtraBold.woff2") format("woff2");font-weight:800;font-display:swap;}
+
+*{box-sizing:border-box}
+code{color:inherit;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--accent-soft);padding:1px 5px;border-radius:4px;font-size:.92em}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  padding-left:max(16px, env(safe-area-inset-left,0px));
+  padding-right:max(16px, env(safe-area-inset-right,0px));
+}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 80px}
+a{color:var(--accent)}
+
+/* ---------- header ---------- */
+header.top{padding-block:4px 20px;border-bottom:1px solid var(--line);margin-bottom:28px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{font-family:"Agibank Sans",sans-serif;font-weight:800;font-size:clamp(28px,5vw,40px);margin:4px 0 8px;text-wrap:balance}
+.lede{color:var(--muted);max-width:62ch;line-height:1.5;font-size:15px;margin:0 0 16px}
+nav.jump{display:flex;gap:8px;flex-wrap:wrap}
+nav.jump a{font-size:13px;font-weight:600;text-decoration:none;color:var(--fg);background:var(--surface);border:1px solid var(--line);padding:7px 13px;border-radius:999px}
+nav.jump a:hover{border-color:var(--accent);color:var(--accent)}
+
+section{margin-bottom:56px}
+h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0 0 16px;display:flex;align-items:center;gap:10px}
+h2::after{content:"";flex:1;height:1px;background:var(--line)}
+h3.ato{font-family:"Agibank Sans",sans-serif;font-weight:700;font-size:20px;margin:40px 0 16px;padding-top:4px;color:var(--fg)}
+h3.ato:first-of-type{margin-top:0}
+
+/* ---------- moodboard: paleta ---------- */
+.palette{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px}
+.swatch{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.swatch .chip{height:64px}
+.swatch .info{padding:8px 10px}
+.swatch .name{font-weight:700;font-size:13px}
+.swatch .hex{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.swatch .role{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.3}
+
+/* ---------- moodboard: tipografia ---------- */
+.type-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:10px;display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+.type-card .label{width:150px;flex:0 0 auto;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.03em}
+.type-card .sample{font-family:"Agibank Sans",sans-serif;color:var(--fg)}
+.type-card .meta{margin-left:auto;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* ---------- moodboard: formas + motion ---------- */
+.twocol{display:grid;grid-template-columns:1.1fr 1fr;gap:20px}
+@media (max-width:720px){.twocol{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
+.panel p.note{font-size:12.5px;color:var(--muted);line-height:1.5;margin:10px 0 0}
+.shapes-row{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.shapes-row .s{width:56px;height:56px;display:flex;align-items:center;justify-content:center}
+.shapes-row .s svg{width:100%;height:100%}
+.shape-bg-blue{background:var(--azulAgibank);border-radius:10px;padding:10px;color:#fff}
+.shape-bg-white{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;color:var(--azulAgibank)}
+.shape-bg-white.outline svg path{fill:none;stroke:currentColor;stroke-width:14px}
+
+.bez-box{display:flex;align-items:center;gap:16px}
+.bez-box svg{background:var(--surface-2);border-radius:8px}
+.stagger{display:flex;align-items:flex-end;gap:6px;height:30px;margin-top:10px}
+.stagger i{width:9px;height:9px;border-radius:50%;background:var(--accent);display:block}
+
+.licoes{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.licoes li{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.5}
+.licoes b{color:var(--fg)}
+
+/* ---------- legenda / filtros ---------- */
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.legend button{
+  font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;
+  border:1px solid var(--line);background:var(--surface);color:var(--fg);
+  padding:7px 13px;border-radius:999px;display:flex;align-items:center;gap:7px;
+}
+.legend button .dot{width:8px;height:8px;border-radius:50%}
+.legend button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+
+/* ---------- storyboard cards ---------- */
+.scene{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:18px}
+.scene-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.scene-id{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;background:var(--surface-2);border:1px solid var(--line);padding:3px 8px;border-radius:6px;font-weight:600}
+.scene-title{font-weight:700;font-size:14.5px}
+.scene-note{font-size:12px;color:var(--muted);margin-left:auto}
+.tag{font-size:10.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:3px 8px;border-radius:999px}
+.tag.pend{background:var(--warn-soft);color:var(--warn)}
+.tag.ok{background:color-mix(in srgb, var(--ok) 15%, transparent);color:var(--ok)}
+
+.filmstrip{display:flex;gap:10px;flex-wrap:wrap}
+.frame{
+  flex:1 1 220px; max-width:360px; aspect-ratio:16/9; border-radius:14px; position:relative;
+  overflow:hidden; font-family:"Agibank Sans",sans-serif; display:flex; flex-direction:column;
+  justify-content:center; padding:14px 16px;
+}
+.frame .eyebrow2{font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;opacity:.85}
+.frame .big{font-weight:800;line-height:1;font-variant-numeric:tabular-nums;margin:4px 0}
+.frame .arrowchip{display:inline-flex;align-items:center;gap:4px;font-weight:700;border-radius:999px;padding:3px 9px;width:fit-content;margin-top:6px}
+.frame .from{font-weight:500;opacity:.75;text-decoration:line-through;margin-right:6px;font-size:.55em;vertical-align:middle}
+.frame .letter{font-weight:500;line-height:1.25}
+.frame .letter b{font-weight:800}
+.frame .corner-shape{position:absolute;opacity:.9}
+.frame .logo-corner{position:absolute;right:12px;bottom:10px;width:46px;opacity:.9}
+.frame .logo-corner svg{width:100%;display:block}
+.frame .origem-tag{position:absolute;left:12px;top:12px;font-size:9px;background:rgba(0,0,0,.18);color:#fff;padding:2px 7px;border-radius:999px;font-weight:600;letter-spacing:.02em}
+
+.frame.onBlue{background:var(--azulAgibank);color:#fff}
+.frame.onBlue .arrowchip{background:rgba(255,255,255,.22);color:#fff}
+.frame.onWhite{background:#fff;color:var(--azulEscuro);border:1px solid var(--line)}
+.frame.onWhite .arrowchip{background:#E9F6DD;color:#1E7A2F}
+.frame.onGray{background:var(--cinzaClaro);color:var(--azulEscuro)}
+.frame.onGray .arrowchip{background:#fff;color:#1E7A2F;border:1px solid #DDE3EC}
+
+.frame.midia{background:var(--azulEscuro);color:#fff;flex-direction:row;flex-wrap:wrap;align-content:center;gap:8px;padding:16px}
+.frame.midia .chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600}
+.frame.midia .capt{width:100%;font-size:10px;opacity:.75;font-weight:500;margin-top:auto}
+
+.frame.illus{color:#fff;justify-content:flex-end}
+.frame.illus .art{position:absolute;inset:0;overflow:hidden}
+.frame.illus .art .shp{position:absolute}
+.frame.illus::after{content:"";position:absolute;inset:auto 0 0 0;height:46%;background:rgba(0,0,0,.6);z-index:1;pointer-events:none}
+.frame.illus .label{position:relative;z-index:2;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:rgba(0,0,0,.45);display:inline-block;padding:3px 8px;border-radius:6px;margin-bottom:6px;width:fit-content}
+.frame.illus .concept{position:relative;z-index:2;font-size:13px;font-weight:600;line-height:1.3}
+
+.frame.closing{background:var(--azulAgibank);color:#fff;align-items:center;text-align:center}
+.frame.closing svg{width:38%;margin-bottom:8px}
+.frame.closing .cta{font-size:13px;font-weight:600;opacity:.9}
+
+.pend-note{margin-top:10px;background:var(--warn-soft);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:12px;line-height:1.5}
+.pend-note b{font-weight:700}
+.ok-note{margin-top:10px;background:color-mix(in srgb, var(--ok) 12%, transparent);color:var(--ok);border-radius:8px;padding:8px 12px;font-size:12px;line-height:1.5}
+
+.scope-note{font-size:12.5px;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:12px 16px;line-height:1.6;margin-bottom:20px}
+
+footer{color:var(--muted);font-size:12px;text-align:center;padding-top:20px}
+</style>
+
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">Retrospectiva 2026 · Agibank / MSJ</div>
+    <h1>Moodboard &amp; storyboard de motion</h1>
+    <p class="lede">Só as telas de motion do roteiro — grafismos, cards de métrica, transições ilustradas, colagens de mídia e o encerramento. Cenas de câmera (entrevista) e b-roll puro ficam fora: não têm layout de motion a definir. Conteúdo real do <code>roteiro.md</code>; cores, formas e tipografia reais da marca.</p>
+    <nav class="jump">
+      <a href="#moodboard">Moodboard</a>
+      <a href="#storyboard">Storyboard por ato</a>
+    </nav>
+  </header>
+
+  <section id="moodboard">
+    <h2>Paleta</h2>
+    <div class="palette" id="palette"></div>
+  </section>
+
+  <section>
+    <h2>Tipografia (Agibank Sans, escala de vídeo)</h2>
+    <div id="type"></div>
+  </section>
+
+  <section>
+    <h2>Formas &amp; motion</h2>
+    <div class="twocol">
+      <div class="panel">
+        <strong style="font-size:13px">Formas oficiais — só rotacionar, espelhar, escalonar</strong>
+        <div class="shapes-row" id="shapes" style="margin-top:14px"></div>
+        <p class="note">Mesmas 3 formas, preenchida e outline, nas combinações de cor aprovadas (<code>tokens.json.shapes.colorCombosPermitidas</code>). Nunca uma forma nova — é exatamente a regra que torna as 4 ilustrações abaixo uma exceção, não o padrão.</p>
+      </div>
+      <div class="panel">
+        <strong style="font-size:13px">Easing &amp; stagger (<code>tokens.json.motion</code>)</strong>
+        <div class="bez-box" style="margin-top:14px">
+          <svg width="90" height="90" viewBox="0 0 100 100"><path d="M10,90 C 10,90 17.5,100 50,50 S 90,10 90,10" fill="none" stroke="var(--accent)" stroke-width="4"/><path d="M10,90 L90,10" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 3"/></svg>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6">
+            <code>cubic-bezier(.77,0,.175,1)</code><br>
+            ease-in-out forte, sem overshoot — reaproveitado em <code>movimentoEmTela</code>, <code>MorphForma</code> e na entrada de texto.
+          </div>
+        </div>
+        <strong style="font-size:13px;display:block;margin-top:16px">Stagger decrescente</strong>
+        <div class="stagger">
+          <i></i><i style="margin-left:4px"></i><i style="margin-left:3px"></i><i style="margin-left:2px"></i><i style="margin-left:2px"></i><i style="margin-left:1px"></i>
+        </div>
+        <p class="note">4·3·3·2·2·2 frames entre unidades — nunca uniforme, imita a aceleração da fala. Vale pra tipografia cinética e pra rajadas de card de métrica.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Lições aplicadas</h2>
+    <ul class="licoes">
+      <li><b>Respiro → rajada:</b> a referência Nu alterna plano-limpo e rajada de corte rápido para marcar virada de assunto. Aplicado aqui: cada refrão "quando a gente tem propósito" (câmera limpa) é seguido pela rajada de cards — nunca os dois ao mesmo tempo.</li>
+      <li><b>"Gráfico" sem gráfico:</b> o estudo de viabilidade do Brandbook completo não achou nenhuma página de data visualization. Os 3 blocos do roteiro marcados "gráfico" (ranking BCB, treinamento, lucro líquido) usam o mesmo card de métrica dos "comparativo" — sem inventar barra/linha/ranking visual.</li>
+      <li><b>Ilustração tem endereço na marca:</b> o capítulo "Ilustrações" (Brandbook p.68–74, documentado em <code>boas-praticas-visuais.md</code> §2.6) é a referência de estilo pintado/gestual usada nas 4 transições abaixo — não é um estilo inventado para este projeto.</li>
+      <li><b>Mídia de terceiros:</b> logos de veículos de imprensa (G1, Forbes, Bloomberg...) são placeholder tipográfico aqui — layout define posição/ritmo, os logos reais entram na implementação, sujeitos a confirmação de direito de uso.</li>
+    </ul>
+  </section>
+
+  <section id="storyboard">
+    <h2>Storyboard por ato</h2>
+    <div class="scope-note">Mostrando 15 telas de motion (ilustração de transição, card de métrica, colagem de mídia, encerramento). Cenas de câmera/entrevista e b-roll puro (01, 02, 03, 05, 07, 09, 13, 14, 18, 20, 23, 25, 26, 27, 28, 31–33) não têm layout de motion — ficaram fora.</div>
+    <div class="legend" id="filters"></div>
+    <div id="scenes"></div>
+  </section>
+
+  <footer>Rascunho de layout para discussão — não é Key Visual final. Aprovação de frame estático acontece no passo 2.5 (storyboard/, via <code>/gerar-storyboard</code>, em msj-motion-hub).</footer>
+</div>
+
+<script>
+const PALETTE = [
+  {name:'Azul Agibank', hex:'#0064F5', role:'primária, obrigatória', bg:'var(--azulAgibank)', fg:'#fff'},
+  {name:'Azul médio', hex:'#0033B0', role:'secundária, grafismos', bg:'var(--azulMedio)', fg:'#fff'},
+  {name:'Azul escuro', hex:'#000F44', role:'secundária, grafismos', bg:'var(--azulEscuro)', fg:'#fff'},
+  {name:'Branco', hex:'#FFFFFF', role:'principal', bg:'#fff', fg:'#10162A', border:true},
+  {name:'Verde', hex:'#77DF40', role:'grafismo — nunca sozinho sem azul/branco', bg:'var(--verde)', fg:'#10162A'},
+  {name:'Verde claro', hex:'#C9FF90', role:'grafismos e detalhes', bg:'var(--verdeClaro)', fg:'#10162A'},
+  {name:'Amarelo', hex:'#FFD600', role:'detalhe pontual — nunca fundo', bg:'var(--amarelo)', fg:'#10162A'},
+  {name:'Cinza claro', hex:'#F3F3F3', role:'fundo alternativo (exceção aprovada)', bg:'var(--cinzaClaro)', fg:'#10162A', border:true},
+];
+
+const TYPE_SCALE = [
+  {label:'destaqueNumero · 120px', weight:800, size:'clamp(28px,7vw,74px)', text:'77'},
+  {label:'título · 88px ExtraBold', weight:800, size:'clamp(22px,5.5vw,44px)', text:'Propósito'},
+  {label:'subtítulo · 44px Medium', weight:500, size:'clamp(16px,3vw,24px)', text:'Resultados do negócio'},
+  {label:'corpo · 36px Regular', weight:400, size:'clamp(14px,2.4vw,18px)', text:'Tá no cafezinho, no bolo e nas pessoas.'},
+  {label:'legenda · 24px Regular', weight:400, size:'13px', text:'2025 → 2026'},
+];
+
+const SHAPES = [
+  {name:'pentagon-03', path:'M7.76,94.31l70.2,13.2c3.09.63,5.43-.84,7.41-5.56,6.08-14.47,7.46-18.1,14.48-35.3,2.01-4.94,2.03-10.29-1.98-14.2C81.24,36.25,59.08,14.09,45.86,1.39c-3.14-3.02-6.34-.56-10.04,1.88-7.05,4.64-14.83,9.45-19.92,12.77-3.66,2.39-4.87,5.95-5.98,11.49C6.72,43.4,2.44,70.02.13,84.58c-.78,4.87,2.03,8.8,7.64,9.73Z', vb:'0 0 101.18 107.64'},
+  {name:'quadrilateral-11', path:'M75.51,119.9c6.54-25.99,22.82-113.52,22.82-113.52,1.13-5.68-2.3-7.09-6.47-6.09-18.66,4.48-34.96,8.26-53.22,14.24-4.08,1.34-6.62,3.16-9.03,7.6L.88,78.57c-1.95,3.94-.72,7.91,4.25,10.45l61.79,33.13c5.84,2.96,7.5,2.14,8.6-2.24Z', vb:'0 0 98.55 123.9'},
+  {name:'triangle-04', path:'M90.47,36.13C62.35,24.57,37.11,14.61,3.98.62.87-.69-1.05.1.61,2.72c11.91,18.25,35.97,54.93,53.52,81.58,2.14,3.22,4.78,2.42,7.43-.77,14.65-17.61,16.33-20.25,30.36-38.45,3.88-4.97,3.44-6.99-1.45-8.94Z', vb:'0 0 94.52 86.35'},
+];
+
+const LOGO_POS = `<svg viewBox="0 0 1920 1082.79" xmlns="http://www.w3.org/2000/svg"><path d="M780.68,442.17h-42.88v25.92c-9.41-12.46-20.3-20.94-33.9-25.26-42.65-13.56-82.08-2.47-108.31,35.89-23.38,34.19-24.73,71.54-4.64,107.7,23.05,41.49,59.42,55.86,100.66,47.75,17.28-3.4,33.16-9.87,45.82-23.29,2.1,19.76-6.6,43.28-25.49,54.01-25.36,14.39-62.47,10.68-84.09-8.81-2.55-2.3-4.76-4.97-6.8-7.12-10.07,9.98-19.92,19.76-29.97,29.73.7.93,1.42,2.12,2.37,3.09,4.65,4.77,9.64,9.22,15.01,13.17,12.38,9.07,27.33,14.38,42.11,17.8,5.75,1.33,11.59,2.31,17.47,2.89,9.51.94,19.11.83,28.58-.52,25.74-3.67,52.29-17.48,66.35-40.02,12.86-20.62,17.37-43.54,17.52-67.33.34-53.78.15-107.55.15-161.33,0-1.48.15-2.97.05-4.26ZM678.38,597.91c-34.83-.07-60.21-25.77-60.28-61.04-.07-35.35,25.64-61.39,60.58-61.36,34.87.03,60.37,26.13,60.24,61.65-.13,35.15-25.7,60.81-60.54,60.74Z" style="fill:#0064f5"/><path d="M514.54,466.65c-9.76-10.71-20.35-19.12-33.41-23.73-37.76-13.35-81.3-4.09-109,35.42-29.82,42.55-21.76,103.58,18.44,136.78,29.72,24.54,63.19,26.86,98.06,12.89,9.25-3.71,17.38-10.21,26.36-15.63v19.42h41.83v-189.78h-42.28v24.63ZM455.23,597.9c-35.15.03-60.69-25.77-60.66-61.28.03-35.37,25.85-61.27,60.95-61.1,34.76.16,60.15,26.09,60.08,61.39-.06,35.26-25.5,60.97-60.37,61Z" style="fill:#0064f5"/><path d="M826.09,366.54c-15.21,0-27.64,12.32-27.65,27.41,0,15.2,12.26,27.35,27.61,27.36,14.95,0,27.19-12.09,27.39-27.06.19-15.04-12.3-27.71-27.35-27.72Z" style="fill:#76df40"/><path d="M804.69,441.52v183.65c0,1.04-.21,2.17,0,3.12v3.45h20.53c7.18.01,14.45,0,21.95,0v-190.53h-42.48v.3Z" style="fill:#0064f5"/><path d="M904.67,494.12c-1.13,1.5-2.44,2.91-4.53,5.37v-118.95h-6.32c-3.85-.14-7.75,0-11.75,0v253.13h18.07v-30.87c.96,1.05,1.46,1.56,1.83,2.09,25.1,36.47,77.87,40.24,111.99,14.61,39.19-29.45,42.82-93.99,8.03-130.6-30.37-31.96-88.49-33.32-117.32,5.22ZM1017.99,587.61c-12.89,22.36-39.39,34.77-64.88,30.37-25.92-4.48-46.12-23.96-51.92-49.51-4.24-18.66-1.35-38.74,8.34-55.28,22.36-38.16,76.31-41.46,103.21-6.3,17.21,22.5,19.4,56.15,5.25,80.71Z" style="fill:#0064f5"/><path d="M1205.09,467.1h-.17v31.29c-1.09-.18-4.51-3.95-6.03-5.84-8.47-10.58-19.08-18.13-31.81-22.82-39.04-14.36-82.31,4.09-99.55,42-17.35,38.16-8.98,93.3,35.27,115.26,31.53,15.65,76.27,11.7,99.79-21.72.51-.72,1.28-1.31,2.49-2.4v31.25h10.96c.31.02.62.03.93.06,1.12.12,2.02.09,2.76-.06h2.99v-167.01h-17.64ZM1205.09,560.57c-.9,7.9-3.09,15.67-6.89,23.26-10.88,21.73-32.16,34.79-56.43,34.73-32.12-.08-57.42-21.24-62.99-52.91-2.94-16.75-1.22-33.08,6.66-48.26,12.96-24.93,38.13-37.96,65.29-34.38,25.75,3.39,46.56,23.29,52.67,50.49.79,3.5,1.31,6.98,1.68,10.44.59,5.6.62,11.15,0,16.63Z" style="fill:#0064f5"/><path d="M1396.62,533.78c-.05-7.27-.78-14.61-1.99-21.78-4.3-25.53-18.26-41.75-40.9-45.56-28.95-4.87-54.06,3.05-73.68,25.74-1.61,1.86-3.15,3.8-5.66,6.84v-31.92h-17.97v167.01h17.97v-.51h.08v-6.18c0-25.05-.08-50.11.06-75.16.03-5.89.34-11.84,1.25-17.65,5.36-34.28,33.63-56.12,67.07-52.1,16.19,1.94,27.32,10.47,31.6,26.18,2.34,8.61,3.43,17.8,3.56,26.75.42,30.61.17,61.24.18,91.86v6.45h18.58c-.04-1.94-.04-3.46-.04-4.98.01-31.66.12-63.33-.09-94.99Z" style="fill:#0064f5"/><path d="M1501.76,537.28c8.26-9.11,16.49-18.19,24.74-27.3l38.97-42.98h-23.11l-5.79,6.38c-1.52,1.39-3.02,2.9-4.49,4.59-4.78,5.46-9.6,10.88-14.44,16.29l-36.2,39.92h.02c-6.58,7.21-13.16,14.41-19.71,21.62-4.46,4.9-9.07,9.65-13.62,14.47-.42-.2-.84-.4-1.26-.61v-188.75h-17.5v253.17h17.61v-23.48c.04-2.94.05-5.88.16-8.82.11-2.66,1.3-5.78,3.04-7.78,8.82-10.08,18-19.85,27.04-29.74,3.72-4.06,7.42-8.14,11.62-12.75,2.91,4.11,5.44,7.56,7.84,11.1,7.57,11.19,15.13,22.4,22.69,33.6h0s1.53,2.26,1.53,2.26l21.74,31.94,2.49,3.65h19.73c.34,0,.64,0,.99,0-21.8-32.93-42.86-64.75-64.08-96.81Z" style="fill:#0064f5"/></svg>`;
+const LOGO_NEG = LOGO_POS.replaceAll('#0064f5','#ffffff');
+
+// ---- composições planas (sem degradê) pras 4 ilustrações de transição ----
+// cada "shp" é uma forma de cor sólida só; nada de gradiente em lugar nenhum.
+// cada composição segue o padrão já documentado em boas-praticas-visuais.md §1
+// ("formas gigantes só como palco de um elemento", ex. buffer do MSJ): 1 forma
+// oficial grande ao fundo + 2-3 pequenas de acento, nunca formas inventadas —
+// só os 3 paths de SHAPES, em escalas/cores diferentes (rotate/mirror/scale).
+const ART_LOJA = {bg:'var(--azulAgibank)', shapes:[
+  {t:'shape', idx:1, c:'var(--verdeClaro)', top:14, left:32, w:70},
+  {t:'rect', c:'#fff', top:50, left:10, w:24, h:34},
+  {t:'rect', c:'#fff', top:52, left:68, w:22, h:32},
+  {t:'shape', idx:2, c:'var(--verde)', top:8, left:46, w:16},
+]};
+const ART_PESSOAS = {bg:'var(--azulMedio)', shapes:(()=>{
+  const out=[{t:'shape', idx:0, c:'var(--azulEscuro)', top:4, left:22, w:100}];
+  const cores=['#fff','var(--verdeClaro)'];
+  for(let i=0;i<10;i++){ const row=Math.floor(i/5), col=i%5;
+    out.push({t:'circle', c:cores[i%2], top:38+row*30, left:16+col*17, w:13}); }
+  return out;
+})()};
+const ART_MAPA = {bg:'var(--azulEscuro)', shapes:[
+  {t:'shape', idx:1, c:'#fff', top:14, left:8, w:50},
+  {t:'shape', idx:2, c:'var(--verdeClaro)', top:50, left:48, w:30},
+  {t:'shape', idx:0, c:'var(--amarelo)', top:10, left:68, w:22},
+]};
+const ART_ROBO = {bg:'var(--azulMedio)', shapes:[
+  {t:'shape', idx:0, c:'var(--azulEscuro)', top:2, left:20, w:95},
+  {t:'circle', c:'#fff', top:16, left:36, w:32},
+  {t:'rect', c:'#fff', top:46, left:29, w:46, h:38, r:'10px'},
+  {t:'circle', c:'var(--azulEscuro)', top:28, left:43, w:6},
+  {t:'circle', c:'var(--azulEscuro)', top:28, left:56, w:6},
+]};
+const ART_TECH = {bg:'var(--azulAgibank)', shapes:[
+  {t:'shape', idx:0, c:'var(--azulMedio)', top:0, left:22, w:95},
+  {t:'rect', c:'#fff', top:9, left:33, w:38, h:70, r:'12px'},
+  {t:'rect', c:'var(--azulAgibank)', top:15, left:36, w:32, h:56, r:'6px'},
+  {t:'bar', c:'var(--verde)', top:50, left:41, w:15, h:5, rot:45},
+  {t:'bar', c:'var(--verde)', top:53, left:47, w:25, h:5, rot:-45},
+]};
+
+// ---- dados reais do roteiro.md (só telas de motion) ----
+const ATOS = [
+  {titulo:'Ato 1 — Propósito & Clientes', cenas:[
+    {id:'cena-04', titulo:'Lojas se fundindo', kind:'ilustracao-single', pend:'ok', notaPend:'Exceção aprovada 23/11/26 (§6) — alta viabilidade: há precedente quase literal na p.74 do Brandbook (fachada de loja oficial). Ver §2.6.',
+      art:ART_LOJA, concept:'Várias lojas Agibank ao redor do Brasil convergindo até formar uma única loja'},
+    {id:'cena-06', titulo:'Rajada — propósito no atendimento', offText:'Off Marina: “Tá no cafezinho, no bolo e nas pessoas que conversam e conhecem o cliente pelo nome.”', kind:'rajada', motions:[
+      {origem:'comparativo', bg:'onBlue', rotulo:'NPS', de:'72', para:'77', variacao:'+7%', periodo:'2025 → 2026'},
+      {origem:'lettering', bg:'onWhite', letterA:'Reclame Aqui', letterB:'90,1% de problemas resolvidos'},
+      {origem:'gráfico → card', bg:'onBlue', rotulo:'Ranking de reclamações BCB', de:'4ª posição', para:'27ª posição', variacao:'-23 posições', periodo:'2025 → 2026'},
+    ]},
+    {id:'cena-08', titulo:'Rajada — marcos históricos', offText:'Off Marina: “alcançando resultados e marcos históricos,”', kind:'rajada', pend:'warn', notaPend:'“Clientes ativos” com cifrão R$ — provável erro de digitação (clientes normalmente é contagem). Confirmar com a redação antes da arte final.', motions:[
+      {origem:'comparativo', bg:'onBlue', rotulo:'Clientes ativos', de:'R$ 6,3 milhões', para:'R$ 8,3 milhões', variacao:'+29%', periodo:'2025 → 2026', flag:true},
+      {origem:'lettering', bg:'onWhite', letterB:'77% a mais de originação bruta em 2026'},
+      {origem:'gráfico → card', bg:'onBlue', rotulo:'Carteira de crédito', de:'R$ 34,4 milhões', para:'R$ 38,8 milhões', variacao:'+12%', periodo:'2025 → 2026'},
+    ]},
+    {id:'cena-10', titulo:'Rajada — agilizar e acolher', offText:'Off Marina: “e fortalecendo a nossa forma de agilizar, acolher e atender cada um.”', kind:'rajada', pend:'warn', notaPend:'“Agi+”: conteúdo pendente (“usar o mesmo gráfico do relatório de resultados”) — layout provisório. “Open finance” em inglês sinalizado ao voice-guide (provavelmente não é desvio).', motions:[
+      {origem:'gráfico → card', bg:'onGray', rotulo:'Agi+', pendenteConteudo:'conteúdo a definir (relatório de resultados)'},
+      {origem:'lettering', bg:'onWhite', letterB:'Open finance, CDB e carteiras digitais para todos os clientes'},
+    ]},
+    {id:'cena-11', titulo:'Rajada — investir para crescer', offText:'Off Piu: “o cliente é o nosso principal ativo, e o resultado de tudo isso justifica novos investimentos.”', kind:'rajada', motions:[
+      {origem:'comparativo', bg:'onBlue', rotulo:'Funding', de:'R$ 35,3 milhões', para:'R$ 40,8 milhões', variacao:'+15%', periodo:'2025 → 2026'},
+      {origem:'lettering', bg:'onWhite', letterA:'FIDC Agibank III', letterB:'R$ 2,1 bilhões'},
+    ]},
+  ]},
+  {titulo:'Ato 2 — Pessoas', cenas:[
+    {id:'cena-12', titulo:'Multidão acendendo', kind:'ilustracao-single', pend:'ok', notaPend:'Exceção aprovada 23/11/26 (§6) — viável com ajuste de escala: repetir versão simplificada do personagem oficial (p.69-70), não desenhar multidão detalhada.',
+      art:ART_PESSOAS, concept:'Milhares de pessoas acendendo, uma a uma — só trilha'},
+    {id:'cena-15', titulo:'Rajada — pessoas bem direcionadas', offText:'Off Piu: “coisas boas acontecem para si mesmas, para o cliente e para a empresa.”', kind:'rajada', pend:'warn', notaPend:'3 dos 4 blocos ainda sem valor (Inscritos/Efetivados, Horas/Qtd. total, Total/Promoções no ano) — layout mostra só os rótulos.', motions:[
+      {origem:'comparativo', bg:'onBlue', rotulo:'Programa de Estágio e de Devs', duploLabel:['Inscritos','Efetivados'], pendenteConteudo:true},
+      {origem:'gráfico → card', bg:'onWhite', rotulo:'Treinamento e desenvolvimento', duploLabel:['Horas totais','Qtd. total'], pendenteConteudo:true},
+      {origem:'lettering', bg:'onBlue', letterA:'Tô de Dono', letterB:'+ de 420 contemplados'},
+      {origem:'gráfico → card', bg:'onWhite', rotulo:'Reconhecimentos', duploLabel:['Total no ano','Promoções no ano'], pendenteConteudo:true},
+    ]},
+  ]},
+  {titulo:'Ato 3 — Resultados do negócio', cenas:[
+    {id:'cena-17', titulo:'Mapa-múndi acendendo', kind:'ilustracao-single', pend:'warn', notaPend:'Viabilidade fraca — zero menção a “mapa” nas 101 páginas do Brandbook. Sem precedente pra ancorar estilo; alternativa sem ilustração nova (contador “+X países”) continua mais segura.',
+      art:ART_MAPA, concept:'Mapa-múndi com países acendendo — só trilha'},
+    {id:'cena-19', titulo:'Rajada — responsabilidade com o negócio', offText:'Só trilha', kind:'rajada', pend:'warn', notaPend:'“Lucro líquido” cai de R$210,5mi pra R$8,3mi mas marcado como alta de 31% — números não batem com o sinal. “Ratings” repete exatamente os valores de “Carteira de crédito” (cena-08) — parece colagem indevida. Não produzir arte final sem confirmar com a redação/dados.', motions:[
+      {origem:'gráfico → card', bg:'onBlue', rotulo:'Lucro líquido', de:'R$ 210,5 milhões', para:'R$ 8,3 milhões', variacao:'+31%', periodo:'2025 → 2026', flag:true},
+      {origem:'lettering', bg:'onWhite', letterA:'10% de market share', letterB:'Crédito Consignado INSS'},
+      {origem:'comparativo', bg:'onBlue', rotulo:'Ratings', de:'R$ 34,4 milhões', para:'R$ 38,8 milhões', flag:true},
+    ]},
+    {id:'cena-21', titulo:'Recortes de mídia — reconhecimento mundial', offText:'Off Marina: “se conquista, evolui e fica marcado ao redor do mundo.”', kind:'midia', chips:['World’s Top Fintechs','MT Top Fintech Leaders']},
+  ]},
+  {titulo:'Ato 4 — Inteligência / IA', cenas:[
+    {id:'cena-22', titulo:'Transição “IA” — duas opções', kind:'ilustracao-dual', notaPend:'Decisão adiada para o storyboard (passo 2.5), conforme pedido do usuário em 23/11/26.',
+      opcaoA:{art:ART_ROBO, label:'Opção A · exceção aprovada', concept:'Robozinho mascote acenando — personagem de marca novo, sem precedente no Brandbook'},
+      opcaoB:{art:ART_TECH, label:'Opção B · ilustração oficial adaptada', concept:'Pessoa saindo de dentro de uma tela de celular com check verde (Brandbook p.72) — zero risco de marca'}},
+    {id:'cena-24', titulo:'Big numbers — IA', offText:'Off Marina: “de agilizar jornadas, melhorar experiências e de ganhar tempo para focar no que importa.”', kind:'rajada', pend:'warn', notaPend:'Números de IA ainda “a decidir” no roteiro original — layout provisório.', motions:[
+      {origem:'big number', bg:'onBlue', rotulo:'Inteligência artificial', pendenteConteudo:'números a definir'},
+    ]},
+  ]},
+  {titulo:'Ato 5 — NYSE', cenas:[
+    {id:'cena-29', titulo:'Recortes de mídia — investidores', offText:'Off Marina: “pelos principais investidores do mundo,”', kind:'midia', chips:['G1','Bloomberg Línea','Finsiders Brasil','Forbes Brasil','Infomoney']},
+    {id:'cena-30', titulo:'Recortes de mídia — governança', offText:'Off Piu: “e reconheceu a potência da nossa governança.”', kind:'midia', chips:['Letsmoney','Money Times','Neofeed']},
+  ]},
+  {titulo:'Encerramento', cenas:[
+    {id:'cena-34', titulo:'Assinatura final', kind:'encerramento', pend:'ok', notaPend:'Confirmado pelo usuário em 23/11/26: logo centralizado (precedente Minuto Jeito Agi), não o canto inferior direito da regra geral.', texto:'Nos vemos em 2027!'},
+  ]},
+];
+
+const TYPES = {
+  rajada: {label:'Card de métrica', color:'var(--accent)'},
+  'ilustracao-single': {label:'Ilustração de transição', color:'#C77B00'},
+  'ilustracao-dual': {label:'Ilustração de transição', color:'#C77B00'},
+  midia: {label:'Colagem de mídia', color:'var(--azulEscuro)'},
+  encerramento: {label:'Encerramento', color:'var(--ok)'},
+};
+
+function el(html){ const t=document.createElement('template'); t.innerHTML=html.trim(); return t.content.firstElementChild; }
+
+// paleta
+document.getElementById('palette').append(...PALETTE.map(p=>el(`
+  <div class="swatch">
+    <div class="chip" style="background:${p.bg}${p.border?';border-bottom:1px solid var(--line)':''}"></div>
+    <div class="info">
+      <div class="name">${p.name}</div>
+      <div class="hex">${p.hex}</div>
+      <div class="role">${p.role}</div>
+    </div>
+  </div>`)));
+
+// tipografia
+document.getElementById('type').append(...TYPE_SCALE.map(t=>el(`
+  <div class="type-card">
+    <div class="label">${t.label}</div>
+    <div class="sample" style="font-weight:${t.weight};font-size:${t.size}">${t.text}</div>
+    <div class="meta">peso ${t.weight}</div>
+  </div>`)));
+
+// formas
+const shapeEls = [];
+SHAPES.forEach(s=>{
+  shapeEls.push(el(`<div class="s shape-bg-blue"><svg viewBox="${s.vb}"><path d="${s.path}" fill="#fff"/></svg></div>`));
+  shapeEls.push(el(`<div class="s shape-bg-white"><svg viewBox="${s.vb}"><path d="${s.path}" fill="currentColor"/></svg></div>`));
+  shapeEls.push(el(`<div class="s shape-bg-white outline"><svg viewBox="${s.vb}"><path d="${s.path}"/></svg></div>`));
+});
+document.getElementById('shapes').append(...shapeEls);
+
+// ---- render de frames ----
+function metricFrame(m){
+  const shape = SHAPES[Math.floor(Math.random()*SHAPES.length)];
+  const corner = `<div class="corner-shape" style="width:30px;height:30px;top:10px;right:14px;opacity:.5"><svg viewBox="${shape.vb}"><path d="${shape.path}" fill="currentColor"/></svg></div>`;
+  if(m.origem && m.origem.includes('lettering')){
+    return `<div class="frame ${m.bg}">
+      <span class="origem-tag">lettering</span>
+      ${corner}
+      <div class="letter">${m.letterA?`<b>${m.letterA}</b><br>`:''}${m.letterB||''}</div>
+    </div>`;
+  }
+  if(m.pendenteConteudo){
+    return `<div class="frame ${m.bg}">
+      <span class="origem-tag">${m.origem}</span>
+      ${corner}
+      <div class="eyebrow2">${m.rotulo||''}</div>
+      ${m.duploLabel?`<div class="letter">${m.duploLabel.join(' · ')}</div>`:''}
+      <div class="letter" style="opacity:.65;font-style:italic;margin-top:6px">${typeof m.pendenteConteudo==='string'?m.pendenteConteudo:'valor pendente'}</div>
+    </div>`;
+  }
+  return `<div class="frame ${m.bg}">
+    <span class="origem-tag">${m.origem}</span>
+    ${corner}
+    <div class="eyebrow2">${m.rotulo||''}</div>
+    <div class="big" style="font-size:clamp(18px,4.5vw,30px)">${m.de?`<span class="from">${m.de}</span>`:''}${m.para||''}</div>
+    ${m.variacao?`<span class="arrowchip">${m.variacao.startsWith('-')?'↓':'↑'} ${m.variacao.replace(/^[+-]/,'')}</span>`:''}
+    ${m.periodo?`<div style="font-size:10.5px;opacity:.7;margin-top:6px">${m.periodo}</div>`:''}
+  </div>`;
+}
+
+function shapeHTML(s){
+  if(s.t==='circle') return `<div class="shp" style="top:${s.top}%;left:${s.left}%;width:${s.w}px;height:${s.w}px;background:${s.c};border-radius:50%;${s.op?`opacity:${s.op}`:''}"></div>`;
+  if(s.t==='rect') return `<div class="shp" style="top:${s.top}%;left:${s.left}%;width:${s.w}px;height:${s.h}px;background:${s.c};border-radius:${s.r||'6px 6px 2px 2px'}"></div>`;
+  if(s.t==='bar') return `<div class="shp" style="top:${s.top}%;left:${s.left}%;width:${s.w}px;height:${s.h}px;background:${s.c};border-radius:3px;transform:rotate(${s.rot}deg)"></div>`;
+  if(s.t==='shape'){ const sh=SHAPES[s.idx]; return `<div class="shp" style="top:${s.top}%;left:${s.left}%;width:${s.w}px"><svg viewBox="${sh.vb}"><path d="${sh.path}" fill="${s.c}"/></svg></div>`; }
+  return '';
+}
+function artHTML(a){ return `<div class="art" style="background:${a.bg}">${a.shapes.map(shapeHTML).join('')}</div>`; }
+function illusFrame(art, label, concept, logo){
+  return `<div class="frame illus">
+    ${artHTML(art)}
+    <div class="label">${label}</div>
+    <div class="concept">${concept}</div>
+    ${logo?`<div class="logo-corner">${LOGO_NEG}</div>`:''}
+  </div>`;
+}
+
+function midiaFrame(chips){
+  return `<div class="frame midia">
+    ${chips.map(c=>`<span class="chip">${c}</span>`).join('')}
+    <span class="capt">placeholder tipográfico — logos reais a confirmar</span>
+  </div>`;
+}
+
+function closingFrame(texto){
+  return `<div class="frame closing">${LOGO_NEG}<div class="cta">${texto}</div></div>`;
+}
+
+function sceneCard(c){
+  const t = TYPES[c.kind];
+  let body = '';
+  if(c.kind==='rajada'){
+    body = `<div class="filmstrip">${c.motions.map(metricFrame).join('')}</div>`;
+  } else if(c.kind==='ilustracao-single'){
+    body = `<div class="filmstrip">${illusFrame(c.art, 'Ilustração customizada', c.concept, true)}</div>`;
+  } else if(c.kind==='ilustracao-dual'){
+    body = `<div class="filmstrip">
+      ${illusFrame(c.opcaoA.art, c.opcaoA.label, c.opcaoA.concept, true)}
+      ${illusFrame(c.opcaoB.art, c.opcaoB.label, c.opcaoB.concept, true)}
+    </div>`;
+  } else if(c.kind==='midia'){
+    body = `<div class="filmstrip">${midiaFrame(c.chips)}</div>`;
+  } else if(c.kind==='encerramento'){
+    body = `<div class="filmstrip">${closingFrame(c.texto)}</div>`;
+  }
+  const pendBadge = c.pend==='ok' ? `<span class="tag ok">resolvido</span>` : c.pend==='warn' ? `<span class="tag pend">pendente</span>` : '';
+  return el(`<div class="scene" data-kind="${c.kind}">
+    <div class="scene-head">
+      <span class="scene-id">${c.id}</span>
+      <span class="scene-title">${c.titulo}</span>
+      ${pendBadge}
+      ${c.offText?`<span class="scene-note">${c.offText}</span>`:''}
+    </div>
+    ${body}
+    ${c.notaPend?`<div class="${c.pend==='ok'?'ok-note':'pend-note'}">${c.notaPend}</div>`:''}
+  </div>`);
+}
+
+const scenesEl = document.getElementById('scenes');
+ATOS.forEach(ato=>{
+  scenesEl.append(el(`<h3 class="ato">${ato.titulo}</h3>`));
+  ato.cenas.forEach(c=> scenesEl.append(sceneCard(c)));
+});
+
+// filtros
+const kinds = [...new Set(ATOS.flatMap(a=>a.cenas.map(c=>c.kind)))];
+const filterBar = document.getElementById('filters');
+function applyFilter(active){
+  document.querySelectorAll('.scene').forEach(s=>{ s.style.display = (active==='all'||s.dataset.kind===active) ? '' : 'none'; });
+  document.querySelectorAll('h3.ato').forEach(h=>{
+    let n = h.nextElementSibling, visible=false;
+    while(n && !n.matches('h3.ato')){ if(n.style.display!=='none') visible=true; n=n.nextElementSibling; }
+    h.style.display = visible ? '' : 'none';
+  });
+  filterBar.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.k===active ? 'true':'false'));
+}
+const allBtn = el(`<button data-k="all" aria-pressed="true"><span class="dot" style="background:var(--muted)"></span>Todos</button>`);
+allBtn.onclick=()=>applyFilter('all');
+filterBar.append(allBtn);
+kinds.forEach(k=>{
+  const t = TYPES[k];
+  const b = el(`<button data-k="${k}"><span class="dot" style="background:${t.color}"></span>${t.label}</button>`);
+  b.onclick=()=>applyFilter(k);
+  filterBar.append(b);
+});
+</script>

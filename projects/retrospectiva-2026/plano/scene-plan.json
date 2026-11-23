@@ -1,0 +1,439 @@
+{
+  "projeto": "retrospectiva-2026",
+  "status": "rascunho",
+  "fonte": "texto colado pelo usuário em 2026-11-23 (locução + indicação de motion por bloco)",
+  "referenciaMotion": "referencia/referencia-motion-nubank.md",
+  "pendenciasGlobais": [
+    {
+      "id": "pg-01",
+      "status": "em aberto",
+      "descricao": "Vídeo base editado não entregue — confirmado pelo usuário em 2026-11-23 que o projeto ainda está em etapa de aprovação do roteiro. Brutos citados por nome no texto, não existe retrospectiva-2026.mp4 já editado. Passo 1 (analise/) não roda até isso ser resolvido.",
+      "pergunta": "Vai existir um corte já fechado (fluxo padrão de motion-sobre-vídeo-editado), ou a montagem é parte do escopo deste projeto a partir dos brutos citados?"
+    },
+    {
+      "id": "pg-02",
+      "descricao": "Locução do Marciano (cena-01) está em inglês, dublagem PT via IA ainda não existe. Timing da cena-01 é estimativa."
+    },
+    {
+      "id": "pg-03",
+      "status": "resolvido 2026-11-23",
+      "descricao": "4 transições (cena-04, cena-12, cena-17, cena-22) pedem ilustração/personagem que não existe no sistema de marca (loja, multidão de pessoas, mapa-múndi, robô). Exceção aprovada pelo usuário em 2026-11-23, registrada em brand/boas-praticas-visuais.md §6. Falta definir estilo de execução — ver analise/estudo-viabilidade-brandbook.md."
+    },
+    {
+      "id": "pg-04",
+      "descricao": "2 inconsistências numéricas no texto original: cena-08 (Clientes ativos com cifrão R$, provável erro) e cena-19 (Lucro líquido com sinal de alta mas números de queda; Ratings repete os valores de Carteira de crédito da cena-08)."
+    },
+    {
+      "id": "pg-05",
+      "descricao": "3 blocos de conteúdo sem valor definido: Agi+ (cena-10), números de IA (cena-24), Inscritos/Efetivados e Horas/Qtd. totais (cena-15)."
+    },
+    {
+      "id": "pg-06",
+      "descricao": "Leitura da seta: tanto alta quanto queda representam resultado positivo neste roteiro (ex. cena-06, ranking de reclamações). Recomendado usar verde como sinalizador de 'positivo', seta só para direção numérica — não há nenhum resultado negativo no roteiro."
+    },
+    {
+      "id": "pg-07",
+      "descricao": "Termo em inglês 'open finance' (cena-10) sinalizado por transparência ao voice-guide.md; provavelmente não é desvio por ser nome de mercado sem tradução corrente."
+    }
+  ],
+  "estruturaNarrativa": {
+    "dispositivo": "refrão 'Quando a gente tem propósito, a gente...' abre cada ato, alternando Marina e Piu",
+    "recomendacao": "refrão = respiro (talking head limpo, sem grafismo); rajada de motion vem depois do refrão, nunca durante — padrão plano-longo/rajada observado na referência Nu"
+  },
+  "atos": [
+    {
+      "id": "ato-00-abertura",
+      "titulo": "Abertura",
+      "cenas": [
+        {
+          "id": "cena-01",
+          "tempoInicioSeg": 0,
+          "tempoFimSeg": 23,
+          "tempoConfianca": "estimado, depende da dublagem (pg-02)",
+          "tipo": "broll+locucao",
+          "fonteVideo": "AGI2501-Opus_RS-E25-TW-Delivery.mp4",
+          "falante": "Marciano (off)",
+          "copy": "Muitas pessoas não se sentem vistas, respeitadas ou valorizadas pelo setor financeiro no Brasil, então decidimos mudar isso com uma nova abordagem que combina o melhor dos dois mundos: o físico e o digital.",
+          "tratamentoVisual": "b-roll puro sem grafismo; texto em tela opcional em tipografia cinética palavra a palavra, só se a dublagem permitir sincronismo",
+          "pendencias": ["pg-02"]
+        },
+        {
+          "id": "cena-02",
+          "tempoInicioSeg": null,
+          "tempoFimSeg": null,
+          "tipo": "camera",
+          "falante": "Marina Zelante (Campus)",
+          "copy": "Por isso, o nosso propósito é claro: lutar por uma experiência bancária que acolhe e encoraja todos os brasileiros.",
+          "tratamentoVisual": "talking head limpo, sem grafismo (primeiro respiro do refrão)",
+          "pendencias": []
+        },
+        {
+          "id": "cena-03",
+          "tempoInicioSeg": null,
+          "tempoFimSeg": null,
+          "tipo": "camera",
+          "falante": "Marina Zelante (Campus)",
+          "copy": "E, em 2026, seguimos firmes nessa luta, mesmo com tudo e todos jogando contra.",
+          "tratamentoVisual": "mesmo tratamento da cena-02, leve zoom/corte marcando virada antes da transição",
+          "pendencias": []
+        }
+      ]
+    },
+    {
+      "id": "ato-01-proposito-clientes",
+      "titulo": "Propósito & Clientes",
+      "cenas": [
+        {
+          "id": "cena-04",
+          "tipo": "transicao-motion",
+          "descricaoMotion": "várias lojas ao redor do Brasil se reunindo até formar uma única loja",
+          "tratamentoVisual": "ilustração customizada (ícone de loja convergindo)",
+          "pendencias": [
+            {
+              "severidade": "resolvida 2026-11-23 — estilo de execução pendente",
+              "regra": "exceção aprovada, boas-praticas-visuais.md §6",
+              "detalhe": "Usuário aprovou ilustrar mesmo assim. Falta definir estilo (traço, nível de detalhe, paleta) — ver analise/estudo-viabilidade-brandbook.md."
+            }
+          ]
+        },
+        {
+          "id": "cena-05",
+          "tipo": "camera",
+          "falante": "Matheus Piuzana (Campus)",
+          "copy": "Quando a gente tem propósito, a gente enxerga quem atendemos de um jeito diferente.",
+          "tratamentoVisual": "refrão — talking head limpo",
+          "pendencias": []
+        },
+        {
+          "id": "cena-06",
+          "tipo": "motion-rajada",
+          "falanteOff": "Marina",
+          "copyOff": "Tá no cafezinho, no bolo e nas pessoas que conversam e conhecem o cliente pelo nome.",
+          "motions": [
+            {"tipo": "comparativo", "titulo": "NPS", "de": "72 (2025)", "para": "77 (2026)", "variacao": "+7%"},
+            {"tipo": "lettering", "titulo": "Reclame Aqui", "texto": "90,1% de problemas resolvidos"},
+            {"tipo": "grafico", "titulo": "Ranking de reclamações BCB", "de": "4ª posição (2025)", "para": "27ª posição (2026)", "variacao": "-23 posições"}
+          ],
+          "tratamentoVisual": "rajada de 3 cards de métrica (número ExtraBold + rótulo), verde como sinal de positivo nos três",
+          "pendencias": ["pg-06"]
+        },
+        {
+          "id": "cena-07",
+          "tipo": "camera",
+          "falante": "Matheus Piuzana (Campus)",
+          "copy": "Foi isso que nos fez continuar superando as expectativas dos nossos clientes,",
+          "tratamentoVisual": "ponte curta entre rajadas",
+          "pendencias": []
+        },
+        {
+          "id": "cena-08",
+          "tipo": "motion-rajada",
+          "falanteOff": "Marina",
+          "copyOff": "alcançando resultados e marcos históricos,",
+          "motions": [
+            {"tipo": "comparativo", "titulo": "Clientes ativos", "de": "R$ 6,3 milhões", "para": "R$ 8,3 milhões", "variacao": "+29%"},
+            {"tipo": "lettering", "texto": "77% a mais de originação bruta em 2026"},
+            {"tipo": "grafico", "titulo": "Carteira de crédito", "de": "R$ 34,4 milhões", "para": "R$ 38,8 milhões", "variacao": "+12%"}
+          ],
+          "tratamentoVisual": "mesmo padrão de card de métrica da cena-06",
+          "pendencias": [
+            {
+              "severidade": "confirmar com redação",
+              "detalhe": "'Clientes ativos' com cifrão R$ — clientes normalmente é contagem, não valor monetário. Possível erro de digitação."
+            }
+          ]
+        },
+        {
+          "id": "cena-09",
+          "tipo": "broll",
+          "descricao": "cortes na mesma tela — campanhas da Simone, SJ da Thay e Santos (takes de campanha + mídia)",
+          "falanteOff": "Marina",
+          "copyOff": "chegando a milhares de casas por todo o país",
+          "tratamentoVisual": "corte rápido entre takes, sem motion gráfico — conteúdo de arquivo",
+          "pendencias": []
+        },
+        {
+          "id": "cena-10",
+          "tipo": "motion-rajada",
+          "falanteOff": "Marina",
+          "copyOff": "e fortalecendo a nossa forma de agilizar, acolher e atender cada um.",
+          "motions": [
+            {"tipo": "grafico", "titulo": "Agi+", "texto": "[usar o mesmo gráfico do relatório de resultados]", "pendente": true},
+            {"tipo": "lettering", "texto": "Open finance, CDB e carteiras digitais para todos os clientes"}
+          ],
+          "tratamentoVisual": "lettering no padrão de tipografia cinética; gráfico Agi+ aguarda o relatório de resultados",
+          "pendencias": ["pg-05", "pg-07"]
+        },
+        {
+          "id": "cena-11",
+          "tipo": "motion-rajada",
+          "falanteOff": "Piu",
+          "copyOff": "Afinal, o cliente é o nosso principal ativo, e o resultado de tudo isso justifica novos investimentos para crescermos juntos.",
+          "motions": [
+            {"tipo": "comparativo", "titulo": "Funding", "de": "R$ 35,3 milhões", "para": "R$ 40,8 milhões", "variacao": "+15%"},
+            {"tipo": "lettering", "titulo": "FIDC Agibank III", "texto": "R$ 2,1 bilhões"}
+          ],
+          "tratamentoVisual": "mesmo padrão de card de métrica",
+          "pendencias": []
+        }
+      ]
+    },
+    {
+      "id": "ato-02-pessoas",
+      "titulo": "Pessoas",
+      "cenas": [
+        {
+          "id": "cena-12",
+          "tipo": "transicao-motion",
+          "descricaoMotion": "milhares de bonequinhos de pessoas acendendo (só trilha)",
+          "tratamentoVisual": "ilustração customizada (multidão de pictogramas)",
+          "pendencias": [
+            {
+              "severidade": "resolvida 2026-11-23 — estilo de execução pendente",
+              "regra": "exceção aprovada, boas-praticas-visuais.md §6",
+              "detalhe": "Usuário aprovou ilustrar mesmo assim. Falta definir estilo — ver analise/estudo-viabilidade-brandbook.md."
+            }
+          ]
+        },
+        {
+          "id": "cena-13",
+          "tipo": "camera",
+          "falante": "Marina Zelante (Campus)",
+          "copy": "Quando a gente tem propósito, a gente tem pessoas bem direcionadas.",
+          "tratamentoVisual": "refrão — talking head limpo",
+          "pendencias": []
+        },
+        {
+          "id": "cena-14",
+          "tipo": "camera",
+          "falante": "Matheus Piuzana (Campus)",
+          "copy": "Pessoas que sabem a importância da nossa luta",
+          "tratamentoVisual": "ponte direta, continuação da fala de Marina",
+          "pendencias": []
+        },
+        {
+          "id": "cena-15",
+          "tipo": "motion-rajada",
+          "falanteOff": "Piu",
+          "copyOff": "e que se permitem superar desafios porque, assim, coisas boas acontecem para si mesmas, para o cliente e para a empresa.",
+          "motions": [
+            {"tipo": "comparativo", "titulo": "Programa de Estágio e de Devs", "campos": ["Inscritos", "Efetivados"], "valoresPendentes": true},
+            {"tipo": "grafico", "titulo": "Treinamento e desenvolvimento", "campos": ["Horas totais", "Qtd. total"], "valoresPendentes": true},
+            {"tipo": "lettering", "titulo": "Tô de Dono", "texto": "+ de 420 contemplados"},
+            {"tipo": "grafico", "titulo": "Reconhecimentos", "campos": ["Total no ano", "Promoções no ano"], "valoresPendentes": true}
+          ],
+          "tratamentoVisual": "rajada de 4 cards, considerar stagger decrescente (tokens.json.motion.staggerFrames) entre eles",
+          "pendencias": ["pg-05"]
+        },
+        {
+          "id": "cena-16",
+          "tipo": "broll",
+          "descricao": "cortes na mesma tela — feiras que participamos + texto simulando notícia sobre ranking de empresas mais desejadas (só trilha)",
+          "tratamentoVisual": "b-roll + motion de 'notícia simulada' no padrão de lettering/card já estabelecido, sem imitar identidade visual de veículo real",
+          "pendencias": [
+            {"severidade": "confirmar conteúdo", "detalhe": "ranking/fonte exata da 'notícia simulada' não veio no texto"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ato-03-resultados-negocio",
+      "titulo": "Resultados do negócio",
+      "cenas": [
+        {
+          "id": "cena-17",
+          "tipo": "transicao-motion",
+          "descricaoMotion": "mapa-múndi com vários países acendendo (só trilha)",
+          "tratamentoVisual": "ilustração customizada (mapa-múndi)",
+          "pendencias": [
+            {
+              "severidade": "resolvida 2026-11-23 — estilo de execução pendente",
+              "regra": "exceção aprovada, boas-praticas-visuais.md §6",
+              "detalhe": "Usuário aprovou ilustrar mesmo assim. Falta definir estilo — ver analise/estudo-viabilidade-brandbook.md."
+            }
+          ]
+        },
+        {
+          "id": "cena-18",
+          "tipo": "camera",
+          "falante": "Marina Zelante (Campus)",
+          "copy": "Quando a gente tem propósito, a gente tem responsabilidade com os resultados do negócio.",
+          "tratamentoVisual": "refrão — talking head limpo",
+          "pendencias": []
+        },
+        {
+          "id": "cena-19",
+          "tipo": "motion-rajada",
+          "falanteOff": null,
+          "copyOff": "só trilha",
+          "motions": [
+            {"tipo": "grafico", "titulo": "Lucro líquido", "de": "R$ 210,5 milhões", "para": "R$ 8,3 milhões", "variacao": "+31% (inconsistente com os valores)"},
+            {"tipo": "lettering", "texto": "10% de market share — Crédito Consignado INSS"},
+            {"tipo": "comparativo", "titulo": "Ratings", "de": "R$ 34,4 milhões", "para": "R$ 38,8 milhões"}
+          ],
+          "tratamentoVisual": "mesmo padrão de card de métrica",
+          "pendencias": [
+            {
+              "severidade": "bloqueante — confirmar com redação/dados",
+              "detalhe": "Lucro líquido: queda de R$210,5mi para R$8,3mi marcada como alta de 31% (números não batem com o sinal). Ratings repete exatamente os valores de Carteira de crédito (cena-08) — parece colagem indevida. Não produzir arte-final até correção."
+            }
+          ]
+        },
+        {
+          "id": "cena-20",
+          "tipo": "camera",
+          "falante": "Marina Zelante (Campus)",
+          "copy": "Mas resultado não é só aquilo que a gente mede. É também o que se constrói,",
+          "tratamentoVisual": "ponte — talking head limpo",
+          "pendencias": []
+        },
+        {
+          "id": "cena-21",
+          "tipo": "motion-midia",
+          "descricao": "Agi na World's Top Fintechs e MT na Top Fintech Leaders",
+          "falanteOff": "Marina",
+          "copyOff": "se conquista, evolui e fica marcado ao redor do mundo.",
+          "tratamentoVisual": "colagem de logos/capturas de matérias reais, sem ilustração nova",
+          "pendencias": [
+            {"severidade": "confirmar direitos", "detalhe": "uso de capturas de tela de publicações de terceiros"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ato-04-ia",
+      "titulo": "Inteligência / IA",
+      "cenas": [
+        {
+          "id": "cena-22",
+          "tipo": "transicao-motion",
+          "descricaoMotion": "robozinho acenando pras pessoas que estão assistindo ao vídeo (só trilha)",
+          "tratamentoVisual": "ilustração customizada (mascote robô) OU ilustração oficial adaptada (p.72 do Brandbook: pessoa saindo de dentro de uma tela de celular com check verde, tema tecnologia) — decisão no storyboard",
+          "pendencias": [
+            {
+              "severidade": "em aberto — decisão adiada para o storyboard (passo 2.5), confirmado pelo usuário 2026-11-23",
+              "regra": "exceção aprovada, boas-praticas-visuais.md §6 (cobre o robô); alternativa sem exceção ancorada em brand/boas-praticas-visuais.md §2.6",
+              "detalhe": "Duas opções seguem como Key Visual candidato: (1) robô mascote customizado, exceção já aprovada; (2) ilustração oficial da p.72 adaptada, zero risco de marca. Ver analise/estudo-viabilidade-brandbook.md §3.4."
+            }
+          ]
+        },
+        {
+          "id": "cena-23",
+          "tipo": "camera",
+          "falante": "Matheus Piuzana (Campus)",
+          "copy": "Quando a gente tem propósito, a gente descobre novas formas de entregar valor com inteligência,",
+          "tratamentoVisual": "refrão — talking head limpo",
+          "pendencias": []
+        },
+        {
+          "id": "cena-24",
+          "tipo": "motion-rajada",
+          "motions": [
+            {"tipo": "big-numbers", "texto": "[números de IA a decidir]", "pendente": true}
+          ],
+          "falanteOff": "Marina",
+          "copyOff": "de agilizar jornadas, melhorar experiências e de ganhar tempo para focar no que realmente importa:",
+          "tratamentoVisual": "card de métrica padrão assim que os números chegarem",
+          "pendencias": ["pg-05"]
+        },
+        {
+          "id": "cena-25",
+          "tipo": "camera",
+          "falante": "Marina Zelante (Campus)",
+          "copy": "o crescimento do Agi, das nossas pessoas e dos nossos clientes.",
+          "tratamentoVisual": "fecha a frase da cena-24 — talking head limpo",
+          "pendencias": []
+        }
+      ]
+    },
+    {
+      "id": "ato-05-nyse",
+      "titulo": "NYSE",
+      "cenas": [
+        {
+          "id": "cena-26",
+          "tipo": "transicao-broll",
+          "descricao": "takes do vídeo do Agi na NYSE",
+          "tratamentoVisual": "b-roll de arquivo real, sem ilustração nova — só tratamento de corte",
+          "pendencias": []
+        },
+        {
+          "id": "cena-27",
+          "tipo": "camera",
+          "falante": "Matheus Piuzana (Campus)",
+          "copy": "Quando a gente tem propósito, a gente chega à NYSE. E alguns podem chamar isso de meta, de oportunidade...",
+          "tratamentoVisual": "refrão — talking head limpo",
+          "pendencias": []
+        },
+        {
+          "id": "cena-28",
+          "tipo": "camera",
+          "falante": "Marina Zelante (Campus)",
+          "copy": "Mas, pra nós, foi uma conquista que reforçou o nosso modelo único de negócio",
+          "tratamentoVisual": "continuação direta (ponte)",
+          "pendencias": []
+        },
+        {
+          "id": "cena-29",
+          "tipo": "motion-midia",
+          "descricao": "Matéria G1, Bloomberg Línea, Finsiders Brasil, Forbes Brasil, Infomoney",
+          "falanteOff": "Marina",
+          "copyOff": "pelos principais investidores do mundo,",
+          "tratamentoVisual": "colagem de capturas reais; considerar rajada rápida (5-8 cortes em 2-3s, padrão observado na referência Nu) para transmitir credibilidade por quantidade de veículos",
+          "pendencias": [
+            {"severidade": "confirmar direitos", "detalhe": "uso de capturas de tela de publicações de terceiros"}
+          ]
+        },
+        {
+          "id": "cena-30",
+          "tipo": "motion-midia",
+          "descricao": "Letsmoney, Money Times, Neofeed",
+          "falanteOff": "Piu",
+          "copyOff": "e reconheceu a potência da nossa governança.",
+          "tratamentoVisual": "mesmo tratamento da cena-29, continuação da mesma rajada",
+          "pendencias": [
+            {"severidade": "confirmar direitos", "detalhe": "uso de capturas de tela de publicações de terceiros"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ato-06-encerramento",
+      "titulo": "Encerramento",
+      "cenas": [
+        {
+          "id": "cena-31",
+          "tipo": "camera",
+          "falante": "Marina Zelante (Campus)",
+          "copy": "Avançamos muito em 2026, mas o problema que queremos resolver ainda é enorme.",
+          "tratamentoVisual": "talking head limpo, tom mais contido — reflexão, não refrão",
+          "pendencias": []
+        },
+        {
+          "id": "cena-32",
+          "tipo": "camera",
+          "falante": "Matheus Piuzana (Campus)",
+          "copy": "Só que, quando a gente tem propósito, tem também a vontade de viver pelo cliente, de agir como empreendedor e de crescer na jornada.",
+          "tratamentoVisual": "última ocorrência do refrão, mais longa — considerar câmera mais fechada, sem corte, tom mais solene",
+          "pendencias": []
+        },
+        {
+          "id": "cena-33",
+          "tipo": "camera",
+          "falante": "Marina Zelante (Campus)",
+          "copy": "E quando a gente une tudo isso, a gente já venceu.",
+          "tratamentoVisual": "talking head limpo",
+          "pendencias": []
+        },
+        {
+          "id": "cena-34",
+          "tipo": "camera+encerramento",
+          "falante": "Marina e Piu juntos (Campus)",
+          "copy": "Nos vemos em 2027!",
+          "tratamentoVisual": "logo Agibank centralizado como assinatura final (precedente minuto-jeito-agi-novembro, boas-praticas-visuais.md §6, 2026-11-19 — confirmado pelo usuário 2026-11-23)",
+          "pendencias": []
+        }
+      ]
+    }
+  ]
+}
