@@ -1,0 +1,248 @@
+{
+  "elementos": {
+    "bullet-1": {
+      "cor": "escuro",
+      "excluido": true,
+      "h": 240,
+      "nome": "Bullet 1 · módulo",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 1152,
+      "x": 768,
+      "y": 360
+    },
+    "bullet-2": {
+      "cor": "verde",
+      "h": 720,
+      "nome": "Bullet 2 · módulo",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 1152,
+      "x": 768,
+      "y": 360
+    },
+    "bullet-3": {
+      "cor": "azul",
+      "excluido": true,
+      "h": 240,
+      "nome": "Bullet 3 · módulo",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 1152,
+      "x": 768,
+      "y": 840
+    },
+    "cacos-1": {
+      "flip": false,
+      "h": 360,
+      "iw": 640,
+      "ix": -120,
+      "iy": -160,
+      "nome": "Cacos 1",
+      "tipo": "cacos",
+      "variante": "medio",
+      "w": 496,
+      "x": 0,
+      "y": 0
+    },
+    "cacos-2": {
+      "excluido": true,
+      "flip": true,
+      "h": 360,
+      "iw": 560,
+      "ix": 380,
+      "iy": -60,
+      "nome": "Cacos 2",
+      "tipo": "cacos",
+      "variante": "medio",
+      "w": 768,
+      "x": 0,
+      "y": 0
+    },
+    "foto": {
+      "h": 720,
+      "nome": "Foto",
+      "px": 45,
+      "py": 30,
+      "src": "CAN_0504",
+      "tipo": "foto",
+      "w": 768,
+      "x": 0,
+      "y": 360,
+      "zoom": 100
+    },
+    "fundo": {
+      "cor": "branco",
+      "h": 1080,
+      "nome": "Fundo",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 1920,
+      "x": 0,
+      "y": 0
+    },
+    "logo-pilar": {
+      "h": 160,
+      "nome": "Logo do pilar",
+      "tipo": "imagem",
+      "w": 565,
+      "x": 560,
+      "y": 104
+    },
+    "modulo-cacos": {
+      "cor": "branco",
+      "h": 360,
+      "nome": "Módulo dos cacos",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 488,
+      "x": 0,
+      "y": 0
+    },
+    "modulo-topo": {
+      "cor": "azul",
+      "h": 360,
+      "nome": "Módulo do título",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 632,
+      "x": 520,
+      "y": 0
+    },
+    "texto-bullet-1": {
+      "align": "left",
+      "cor": "escuro",
+      "h": 104,
+      "nome": "Bullet 1 · texto",
+      "peso": 400,
+      "size": 46,
+      "tipo": "texto",
+      "valign": "center",
+      "w": 840,
+      "x": 920,
+      "y": 488
+    },
+    "texto-bullet-2": {
+      "align": "left",
+      "cor": "escuro",
+      "h": 120,
+      "nome": "Bullet 2 · texto",
+      "peso": 400,
+      "size": 46,
+      "tipo": "texto",
+      "valign": "center",
+      "w": 896,
+      "x": 920,
+      "y": 652
+    },
+    "texto-bullet-3": {
+      "align": "left",
+      "cor": "escuro",
+      "h": 104,
+      "nome": "Bullet 3 · texto",
+      "peso": 400,
+      "size": 46,
+      "tipo": "texto",
+      "valign": "center",
+      "w": 848,
+      "x": 920,
+      "y": 832
+    },
+    "texto-representa": {
+      "align": "left",
+      "cor": "azul",
+      "h": 104,
+      "nome": "Representa…",
+      "peso": 300,
+      "size": 44,
+      "tipo": "texto",
+      "valign": "top",
+      "w": 256,
+      "x": 1224,
+      "y": 136
+    },
+    "timer": {
+      "cor": "branco",
+      "fundo": "escuro",
+      "h": 360,
+      "nome": "Timer",
+      "size": 112,
+      "tipo": "timer",
+      "w": 384,
+      "x": 1536,
+      "y": 0
+    },
+    "traco-1": {
+      "cor": "verde",
+      "excluido": true,
+      "h": 88,
+      "nome": "Bullet 1 · traço",
+      "raio": 5,
+      "textura": false,
+      "tipo": "modulo",
+      "w": 10,
+      "x": 840,
+      "y": 436
+    },
+    "traco-2": {
+      "cor": "escuro",
+      "excluido": true,
+      "h": 88,
+      "nome": "Bullet 2 · traço",
+      "raio": 5,
+      "textura": false,
+      "tipo": "modulo",
+      "w": 10,
+      "x": 840,
+      "y": 676
+    },
+    "traco-3": {
+      "cor": "verde",
+      "excluido": true,
+      "h": 88,
+      "nome": "Bullet 3 · traço",
+      "raio": 5,
+      "textura": false,
+      "tipo": "modulo",
+      "w": 10,
+      "x": 840,
+      "y": 916
+    }
+  },
+  "nome": "T03 · Agir como empreendedor",
+  "nota": "",
+  "ordem": [
+    "fundo",
+    "bullet-2",
+    "modulo-topo",
+    "modulo-cacos",
+    "cacos-1",
+    "cacos-2",
+    "logo-pilar",
+    "texto-representa",
+    "timer",
+    "foto",
+    "bullet-1",
+    "traco-1",
+    "texto-bullet-1",
+    "traco-2",
+    "texto-bullet-2",
+    "bullet-3",
+    "traco-3",
+    "texto-bullet-3"
+  ],
+  "palco": {
+    "altura": 1080,
+    "grade": {
+      "celula": [
+        384,
+        360
+      ],
+      "colunas": 5,
+      "linhas": 3
+    },
+    "largura": 1920
+  },
+  "salvoEm": "2026-11-26T17:29:24.921Z",
+  "tela": "t03"
+}

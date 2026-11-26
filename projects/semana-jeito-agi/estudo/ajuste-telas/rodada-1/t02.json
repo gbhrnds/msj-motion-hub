@@ -1,0 +1,233 @@
+{
+  "elementos": {
+    "bullet-1": {
+      "cor": "escuro",
+      "excluido": true,
+      "h": 240,
+      "nome": "Bullet 1 · módulo",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 1152,
+      "x": 0,
+      "y": 360
+    },
+    "bullet-2": {
+      "cor": "medio",
+      "excluido": true,
+      "h": 240,
+      "nome": "Bullet 2 · módulo",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 1152,
+      "x": 0,
+      "y": 600
+    },
+    "bullet-3": {
+      "cor": "medio",
+      "h": 720,
+      "nome": "Bullet 3 · módulo",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 1152,
+      "x": 0,
+      "y": 360
+    },
+    "cacos-1": {
+      "flip": false,
+      "h": 360,
+      "iw": 560,
+      "ix": -60,
+      "iy": -120,
+      "nome": "Cacos",
+      "tipo": "cacos",
+      "variante": "medio",
+      "w": 384,
+      "x": 1152,
+      "y": 0
+    },
+    "foto": {
+      "h": 720,
+      "nome": "Foto",
+      "px": 44,
+      "py": 78,
+      "src": "CAN_0024",
+      "tipo": "foto",
+      "w": 768,
+      "x": 1152,
+      "y": 360,
+      "zoom": 121
+    },
+    "fundo": {
+      "cor": "branco",
+      "h": 1080,
+      "nome": "Fundo",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 1920,
+      "x": 0,
+      "y": 0
+    },
+    "logo-pilar": {
+      "h": 160,
+      "nome": "Logo do pilar",
+      "tipo": "imagem",
+      "w": 511,
+      "x": 80,
+      "y": 104
+    },
+    "modulo-cacos": {
+      "cor": "azul",
+      "h": 360,
+      "nome": "Módulo dos cacos",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 384,
+      "x": 1152,
+      "y": 0
+    },
+    "modulo-topo": {
+      "cor": "azul",
+      "h": 360,
+      "nome": "Módulo do título",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 664,
+      "x": 0,
+      "y": 0
+    },
+    "texto-bullet-1": {
+      "align": "left",
+      "cor": "branco",
+      "h": 80,
+      "nome": "Bullet 1 · texto",
+      "peso": 400,
+      "size": 46,
+      "tipo": "texto",
+      "valign": "center",
+      "w": 616,
+      "x": 152,
+      "y": 448
+    },
+    "texto-bullet-2": {
+      "align": "left",
+      "cor": "branco",
+      "h": 128,
+      "nome": "Bullet 2 · texto",
+      "peso": 400,
+      "size": 46,
+      "tipo": "texto",
+      "valign": "center",
+      "w": 792,
+      "x": 152,
+      "y": 656
+    },
+    "texto-bullet-3": {
+      "align": "left",
+      "cor": "branco",
+      "h": 88,
+      "nome": "Bullet 3 · texto",
+      "peso": 400,
+      "size": 46,
+      "tipo": "texto",
+      "valign": "center",
+      "w": 976,
+      "x": 120,
+      "y": 832
+    },
+    "texto-representa": {
+      "align": "left",
+      "cor": "azul",
+      "h": 112,
+      "nome": "Representa…",
+      "peso": 300,
+      "size": 51,
+      "tipo": "texto",
+      "valign": "top",
+      "w": 384,
+      "x": 720,
+      "y": 128
+    },
+    "timer": {
+      "cor": "branco",
+      "fundo": "escuro",
+      "h": 360,
+      "nome": "Timer",
+      "size": 112,
+      "tipo": "timer",
+      "w": 384,
+      "x": 1536,
+      "y": 0
+    },
+    "traco-1": {
+      "cor": "medio",
+      "excluido": true,
+      "h": 88,
+      "nome": "Bullet 1 · traço",
+      "raio": 5,
+      "textura": false,
+      "tipo": "modulo",
+      "w": 10,
+      "x": 72,
+      "y": 436
+    },
+    "traco-2": {
+      "cor": "branco",
+      "excluido": true,
+      "h": 88,
+      "nome": "Bullet 2 · traço",
+      "raio": 5,
+      "textura": false,
+      "tipo": "modulo",
+      "w": 10,
+      "x": 72,
+      "y": 676
+    },
+    "traco-3": {
+      "cor": "medio",
+      "excluido": true,
+      "h": 88,
+      "nome": "Bullet 3 · traço",
+      "raio": 5,
+      "textura": false,
+      "tipo": "modulo",
+      "w": 10,
+      "x": 72,
+      "y": 916
+    }
+  },
+  "nome": "T02 · Viver pelo cliente",
+  "nota": "tirar os traços dos bullet points, inserir, bolinha. ",
+  "ordem": [
+    "fundo",
+    "bullet-3",
+    "modulo-topo",
+    "modulo-cacos",
+    "cacos-1",
+    "logo-pilar",
+    "texto-representa",
+    "timer",
+    "foto",
+    "bullet-1",
+    "traco-1",
+    "texto-bullet-1",
+    "bullet-2",
+    "traco-2",
+    "texto-bullet-2",
+    "traco-3",
+    "texto-bullet-3"
+  ],
+  "palco": {
+    "altura": 1080,
+    "grade": {
+      "celula": [
+        384,
+        360
+      ],
+      "colunas": 5,
+      "linhas": 3
+    },
+    "largura": 1920
+  },
+  "salvoEm": "2026-11-26T17:26:45.687Z",
+  "tela": "t02"
+}

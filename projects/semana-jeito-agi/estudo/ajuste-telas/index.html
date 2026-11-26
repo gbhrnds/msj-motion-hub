@@ -126,72 +126,75 @@ const LOGOS={viver:'assets/viver_pelo_cliente_negativo.svg',agir:'assets/agirc_c
 const LOGO_RATIO={viver:1589.53/498.06,agir:1758.5/498.06,crescer:1505.1/498.1};
 const SEMANA='assets/logo-semana-do-jeito-agi-positivo.svg', SEMANA_R=699.944/714.422;
 
-function pilar({id,nome,logo,rep,bul,acento,acTxt,fotoSrc,px,py,lado,valor}){
-  const dir=lado==='dir', topoX=dir?0:2*C, topoW=dir?3*C:2*C, fx=dir?3*C:0, tx=dir?0:2*C;
-  const H=160, lw=Math.round(H*LOGO_RATIO[logo]);
+// Frame style v2: ajustes do usuário (rodada 1, 2026-11-26) consolidados e repetidos nas telas da mesma série.
+const bola=(id,nome,x,y,cor)=>rect(id,nome,x,y,18,18,cor,{raio:9});
+function pilar({id,nome,logo,rep,bul,ys,hs,acento,txtCor,bolaCor,fotoSrc,px,py,zoom,lado,valor}){
+  const dir=lado==='dir';
+  const topoX=dir?0:520, topoW=632, cacX=dir?3*C:0, cacW=dir?C:520, repX=dir?topoX+topoW+56:3*C+56, repW=dir?3*C-repX-40:C-96;
+  const bx=dir?0:2*C, fx=dir?3*C:0, H=160, lw=Math.round(H*LOGO_RATIO[logo]);
   const els=[rect('fundo','Fundo',0,0,1920,1080,'branco'),
-    rect('modulo-topo','Módulo do título',topoX,0,topoW,R,'azul')];
-  if(dir) els.push(rect('modulo-cacos','Módulo dos cacos',3*C,0,C,R,'branco'),cac('cacos-1','Cacos',3*C,0,C,R,-60,-120,560,'medio'));
-  else els.push(rect('modulo-cacos','Módulo dos cacos',0,0,2*C,R,'branco'),cac('cacos-1','Cacos 1',0,0,2*C,R,-120,-160,640,'medio'),cac('cacos-2','Cacos 2',0,0,2*C,R,380,-60,560,'medio',true));
-  els.push(img('logo-pilar','Logo do pilar',LOGOS[logo],topoX+80,64,lw,H),
-    txt('texto-representa','Representa…',topoX+86,262,900,60,44,300,'branco',rep),
+    rect('modulo-topo','Módulo do logo do pilar',topoX,0,topoW,R,'azul'),
+    img('logo-pilar','Logo do pilar',LOGOS[logo],topoX+44,100,lw,H),
+    txt('texto-representa','Representa…',repX,128,repW,120,44,300,'azul',rep),
+    rect('modulo-cacos','Módulo dos cacos',cacX,0,cacW,R,'branco'),
+    cac('cacos-1','Cacos',cacX,0,cacW,R,dir?-60:-120,dir?-120:-160,dir?560:640,'medio'),
     timer('timer',4*C,0,C,R,112,'escuro',valor),
-    foto('foto',fotoSrc,fx,R,2*C,2*R,px,py));
-  const rows=[['escuro','branco'],[acento,acTxt],['azul','branco']];
-  const tracoCor=[acento==='medio'?'medio':acento, acento==='medio'?'branco':'escuro', acento==='medio'?'medio':acento];
-  rows.forEach(([f,t],i)=>{const y=R+i*240;
-    els.push(rect('bullet-'+(i+1),'Bullet '+(i+1)+' · módulo',tx,y,3*C,240,f),
-      rect('traco-'+(i+1),'Bullet '+(i+1)+' · traço',tx+72,y+76,10,88,tracoCor[i],{raio:5}),
-      txt('texto-bullet-'+(i+1),'Bullet '+(i+1)+' · texto',tx+120,y,3*C-190,240,46,400,t,bul[i],{valign:'center'}));});
+    foto('foto',fotoSrc,fx,R,2*C,2*R,px,py,zoom),
+    rect('modulo-bullets','Módulo dos bullets',bx,R,3*C,2*R,acento)];
+  bul.forEach((t,i)=>els.push(bola('bolinha-'+(i+1),'Bullet '+(i+1)+' · bolinha',bx+95,ys[i]+17,bolaCor),
+    txt('texto-bullet-'+(i+1),'Bullet '+(i+1)+' · texto',bx+152,ys[i],880,hs[i],46,400,txtCor,t)));
   return {id,nome,els};
 }
 function respiro(id,nome,fundo,modTimer,acento,valor,variante){
-  const lw=300,lh=Math.round(lw/SEMANA_R);
+  const lw=212,lh=Math.round(lw/SEMANA_R);
   return {id,nome,els:[rect('fundo','Fundo',0,0,1920,1080,fundo),
     cac('cacos-esq-1','Cacos esquerda 1',0,0,C,1080,-380,-20,720,variante),
-    cac('cacos-esq-2','Cacos esquerda 2',0,0,C,1080,-380,700,720,variante),
+    cac('cacos-esq-2','Cacos esquerda 2',0,64,C,1080,-380,700,720,variante),
     rect('modulo-timer','Módulo do timer',C,0,3*C,2*R,modTimer),
     timer('timer',C,0,3*C,2*R,330,modTimer,valor),
     rect('modulo-logo','Módulo do logo',C,2*R,3*C,R,'branco'),
-    img('logo-semana','Logo da Semana',SEMANA,960-lw/2,2*R+(R-lh)/2,lw,lh),
+    img('logo-semana','Logo da Semana',SEMANA,960-lw/2,2*R+Math.round((R-lh)/2),lw,lh),
     rect('modulo-acento','Módulo de acento',4*C,0,C,R,acento),
     cac('cacos-dir','Cacos direita',4*C,R,C,2*R,20,0,640,variante)]};
 }
+const PESSOA_R=1034/1146;
 const DEFAULTS=[
  {id:'t01',nome:'T01 · Equação',els:[
   rect('fundo','Fundo',0,0,1920,1080,'branco'),
-  img('logo-semana','Logo da Semana',SEMANA,66,50,252,Math.round(252/SEMANA_R)),
-  rect('modulo-cacos-topo','Módulo cacos (topo)',C,0,2*C,R,'azul'),
-  cac('cacos-topo-1','Cacos topo 1',C,0,2*C,R,0,150,620,'escuro'),
-  cac('cacos-topo-2','Cacos topo 2',C,0,2*C,R,560,120,620,'escuro',true),
-  rect('modulo-textura','Módulo textura',3*C,0,C,R,'verde',{textura:true}),
-  timer('timer',4*C,0,C,R,112,'escuro','14:12'),
-  rect('modulo-proposito','Módulo Propósito',0,R,C,R,'medio'),
-  txt('texto-proposito','Texto Propósito',56,R,320,R,58,500,'branco','Propósito',{valign:'center'}),
-  rect('modulo-pilares','Módulo pilares',C,R,C,R,'azul'),
-  txt('texto-pilares','Texto pilares',C+70,R,300,R,58,500,'branco','pilares',{valign:'center'}),
-  rect('modulo-respeito','Módulo respeito',2*C,R,C,R,'escuro'),
-  txt('texto-respeito','Texto respeito e meritocracia',2*C+60,R,310,R,46,500,'branco','respeito<br>e'+NB+'meritocracia',{valign:'center'}),
-  op('op-mais-1','Operador + (1)',C-42,R+138,'+'),
-  op('op-mais-2','Operador + (2)',2*C-42,R+138,'+'),
+  img('logo-semana','Logo da Semana',SEMANA,66,50,252,257),
+  rect('modulo-cacos-topo','Módulo cacos (topo)',C,144,2*C,216,'azul'),
+  cac('cacos-topo-1','Cacos topo',C,0,616,R,0,150,620,'escuro'),
+  rect('modulo-textura','Módulo textura',3*C,0,328,R,'verde',{textura:true}),
+  timer('timer',1480,0,440,R,112,'escuro','14:12'),
+  rect('modulo-proposito','Módulo Propósito',0,R,C,R,'verde'),
+  txt('texto-proposito','Texto Propósito',24,368,336,R,58,500,'escuro','Propósito',{valign:'center',align:'center'}),
+  rect('modulo-pilares','Módulo pilares',C,R,C,R,'vclaro'),
+  txt('texto-pilares','Texto pilares',C+24,368,336,R,58,500,'escuro','pilares',{valign:'center',align:'center'}),
+  rect('modulo-respeito','Módulo respeito',2*C,R,C,R,'amarelo'),
+  txt('texto-respeito','Texto respeito e meritocracia',2*C+48,368,288,R,42,500,'escuro','respeito<br>e'+NB+'meritocracia',{valign:'center',align:'center'}),
+  op('op-mais-1','Operador + (1)',C-42,506,'+'),
+  op('op-mais-2','Operador + (2)',2*C-42,506,'+'),
   rect('modulo-resultado','Módulo resultado',0,2*R,3*C,R,'azul'),
-  txt('texto-resultado','Texto resultado',170,2*R,1000,R,80,700,'branco','uma cultura forte,<br><span class="vc">do nosso jeito</span>',{valign:'center'}),
-  op('op-igual','Operador =',44,2*R+138,'='),
-  rect('modulo-amarelo','Módulo amarelo',3*C,2*R,C,R,'amarelo'),
+  txt('texto-resultado','Texto resultado',280,800,664,200,80,700,'branco','uma cultura forte,<br><span class="vc">do nosso jeito</span>',{valign:'center'}),
+  op('op-igual','Operador =',C+C/2-42,2*R-42,'='),
+  rect('modulo-acento','Módulo de acento',3*C,2*R,C,R,'medio'),
   rect('modulo-cacos-dir','Módulo cacos (dir.)',4*C,2*R,C,R,'azul'),
   cac('cacos-dir','Cacos direita',4*C,2*R,C,R,-40,120,560,'escuro'),
-  img('pessoa','Pessoa recortada (KV)','assets/pessoa-principal.png',3*C+20,R-20,Math.round(740*800/837),740)]},
- pilar({id:'t02',nome:'T02 · Viver pelo cliente',logo:'viver',rep:'Representa quem atendemos',acento:'medio',acTxt:'branco',lado:'dir',valor:'13:40',fotoSrc:'CAN_0024',px:55,py:40,
+  img('pessoa','Pessoa recortada (CAN_9999)','assets/pessoa-CAN_9999.png',1200,340,Math.round(740*PESSOA_R),740)]},
+ pilar({id:'t02',nome:'T02 · Viver pelo cliente',logo:'viver',rep:'Representa quem atendemos',acento:'medio',txtCor:'branco',bolaCor:'branco',lado:'dir',valor:'13:40',
+   fotoSrc:'CAN_0024',px:44,py:78,zoom:121,ys:[533,641,802],hs:[56,108,108],
    bul:['A dor do cliente é a'+NB+'nossa'+NB+'dor','Conhecemos e'+NB+'utilizamos os'+NB+'produtos e'+NB+'experiências que'+NB+'oferecemos','Superamos as'+NB+'expectativas dos'+NB+'nossos'+NB+'clientes']}),
- pilar({id:'t03',nome:'T03 · Agir como empreendedor',logo:'agir',rep:'Representa os acionistas',acento:'verde',acTxt:'escuro',lado:'esq',valor:'13:22',fotoSrc:'CAN_0504',px:45,py:30,
+ pilar({id:'t03',nome:'T03 · Agir como empreendedor',logo:'agir',rep:'Representa os acionistas',acento:'verde',txtCor:'escuro',bolaCor:'escuro',lado:'esq',valor:'13:22',
+   fotoSrc:'CAN_0504',px:45,py:30,zoom:100,ys:[506,667,828],hs:[108,108,108],
    bul:['Temos responsabilidade total com os'+NB+'resultados e'+NB+'a'+NB+'perenidade da'+NB+'empresa','Nos destacamos no'+NB+'mercado por'+NB+'excelência e'+NB+'inovação','Usamos a'+NB+'força do'+NB+'grupo para'+NB+'encontrar os'+NB+'melhores'+NB+'caminhos']}),
- pilar({id:'t04',nome:'T04 · Crescer na jornada',logo:'crescer',rep:'Representa os colaboradores',acento:'amarelo',acTxt:'escuro',lado:'dir',valor:'12:58',fotoSrc:'BAIXA_time-mesa-campus',px:38,py:45,
+ pilar({id:'t04',nome:'T04 · Crescer na jornada',logo:'crescer',rep:'Representa os colaboradores',acento:'amarelo',txtCor:'escuro',bolaCor:'escuro',lado:'dir',valor:'12:58',
+   fotoSrc:'BAIXA_time-mesa-campus',px:38,py:45,zoom:100,ys:[585,693,801],hs:[56,56,56],
    bul:['Temos mentalidade de'+NB+'crescimento','Comunicamos com franqueza'+NB+'radical','Somos fanáticos por'+NB+'resultados']}),
  {id:'t05',nome:'T05 · Respeito e meritocracia',els:[
   rect('fundo','Fundo',0,0,1920,1080,'branco'),
   foto('foto','CAN_0009',0,0,4*C,2*R,50,62),
   timer('timer',4*C,0,C,R,112,'escuro','12:31'),
-  rect('modulo-textura','Módulo textura',4*C,R,C,R,'verde',{textura:true}),
+  rect('modulo-textura','Módulo textura',1608,R,312,R,'verde',{textura:true}),
   rect('modulo-frase-1','Módulo frase 1',0,2*R,3*C,R,'azul'),
   txt('texto-frase-1','Texto frase 1',90,2*R,1000,R,62,300,'branco','Pra gente, <b>respeitar</b> todas as'+NB+'pessoas é'+NB+'inegociável.',{valign:'center'}),
   rect('modulo-frase-2','Módulo frase 2',3*C,2*R,2*C,R,'escuro'),
@@ -202,13 +205,14 @@ const DEFAULTS=[
  {id:'buffer',nome:'Buffer (5 min)',els:[
   rect('fundo','Fundo',0,0,1920,1080,'azul'),
   rect('modulo-logo','Módulo do logo',C,0,3*C,3*R,'branco'),
-  img('logo-semana','Logo da Semana',SEMANA,960-280,540-Math.round(560/SEMANA_R)/2,560,Math.round(560/SEMANA_R)),
+  img('logo-semana','Logo da Semana',SEMANA,804,381,312,319),
   cac('cacos-esq','Cacos esquerda',0,0,C,2*R,-300,-40,640,'escuro'),
   rect('modulo-amarelo','Módulo amarelo',0,2*R,C,R,'amarelo'),
-  rect('modulo-textura','Módulo textura',4*C,0,C,R,'verde',{textura:true}),
+  rect('modulo-textura','Módulo textura',1608,0,312,R,'verde',{textura:true}),
   rect('modulo-cacos-dir','Módulo cacos (dir.)',4*C,R,C,2*R,'escuro'),
   cac('cacos-dir','Cacos direita',4*C,R,C,2*R,20,0,640,'medio')]},
 ];
+
 
 // ---------- estado
 const clone=o=>JSON.parse(JSON.stringify(o));
@@ -419,7 +423,7 @@ function salvar(t){salvando=salvando.then(async()=>{try{await db.doc('ajustes/'+
 $('btnCopiar').onclick=()=>{const s=JSON.stringify(serializar(tela()),null,1);
   navigator.clipboard.writeText(s).then(()=>status(db?'ok':'pend','JSON copiado: cole no chat')).catch(()=>{const ta=document.createElement('textarea');ta.value=s;ta.readOnly=true;ta.style.minHeight='160px';$('pCampos').prepend(ta);ta.select();status('pend','Selecionei o JSON no painel: copie com Ctrl+C');});};
 function resetBotao(){const box=$('resetBox');box.textContent='';box.appendChild(btn('Restaurar esta tela',resetPergunta));}
-function resetPergunta(){const box=$('resetBox');box.textContent='';const s=document.createElement('span');s.textContent='Voltar esta tela ao frame style v1?';
+function resetPergunta(){const box=$('resetBox');box.textContent='';const s=document.createElement('span');s.textContent='Voltar esta tela ao frame style v2?';
   box.append(s,btn('Restaurar',()=>{const d=clone(DEFAULTS[atual]);tela().els=d.els;sel=[];resetBotao();mudou();},null,'prim'),btn('Cancelar',resetBotao));}
 resetBotao();
 
