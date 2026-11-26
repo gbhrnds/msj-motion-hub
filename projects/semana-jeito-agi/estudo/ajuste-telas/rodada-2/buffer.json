@@ -1,0 +1,114 @@
+{
+  "elementos": {
+    "cacos-dir": {
+      "flip": true,
+      "h": 440,
+      "iw": 640,
+      "ix": 20,
+      "iy": 0,
+      "nome": "Cacos direita",
+      "tipo": "cacos",
+      "variante": "medio",
+      "w": 304,
+      "x": 1624,
+      "y": 648
+    },
+    "cacos-esq": {
+      "flip": false,
+      "h": 720,
+      "iw": 640,
+      "ix": -300,
+      "iy": -40,
+      "nome": "Cacos esquerda",
+      "tipo": "cacos",
+      "variante": "escuro",
+      "w": 384,
+      "x": 0,
+      "y": 0
+    },
+    "fundo": {
+      "cor": "azul",
+      "h": 1080,
+      "nome": "Fundo",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 1920,
+      "x": 0,
+      "y": 0
+    },
+    "logo-semana": {
+      "h": 319,
+      "nome": "Logo da Semana",
+      "tipo": "imagem",
+      "w": 312,
+      "x": 804,
+      "y": 381
+    },
+    "modulo-amarelo": {
+      "cor": "amarelo",
+      "h": 424,
+      "nome": "Módulo amarelo",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 336,
+      "x": 0,
+      "y": 656
+    },
+    "modulo-cacos-dir": {
+      "cor": "escuro",
+      "h": 288,
+      "nome": "Módulo cacos (dir.)",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 312,
+      "x": 1608,
+      "y": 360
+    },
+    "modulo-logo": {
+      "cor": "branco",
+      "h": 1080,
+      "nome": "Módulo do logo",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 1272,
+      "x": 336,
+      "y": 0
+    },
+    "modulo-textura": {
+      "cor": "verde",
+      "h": 360,
+      "nome": "Módulo textura",
+      "textura": true,
+      "tipo": "modulo",
+      "w": 312,
+      "x": 1608,
+      "y": 0
+    }
+  },
+  "nome": "Buffer (5 min)",
+  "nota": "",
+  "ordem": [
+    "fundo",
+    "modulo-logo",
+    "logo-semana",
+    "cacos-esq",
+    "modulo-amarelo",
+    "modulo-textura",
+    "modulo-cacos-dir",
+    "cacos-dir"
+  ],
+  "palco": {
+    "altura": 1080,
+    "grade": {
+      "celula": [
+        384,
+        360
+      ],
+      "colunas": 5,
+      "linhas": 3
+    },
+    "largura": 1920
+  },
+  "salvoEm": "2026-11-26T23:03:22.405Z",
+  "tela": "buffer"
+}

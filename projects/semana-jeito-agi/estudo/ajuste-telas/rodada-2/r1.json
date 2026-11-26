@@ -1,0 +1,130 @@
+{
+  "elementos": {
+    "cacos-dir": {
+      "excluido": true,
+      "flip": false,
+      "h": 1080,
+      "iw": 640,
+      "ix": 20,
+      "iy": 0,
+      "nome": "Cacos direita",
+      "tipo": "cacos",
+      "variante": "medio",
+      "w": 384,
+      "x": 1536,
+      "y": -24
+    },
+    "cacos-esq-1": {
+      "flip": false,
+      "h": 1080,
+      "iw": 720,
+      "ix": -380,
+      "iy": -20,
+      "nome": "Cacos esquerda 1",
+      "tipo": "cacos",
+      "variante": "medio",
+      "w": 384,
+      "x": 0,
+      "y": 0
+    },
+    "cacos-esq-2": {
+      "flip": false,
+      "h": 1080,
+      "iw": 720,
+      "ix": -380,
+      "iy": 700,
+      "nome": "Cacos esquerda 2",
+      "tipo": "cacos",
+      "variante": "medio",
+      "w": 384,
+      "x": 0,
+      "y": 64
+    },
+    "fundo": {
+      "cor": "azul",
+      "h": 1080,
+      "nome": "Fundo",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 1920,
+      "x": 0,
+      "y": 0
+    },
+    "logo-semana": {
+      "h": 216,
+      "nome": "Logo da Semana",
+      "tipo": "imagem",
+      "w": 212,
+      "x": 854,
+      "y": 792
+    },
+    "modulo-acento": {
+      "cor": "escuro",
+      "h": 360,
+      "nome": "Módulo de acento",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 384,
+      "x": 1536,
+      "y": 0
+    },
+    "modulo-logo": {
+      "cor": "branco",
+      "h": 360,
+      "nome": "Módulo do logo",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 1152,
+      "x": 384,
+      "y": 720
+    },
+    "modulo-timer": {
+      "cor": "azul",
+      "h": 720,
+      "nome": "Módulo do timer",
+      "textura": false,
+      "tipo": "modulo",
+      "w": 1152,
+      "x": 384,
+      "y": 0
+    },
+    "timer": {
+      "cor": "branco",
+      "fundo": "azul",
+      "h": 720,
+      "nome": "Timer",
+      "size": 330,
+      "tipo": "timer",
+      "w": 1152,
+      "x": 384,
+      "y": 0
+    }
+  },
+  "nome": "Respiro 1",
+  "nota": "",
+  "ordem": [
+    "fundo",
+    "cacos-esq-1",
+    "cacos-esq-2",
+    "modulo-timer",
+    "timer",
+    "modulo-logo",
+    "logo-semana",
+    "modulo-acento",
+    "cacos-dir"
+  ],
+  "palco": {
+    "altura": 1080,
+    "grade": {
+      "celula": [
+        384,
+        360
+      ],
+      "colunas": 5,
+      "linhas": 3
+    },
+    "largura": 1920
+  },
+  "salvoEm": "2026-11-26T23:00:59.149Z",
+  "tela": "r1"
+}

@@ -83,3 +83,27 @@ Padrão aplicado:
 
 Para o motion, o vazamento é um ótimo gancho: o módulo abre como janela e a pessoa
 "sai" dele por último.
+
+## v5: foto e recorte como elementos separados (rodada 2, 2026-11-26)
+
+Notas do usuário (arquivadas em `ajuste-telas/rodada-2/`) e o que foi feito:
+- **T02, "não cortar as cabeças":** foto reenquadrada (escala 0,8), com as três cabeças
+  dentro do módulo. A regra vale para todas as telas.
+- **T03, "não recortar a terceira pessoa; recortes na frente e foto com máscara atrás,
+  separados":**
+  - a foto com fundo (`fotomask`, atrás) e o recorte (`recorte`, na frente) agora são
+    **dois elementos independentes** na página, alinhados por padrão;
+  - para mover os dois juntos, selecione ambos;
+  - na T03, o módulo da foto passou para 900px, com o trio inteiro e a moça vazando para o
+    módulo verde;
+  - os bullets passaram para 1020px de largura.
+  - Efeito colateral: uma faixa azul de 52px no topo do módulo da foto (a foto não cobre a
+    altura toda nessa escala).
+- **T04, "substituir por uma das meninas em selfie com a placa":**
+  - entrou a PI_A0001-23 (selfie com a placa, parede dos pilares ao fundo), com a placa
+    vazando para o módulo amarelo;
+  - a OB_A0001-63 ficou recortada como alternativa (pessoas do fundo removidas do recorte);
+    troque pelo seletor "Foto"/"Recorte".
+- **T05, respiros e buffer:** mantidos como o usuário salvou (textura da T05 em célula
+  inteira; cacos da direita removidos no r1 e no r2 e espelhados no r3; buffer com módulos
+  fora da grade).
