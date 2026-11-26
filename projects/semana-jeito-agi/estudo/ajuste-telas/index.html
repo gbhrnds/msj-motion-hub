@@ -128,7 +128,7 @@ const SEMANA='assets/logo-semana-do-jeito-agi-positivo.svg', SEMANA_R=699.944/71
 
 // Frame style v2: ajustes do usuário (rodada 1, 2026-11-26) consolidados e repetidos nas telas da mesma série.
 const bola=(id,nome,x,y,cor)=>rect(id,nome,x,y,18,18,cor,{raio:9});
-function pilar({id,nome,logo,rep,bul,ys,hs,acento,txtCor,bolaCor,fotoSrc,px,py,zoom,lado,valor}){
+function pilar({id,nome,logo,rep,bul,ys,hs,acento,txtCor,bolaCor,pessoa,lado,valor}){
   const dir=lado==='dir';
   const topoX=dir?0:520, topoW=632, cacX=dir?3*C:0, cacW=dir?C:520, repX=dir?topoX+topoW+56:3*C+56, repW=dir?3*C-repX-40:C-96;
   const bx=dir?0:2*C, fx=dir?3*C:0, H=160, lw=Math.round(H*LOGO_RATIO[logo]);
@@ -139,10 +139,11 @@ function pilar({id,nome,logo,rep,bul,ys,hs,acento,txtCor,bolaCor,fotoSrc,px,py,z
     rect('modulo-cacos','Módulo dos cacos',cacX,0,cacW,R,'branco'),
     cac('cacos-1','Cacos',cacX,0,cacW,R,dir?-60:-120,dir?-120:-160,dir?560:640,'medio'),
     timer('timer',4*C,0,C,R,112,'escuro',valor),
-    foto('foto',fotoSrc,fx,R,2*C,2*R,px,py,zoom),
+    rect('modulo-pessoa','Módulo da pessoa',fx,R,2*C,2*R,'azul'),
     rect('modulo-bullets','Módulo dos bullets',bx,R,3*C,2*R,acento)];
   bul.forEach((t,i)=>els.push(bola('bolinha-'+(i+1),'Bullet '+(i+1)+' · bolinha',bx+95,ys[i]+17,bolaCor),
     txt('texto-bullet-'+(i+1),'Bullet '+(i+1)+' · texto',bx+152,ys[i],880,hs[i],46,400,txtCor,t)));
+  els.push(img('pessoa','Pessoa recortada ('+pessoa.src+')','assets/recorte-'+pessoa.src+'.png',pessoa.x,pessoa.y,pessoa.w,pessoa.h));
   return {id,nome,els};
 }
 function respiro(id,nome,fundo,modTimer,acento,valor,variante){
@@ -180,19 +181,20 @@ const DEFAULTS=[
   rect('modulo-acento','Módulo de acento',3*C,2*R,C,R,'medio'),
   rect('modulo-cacos-dir','Módulo cacos (dir.)',4*C,2*R,C,R,'azul'),
   cac('cacos-dir','Cacos direita',4*C,2*R,C,R,-40,120,560,'escuro'),
-  img('pessoa','Pessoa recortada (CAN_9999)','assets/pessoa-CAN_9999.png',1200,340,Math.round(740*PESSOA_R),740)]},
+  img('pessoa','Pessoa recortada (CAN_9999)','assets/recorte-CAN_9999.png',1200,340,666,740)]},
  pilar({id:'t02',nome:'T02 · Viver pelo cliente',logo:'viver',rep:'Representa quem atendemos',acento:'medio',txtCor:'branco',bolaCor:'branco',lado:'dir',valor:'13:40',
-   fotoSrc:'CAN_0024',px:44,py:78,zoom:121,ys:[533,641,802],hs:[56,108,108],
+   pessoa:{src:'CAN_0024',x:1136,y:488,w:800,h:592},ys:[533,641,802],hs:[56,108,108],
    bul:['A dor do cliente é a'+NB+'nossa'+NB+'dor','Conhecemos e'+NB+'utilizamos os'+NB+'produtos e'+NB+'experiências que'+NB+'oferecemos','Superamos as'+NB+'expectativas dos'+NB+'nossos'+NB+'clientes']}),
  pilar({id:'t03',nome:'T03 · Agir como empreendedor',logo:'agir',rep:'Representa os acionistas',acento:'verde',txtCor:'escuro',bolaCor:'escuro',lado:'esq',valor:'13:22',
-   fotoSrc:'CAN_0504',px:45,py:30,zoom:100,ys:[506,667,828],hs:[108,108,108],
+   pessoa:{src:'CAN_0504',x:-60,y:543,w:860,h:537},ys:[506,667,828],hs:[108,108,108],
    bul:['Temos responsabilidade total com os'+NB+'resultados e'+NB+'a'+NB+'perenidade da'+NB+'empresa','Nos destacamos no'+NB+'mercado por'+NB+'excelência e'+NB+'inovação','Usamos a'+NB+'força do'+NB+'grupo para'+NB+'encontrar os'+NB+'melhores'+NB+'caminhos']}),
  pilar({id:'t04',nome:'T04 · Crescer na jornada',logo:'crescer',rep:'Representa os colaboradores',acento:'amarelo',txtCor:'escuro',bolaCor:'escuro',lado:'dir',valor:'12:58',
-   fotoSrc:'BAIXA_time-mesa-campus',px:38,py:45,zoom:100,ys:[585,693,801],hs:[56,56,56],
+   pessoa:{src:'BAIXA_time-mesa-campus',x:1110,y:612,w:860,h:468},ys:[585,693,801],hs:[56,56,56],
    bul:['Temos mentalidade de'+NB+'crescimento','Comunicamos com franqueza'+NB+'radical','Somos fanáticos por'+NB+'resultados']}),
  {id:'t05',nome:'T05 · Respeito e meritocracia',els:[
   rect('fundo','Fundo',0,0,1920,1080,'branco'),
-  foto('foto','CAN_0009',0,0,4*C,2*R,50,62),
+  rect('modulo-pessoa','Módulo da pessoa',0,0,4*C,2*R,'azul'),
+  img('pessoa','Pessoa recortada (CAN_0009)','assets/recorte-CAN_0009.png',336,20,864,700),
   timer('timer',4*C,0,C,R,112,'escuro','12:31'),
   rect('modulo-textura','Módulo textura',1608,R,312,R,'verde',{textura:true}),
   rect('modulo-frase-1','Módulo frase 1',0,2*R,3*C,R,'azul'),
@@ -423,7 +425,7 @@ function salvar(t){salvando=salvando.then(async()=>{try{await db.doc('ajustes/'+
 $('btnCopiar').onclick=()=>{const s=JSON.stringify(serializar(tela()),null,1);
   navigator.clipboard.writeText(s).then(()=>status(db?'ok':'pend','JSON copiado: cole no chat')).catch(()=>{const ta=document.createElement('textarea');ta.value=s;ta.readOnly=true;ta.style.minHeight='160px';$('pCampos').prepend(ta);ta.select();status('pend','Selecionei o JSON no painel: copie com Ctrl+C');});};
 function resetBotao(){const box=$('resetBox');box.textContent='';box.appendChild(btn('Restaurar esta tela',resetPergunta));}
-function resetPergunta(){const box=$('resetBox');box.textContent='';const s=document.createElement('span');s.textContent='Voltar esta tela ao frame style v2?';
+function resetPergunta(){const box=$('resetBox');box.textContent='';const s=document.createElement('span');s.textContent='Voltar esta tela ao frame style v3?';
   box.append(s,btn('Restaurar',()=>{const d=clone(DEFAULTS[atual]);tela().els=d.els;sel=[];resetBotao();mudou();},null,'prim'),btn('Cancelar',resetBotao));}
 resetBotao();
 

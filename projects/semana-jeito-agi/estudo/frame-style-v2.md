@@ -39,3 +39,24 @@ direita na grade (360/720).
 - **Módulo atrás dos cacos nas telas de pilar:** na T02 estava azul e nas T03 e T04 estava
   branco. Na v2 os três ficaram brancos (a maioria).
 - **Tamanho do "Representa…":** 51px na T02 e 44px nas outras. Na v2 os três ficaram em 44px.
+
+## v3: todas as pessoas recortadas (2026-11-26)
+
+Decisão do usuário: padronizar as fotos, todas recortadas. Os recortes foram feitos
+pelo Adobe (remoção de fundo do Photoshop, skill `adobe-product-photo-cutout`) e
+estão em `kv/recortes/` em resolução cheia (CAN_9999, CAN_0024, CAN_0504,
+BAIXA_time-mesa-campus, CAN_0009). Nas telas, a foto deu lugar a um módulo azul com a
+pessoa recortada por cima, apoiada na base do quadro (como no KV). O recorte local
+anterior da CAN_9999 foi descartado.
+
+Pontos de atenção:
+- **T04 (BAIXA_time-mesa-campus):** a mesa saiu no recorte, então os notebooks
+  ficam "flutuando". Sugestão: trocar por uma foto de pé (CAN_9981, trio rindo com notebook).
+  Essa foto também só existe em baixa resolução.
+- **T05 (CAN_0009):** o grupo ocupa pouco do quadro original. Recortado, ele tem 942px
+  de altura e está sendo usado a ~700px: bom para 1080p, sem folga para zoom.
+- **T02:** camisas azuis sobre o módulo azul se misturam. Dá para trocar a cor do módulo na página.
+
+Para usar o fluxo Adobe nesta sessão, o ambiente "Vinheta-MSJ" ganhou os hosts
+`at.adobe.com`, `acp-aep-cs-blobstore-prod-va6-data.adobe.io`, `photoshop-api.adobe.io` e
+`cis-utils-storage-prod.s3-accelerate.amazonaws.com`.
