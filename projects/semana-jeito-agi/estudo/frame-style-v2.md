@@ -60,3 +60,26 @@ Pontos de atenção:
 Para usar o fluxo Adobe nesta sessão, o ambiente "Vinheta-MSJ" ganhou os hosts
 `at.adobe.com`, `acp-aep-cs-blobstore-prod-va6-data.adobe.io`, `photoshop-api.adobe.io` e
 `cis-utils-storage-prod.s3-accelerate.amazonaws.com`.
+
+## v4: foto com fundo mascarada no módulo + vazamento (2026-11-26)
+
+Pedido do usuário: as fotos com fundo voltam para dentro dos módulos (como máscara),
+e algumas partes "vazam" para os módulos vizinhos, para a tela não parecer vazia.
+
+Técnica (elemento `fotovaza` na página de ajuste, a mesma que vai para o Remotion):
+1. **Camada 1:** a foto original, recortada pela caixa do módulo (máscara).
+2. **Camada 2:** o recorte do Adobe da **mesma foto**, na mesma posição e escala,
+   recortado por uma caixa maior (a caixa do módulo + as margens de vazamento
+   topo/esquerda/direita/base). Dentro do módulo ele coincide com a foto; fora, só a pessoa aparece.
+3. A camada fica acima dos módulos vizinhos e abaixo dos textos. O vazamento nunca cobre
+   texto: ele vai para a área livre (lateral do módulo de bullets, módulo de textura).
+
+Padrão aplicado:
+- **T01:** cabelo vazando para cima, na textura; braço e placa vazando para a esquerda.
+- **T02:** ombro vazando para a esquerda, no módulo de bullets.
+- **T03:** vazamento para a direita.
+- **T04:** vazamento para a esquerda.
+- **T05:** a foto preenche o módulo, sem vazamento (o texto fica logo abaixo).
+
+Para o motion, o vazamento é um ótimo gancho: o módulo abre como janela e a pessoa
+"sai" dele por último.

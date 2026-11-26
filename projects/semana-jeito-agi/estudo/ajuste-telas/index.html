@@ -128,7 +128,10 @@ const SEMANA='assets/logo-semana-do-jeito-agi-positivo.svg', SEMANA_R=699.944/71
 
 // Frame style v2: ajustes do usuário (rodada 1, 2026-11-26) consolidados e repetidos nas telas da mesma série.
 const bola=(id,nome,x,y,cor)=>rect(id,nome,x,y,18,18,cor,{raio:9});
-function pilar({id,nome,logo,rep,bul,ys,hs,acento,txtCor,bolaCor,pessoa,lado,valor}){
+// Foto mascarada no módulo + recorte da mesma foto alinhado por cima, visível só onde passa da borda (vazamento).
+const VAZA={'CAN_9999':[1600,1066],'CAN_0024':[1600,1066],'CAN_0504':[1600,1066],'BAIXA_time-mesa-campus':[1600,1066],'CAN_0009':[1600,1067]};
+const fv=(id,src,x,y,w,h,esc,ix,iy,vaza={})=>({id,nome:'Foto com vazamento ('+src+')',tipo:'fotovaza',src,x,y,w,h,ix,iy,iw:Math.round(VAZA[src][0]*esc),vt:0,ve:0,vd:0,vb:0,...vaza});
+function pilar({id,nome,logo,rep,bul,ys,hs,acento,txtCor,bolaCor,foto:fo,lado,valor}){
   const dir=lado==='dir';
   const topoX=dir?0:520, topoW=632, cacX=dir?3*C:0, cacW=dir?C:520, repX=dir?topoX+topoW+56:3*C+56, repW=dir?3*C-repX-40:C-96;
   const bx=dir?0:2*C, fx=dir?3*C:0, H=160, lw=Math.round(H*LOGO_RATIO[logo]);
@@ -139,11 +142,10 @@ function pilar({id,nome,logo,rep,bul,ys,hs,acento,txtCor,bolaCor,pessoa,lado,val
     rect('modulo-cacos','Módulo dos cacos',cacX,0,cacW,R,'branco'),
     cac('cacos-1','Cacos',cacX,0,cacW,R,dir?-60:-120,dir?-120:-160,dir?560:640,'medio'),
     timer('timer',4*C,0,C,R,112,'escuro',valor),
-    rect('modulo-pessoa','Módulo da pessoa',fx,R,2*C,2*R,'azul'),
     rect('modulo-bullets','Módulo dos bullets',bx,R,3*C,2*R,acento)];
   bul.forEach((t,i)=>els.push(bola('bolinha-'+(i+1),'Bullet '+(i+1)+' · bolinha',bx+95,ys[i]+17,bolaCor),
     txt('texto-bullet-'+(i+1),'Bullet '+(i+1)+' · texto',bx+152,ys[i],880,hs[i],46,400,txtCor,t)));
-  els.push(img('pessoa','Pessoa recortada ('+pessoa.src+')','assets/recorte-'+pessoa.src+'.png',pessoa.x,pessoa.y,pessoa.w,pessoa.h));
+  els.splice(els.findIndex(e=>e.id==='modulo-bullets')+1,0,fv('foto',fo.src,fx,R,2*C,2*R,fo.s,fo.ix,fo.iy,fo.vaza));
   return {id,nome,els};
 }
 function respiro(id,nome,fundo,modTimer,acento,valor,variante){
@@ -181,20 +183,19 @@ const DEFAULTS=[
   rect('modulo-acento','Módulo de acento',3*C,2*R,C,R,'medio'),
   rect('modulo-cacos-dir','Módulo cacos (dir.)',4*C,2*R,C,R,'azul'),
   cac('cacos-dir','Cacos direita',4*C,2*R,C,R,-40,120,560,'escuro'),
-  img('pessoa','Pessoa recortada (CAN_9999)','assets/recorte-CAN_9999.png',1200,340,666,740)]},
+  fv('foto','CAN_9999',3*C,R,2*C,2*R,1.1,1055-3*C-Math.round(547*1.1),720-Math.round(1066*1.1),{vt:130,ve:110})]},
  pilar({id:'t02',nome:'T02 · Viver pelo cliente',logo:'viver',rep:'Representa quem atendemos',acento:'medio',txtCor:'branco',bolaCor:'branco',lado:'dir',valor:'13:40',
-   pessoa:{src:'CAN_0024',x:1136,y:488,w:800,h:592},ys:[533,641,802],hs:[56,108,108],
+   foto:{src:'CAN_0024',s:0.9,ix:1060-1152-Math.round(116*0.9),iy:720-Math.round(1066*0.9),vaza:{ve:110}},ys:[533,641,802],hs:[56,108,108],
    bul:['A dor do cliente é a'+NB+'nossa'+NB+'dor','Conhecemos e'+NB+'utilizamos os'+NB+'produtos e'+NB+'experiências que'+NB+'oferecemos','Superamos as'+NB+'expectativas dos'+NB+'nossos'+NB+'clientes']}),
  pilar({id:'t03',nome:'T03 · Agir como empreendedor',logo:'agir',rep:'Representa os acionistas',acento:'verde',txtCor:'escuro',bolaCor:'escuro',lado:'esq',valor:'13:22',
-   pessoa:{src:'CAN_0504',x:-60,y:543,w:860,h:537},ys:[506,667,828],hs:[108,108,108],
+   foto:{src:'CAN_0504',s:0.75,ix:818-Math.round(1563*0.75),iy:720-Math.round(1066*0.75),vaza:{vd:60,vt:40}},ys:[506,667,828],hs:[108,108,108],
    bul:['Temos responsabilidade total com os'+NB+'resultados e'+NB+'a'+NB+'perenidade da'+NB+'empresa','Nos destacamos no'+NB+'mercado por'+NB+'excelência e'+NB+'inovação','Usamos a'+NB+'força do'+NB+'grupo para'+NB+'encontrar os'+NB+'melhores'+NB+'caminhos']}),
  pilar({id:'t04',nome:'T04 · Crescer na jornada',logo:'crescer',rep:'Representa os colaboradores',acento:'amarelo',txtCor:'escuro',bolaCor:'escuro',lado:'dir',valor:'12:58',
-   pessoa:{src:'BAIXA_time-mesa-campus',x:1110,y:612,w:860,h:468},ys:[585,693,801],hs:[56,56,56],
+   foto:{src:'BAIXA_time-mesa-campus',s:0.7,ix:1060-1152-Math.round(45*0.7),iy:720-Math.round(1066*0.7),vaza:{ve:110}},ys:[585,693,801],hs:[56,56,56],
    bul:['Temos mentalidade de'+NB+'crescimento','Comunicamos com franqueza'+NB+'radical','Somos fanáticos por'+NB+'resultados']}),
  {id:'t05',nome:'T05 · Respeito e meritocracia',els:[
   rect('fundo','Fundo',0,0,1920,1080,'branco'),
-  rect('modulo-pessoa','Módulo da pessoa',0,0,4*C,2*R,'azul'),
-  img('pessoa','Pessoa recortada (CAN_0009)','assets/recorte-CAN_0009.png',336,20,864,700),
+  fv('foto','CAN_0009',0,0,4*C,2*R,0.96,0,700-Math.round(1018*0.96)),
   timer('timer',4*C,0,C,R,112,'escuro','12:31'),
   rect('modulo-textura','Módulo textura',1608,R,312,R,'verde',{textura:true}),
   rect('modulo-frase-1','Módulo frase 1',0,2*R,3*C,R,'azul'),
@@ -221,9 +222,9 @@ const clone=o=>JSON.parse(JSON.stringify(o));
 const BASE=['x','y','w','h','oculto','excluido'];
 const EDITAVEIS={modulo:[...BASE,'cor','textura','raio'],cacos:[...BASE,'ix','iy','iw','variante','flip'],
   texto:[...BASE,'size','peso','cor','valign','align'],timer:[...BASE,'size','fundo','cor'],
-  imagem:[...BASE],foto:[...BASE,'src','px','py','zoom'],operador:[...BASE,'size']};
+  imagem:[...BASE],foto:[...BASE,'src','px','py','zoom'],operador:[...BASE,'size'],fotovaza:[...BASE,'src','ix','iy','iw','vt','ve','vd','vb']};
 const BOOL=['textura','flip','oculto','excluido'];
-const ENUM={cor:Object.keys(COR),fundo:Object.keys(COR),variante:['medio','escuro'],valign:['top','center','bottom'],align:['left','center','right'],src:FOTOS};
+const ENUM={cor:Object.keys(COR),fundo:Object.keys(COR),variante:['medio','escuro'],valign:['top','center','bottom'],align:['left','center','right'],src:[...FOTOS,'CAN_9999','CAN_0024','CAN_0504','BAIXA_time-mesa-campus','CAN_0009']};
 let telas=clone(DEFAULTS).map(t=>({...t,nota:'',alterada:false}));
 let atual=0, sel=[], db=null;            // sel: ids selecionados; o último é o "principal" (painel)
 const hist={};                            // desfazer, por tela
@@ -275,6 +276,12 @@ function renderEl(e,comSel=true){
   else if(e.tipo==='foto'){d.style.overflow='hidden';d.style.background='#333';const i=document.createElement('img');i.src='fotos/'+e.src+'.jpg';i.alt='';i.draggable=false;
     Object.assign(i.style,{width:'100%',height:'100%',objectFit:'cover',objectPosition:`${e.px}% ${e.py}%`,transform:`scale(${e.zoom/100})`,transformOrigin:`${e.px}% ${e.py}%`,display:'block',maxWidth:'none'});d.appendChild(i);}
   else if(e.tipo==='operador'){d.classList.add('op');d.style.fontSize=e.size+'px';d.textContent=e.simbolo;}
+  else if(e.tipo==='fotovaza'){d.style.overflow='visible';
+    const bg=document.createElement('div');Object.assign(bg.style,{position:'absolute',inset:0,overflow:'hidden',background:'#333'});
+    const i1=document.createElement('img');i1.src='fotos/vaza-'+e.src+'.jpg';i1.alt='';i1.draggable=false;Object.assign(i1.style,{position:'absolute',left:e.ix+'px',top:e.iy+'px',width:e.iw+'px',maxWidth:'none'});bg.appendChild(i1);
+    const lk=document.createElement('div');Object.assign(lk.style,{position:'absolute',left:-e.ve+'px',top:-e.vt+'px',width:(e.w+e.ve+e.vd)+'px',height:(e.h+e.vt+e.vb)+'px',overflow:'hidden',pointerEvents:'none'});
+    const i2=document.createElement('img');i2.src='assets/vaza-'+e.src+'.png';i2.alt='';i2.draggable=false;Object.assign(i2.style,{position:'absolute',left:(e.ix+e.ve)+'px',top:(e.iy+e.vt)+'px',width:e.iw+'px',maxWidth:'none'});lk.appendChild(i2);
+    d.append(bg,lk);}
   if(!visivel(e)) d.style.display='none';
   if(comSel&&sel.includes(e.id)){d.classList.add('sel');if(sel.length===1){const h=document.createElement('div');h.className='handle';h.dataset.handle='1';d.appendChild(h);}}
   return d;
@@ -364,6 +371,11 @@ function renderPainel(){const P=$('pCampos'),N=$('pNome');P.textContent='';P.cla
     if(e.tipo==='timer'){col.appendChild(campoNum(e,'size','Tamanho do número',20,600));col.appendChild(swatches([e],'fundo','Fundo do timer'));col.appendChild(swatches([e],'cor','Cor do número',['branco','escuro','azul','vclaro']));}
     if(e.tipo==='foto'){col.appendChild(campoSel(e,'src','Foto',FOTOS.map(f=>[f,f])));col.appendChild(campoRange(e,'px','Enquadramento horizontal (%)',0,100));col.appendChild(campoRange(e,'py','Enquadramento vertical (%)',0,100));col.appendChild(campoRange(e,'zoom','Zoom (%)',100,250));}
     if(e.tipo==='operador'){col.appendChild(campoNum(e,'size','Tamanho do símbolo',20,200));}
+    if(e.tipo==='fotovaza'){col.appendChild(campoSel(e,'src','Foto',Object.keys(VAZA).map(f=>[f,f])));
+      const h0=document.createElement('div');h0.className='hint';h0.textContent='X/Y/Largura/Altura = a máscara (o módulo). Abaixo, a posição e o tamanho da foto dentro dela.';col.appendChild(h0);
+      const r=document.createElement('div');r.className='row';r.append(campoNum(e,'ix','Foto X'),campoNum(e,'iy','Foto Y'),campoNum(e,'iw','Foto largura',100));col.appendChild(r);
+      const hv=document.createElement('div');hv.className='f';hv.textContent='Quanto a pessoa vaza para fora do módulo (px; 0 = não vaza)';col.appendChild(hv);
+      const r2=document.createElement('div');r2.className='row';r2.append(campoNum(e,'vt','Topo'),campoNum(e,'ve','Esquerda'),campoNum(e,'vd','Direita'),campoNum(e,'vb','Base'));col.appendChild(r2);}
     const z=document.createElement('div');z.className='row2';z.append(btn('Trazer p/ frente',()=>mover(1)),btn('Enviar p/ trás',()=>mover(-1)));col.appendChild(z);
     col.appendChild(campoChk(e,'oculto','Ocultar (fica na lista)'));
   }
@@ -425,7 +437,7 @@ function salvar(t){salvando=salvando.then(async()=>{try{await db.doc('ajustes/'+
 $('btnCopiar').onclick=()=>{const s=JSON.stringify(serializar(tela()),null,1);
   navigator.clipboard.writeText(s).then(()=>status(db?'ok':'pend','JSON copiado: cole no chat')).catch(()=>{const ta=document.createElement('textarea');ta.value=s;ta.readOnly=true;ta.style.minHeight='160px';$('pCampos').prepend(ta);ta.select();status('pend','Selecionei o JSON no painel: copie com Ctrl+C');});};
 function resetBotao(){const box=$('resetBox');box.textContent='';box.appendChild(btn('Restaurar esta tela',resetPergunta));}
-function resetPergunta(){const box=$('resetBox');box.textContent='';const s=document.createElement('span');s.textContent='Voltar esta tela ao frame style v3?';
+function resetPergunta(){const box=$('resetBox');box.textContent='';const s=document.createElement('span');s.textContent='Voltar esta tela ao frame style v4?';
   box.append(s,btn('Restaurar',()=>{const d=clone(DEFAULTS[atual]);tela().els=d.els;sel=[];resetBotao();mudou();},null,'prim'),btn('Cancelar',resetBotao));}
 resetBotao();
 
