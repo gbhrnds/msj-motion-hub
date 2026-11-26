@@ -239,3 +239,26 @@ Já está preparado no projeto:
    - E1–E6: seguir o KV;
    - logo negativo da Semana;
    - 1 mp4 ou 3.
+
+---
+
+## 8. Decisões do usuário (2026-11-26)
+
+| Tema | Decisão |
+|---|---|
+| Respiro | Pode sugerir frase ou ir só com timer. Objetivo: **reforçar pilares e comportamentos** |
+| Logos dos pilares | Os três existem em `brand/logos/`. **A cor do traço de cada logo é a cor de destaque da tela** |
+| Destaques | T02 Viver pelo cliente → **azulMedio** · T03 Agir como empreendedor → **verde** · T04 Crescer na jornada → **amarelo** (substitui a tabela "Variação da série" da §3) |
+| Bold | Bullets sem destaque. T05: **respeitar** e **meritocracia** (caixa da redação mantida) |
+| Transições | A entre conteúdos, B + C nos respiros, D uma vez por volta |
+| Entrega | **Um mp4 único** para as 3 lives |
+
+**Logos com texto vivo:** `viver_pelo_cliente_*` e `agirc_como_empreendedor_*`
+trazem o texto como `<text>` e caem para Times em `<img>`. Corrigir convertendo
+em contorno com a própria Agibank Sans, por script ou pelo Illustrator.
+
+**Proposta de respiro (sugestão, pede aprovação):** timer grande + o logo de um
+pilar, alternando os três ao longo das voltas. Sem frase nova; cada pilar
+aparece ~6 vezes em 10 min. Opcional: o propósito oficial da parede, "Lutar por
+uma experiência bancária que acolhe e encoraja todos os brasileiros", no respiro
+depois da T01.
