@@ -1,0 +1,367 @@
+<title>Ajuste Semana do Jeito Agi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: barra de telas no topo, palco 1920x1080 em escala à esquerda, painel de propriedades à direita (empilha no celular). Visual único escuro, para o palco ser o único ponto de cor. */
+@font-face{font-family:AS;font-weight:300;src:url(assets/AgibankSans-Light.woff2) format("woff2")}
+@font-face{font-family:AS;font-weight:400;src:url(assets/AgibankSans-Regular.woff2) format("woff2")}
+@font-face{font-family:AS;font-weight:500;src:url(assets/AgibankSans-Medium.woff2) format("woff2")}
+@font-face{font-family:AS;font-weight:700;src:url(assets/AgibankSans-Bold.woff2) format("woff2")}
+:root{
+  color-scheme:dark;
+  --chrome:#0B1020; --chrome-2:#121933; --linha:#26305A; --texto:#E7EBF7; --texto-2:#9AA4C7; --sel:#7CF0FF; --ok:#77DF40; --aviso:#FFD600;
+  --azul:#0064F5; --medio:#0033B0; --escuro:#000F44; --verde:#77DF40; --vclaro:#C9FF90; --amarelo:#FFD600; --branco:#FFFFFF;
+  --ui:AS,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{background:var(--chrome);color:var(--texto);font-family:var(--ui);font-size:14px}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 32px}
+header{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-bottom:12px}
+h1{font-size:18px;font-weight:700;margin:0;letter-spacing:.01em}
+.status{font-size:12px;color:var(--texto-2);display:flex;align-items:center;gap:6px}
+.status i{width:8px;height:8px;border-radius:4px;background:var(--texto-2);display:inline-block}
+.status.ok i{background:var(--ok)} .status.pend i{background:var(--aviso)} .status.err i{background:#ff6b6b}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px}
+.tab{flex:0 0 auto;background:var(--chrome-2);border:1px solid var(--linha);color:var(--texto);border-radius:10px;padding:6px;cursor:pointer;display:flex;flex-direction:column;gap:5px;align-items:flex-start;font:500 12px var(--ui)}
+.tab canvas,.tab .mini{width:128px;height:72px;border-radius:4px;display:block;background:#222}
+.tab[aria-current="true"]{border-color:var(--sel);box-shadow:0 0 0 1px var(--sel)}
+.tab .dot{width:6px;height:6px;border-radius:3px;background:var(--aviso);display:inline-block;margin-left:4px}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}
+@media (max-width:900px){.main{grid-template-columns:minmax(0,1fr)}}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;font-size:12px;color:var(--texto-2)}
+.toolbar label{display:flex;gap:6px;align-items:center;cursor:pointer}
+button{font:500 12px var(--ui);color:var(--texto);background:var(--chrome-2);border:1px solid var(--linha);border-radius:8px;padding:6px 10px;cursor:pointer}
+button:hover{border-color:var(--texto-2)} button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--sel);outline-offset:1px}
+button.prim{background:var(--azul);border-color:var(--azul);color:#fff}
+.stagebox{position:relative;width:100%;aspect-ratio:16/9;max-width:100%;background:#000;border-radius:6px;overflow:hidden;touch-action:none}
+.stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;background:#fff;font-family:AS,Arial,sans-serif}
+.el{position:absolute}
+.el.sel{outline:3px solid var(--sel);outline-offset:-1px;z-index:900}
+.el.hov{outline:2px dashed rgba(124,240,255,.6);outline-offset:-1px}
+.handle{position:absolute;width:26px;height:26px;right:-13px;bottom:-13px;background:var(--sel);border:3px solid #001;border-radius:4px;cursor:nwse-resize;z-index:901}
+.grid{position:absolute;inset:0;pointer-events:none;z-index:800;background-image:linear-gradient(to right,rgba(255,0,140,.75) 2px,transparent 2px),linear-gradient(to bottom,rgba(255,0,140,.75) 2px,transparent 2px);background-size:384px 360px}
+.ghost{position:absolute;color:#fff;opacity:.41;font-weight:300;font-size:58px;line-height:61px;white-space:nowrap;left:16px}
+.txt{position:absolute;display:flex;line-height:1.14}
+.txt>.conteudo{width:100%}
+.vc{color:var(--vclaro)}
+.op{border-radius:50%;background:#fff;color:var(--escuro);font-weight:700;display:flex;align-items:center;justify-content:center}
+.panel{background:var(--chrome-2);border:1px solid var(--linha);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel h2{font-size:13px;margin:0;color:var(--texto-2);font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+.panel .nome{font-size:16px;font-weight:700;margin-top:4px}
+.row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.f{display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--texto-2);min-width:0}
+input,select,textarea{font:400 13px var(--ui);color:var(--texto);background:var(--chrome);border:1px solid var(--linha);border-radius:6px;padding:5px 6px;width:100%;min-width:0;font-variant-numeric:tabular-nums}
+input[type=range]{padding:0}
+input[type=checkbox]{width:auto}
+textarea{min-height:84px;resize:vertical}
+.swatches{display:flex;flex-wrap:wrap;gap:6px}
+.sw{width:30px;height:30px;border-radius:6px;border:2px solid var(--linha);cursor:pointer;padding:0}
+.sw[aria-pressed="true"]{border-color:var(--sel);box-shadow:0 0 0 2px var(--sel)}
+.lista{display:flex;flex-direction:column;gap:2px;max-height:220px;overflow:auto;border:1px solid var(--linha);border-radius:8px;padding:4px}
+.lista button{text-align:left;border:0;background:transparent;padding:4px 6px;border-radius:5px;display:flex;justify-content:space-between;gap:6px}
+.lista button[aria-current="true"]{background:var(--linha)}
+.lista button .k{color:var(--texto-2);font-size:11px}
+.copy{font-size:12px;color:var(--texto-2);background:var(--chrome);border:1px solid var(--linha);border-radius:8px;padding:8px;line-height:1.4}
+.hint{font-size:11.5px;color:var(--texto-2);line-height:1.45}
+.confirm{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Ajuste · Semana do Jeito Agi</h1>
+    <span class="status" id="status" role="status"><i></i><span id="statusTxt">Conectando…</span></span>
+    <span style="flex:1"></span>
+    <button id="btnCopiar" type="button">Copiar JSON da tela</button>
+  </header>
+
+  <nav class="tabs" id="tabs" aria-label="Telas"></nav>
+
+  <div class="main">
+    <section style="min-width:0">
+      <div class="toolbar">
+        <label><input type="checkbox" id="optGrade" checked> Grade 5×3</label>
+        <label><input type="checkbox" id="optIma" checked> Ímã na grade</label>
+        <span>Arraste para mover · alça azul para redimensionar · setas movem 1px (Shift = 10px) · Alt solta o ímã</span>
+      </div>
+      <div class="stagebox" id="stagebox"><div class="stage" id="stage"></div></div>
+      <div class="f" style="margin-top:12px">
+        <label for="nota" style="font-size:12px;color:var(--texto)">Observações desta tela (eu leio junto com os ajustes)</label>
+        <textarea id="nota" placeholder="Ex.: quero o título mais perto do topo; a foto pode ser a CAN_9307…"></textarea>
+      </div>
+    </section>
+
+    <aside class="panel" id="panel" aria-label="Propriedades">
+      <div><h2>Elemento</h2><div class="nome" id="pNome">Nenhum selecionado</div></div>
+      <div id="pCampos" class="hint">Clique num elemento do palco ou da lista abaixo.</div>
+      <div><h2 style="margin-bottom:6px">Camadas</h2><div class="lista" id="lista"></div></div>
+      <div class="confirm" id="resetBox"></div>
+    </aside>
+  </div>
+</div>
+
+<script>
+(()=>{
+const C=384,R=360;
+const COR={azul:'#0064F5',medio:'#0033B0',escuro:'#000F44',verde:'#77DF40',vclaro:'#C9FF90',amarelo:'#FFD600',branco:'#FFFFFF'};
+const NOMECOR={azul:'Azul Agibank',medio:'Azul médio',escuro:'Azul escuro',verde:'Verde',vclaro:'Verde claro',amarelo:'Amarelo',branco:'Branco'};
+const FOTOS=['CAN_0009','CAN_0024','CAN_0089','CAN_0292','CAN_0504','CAN_0521-2','CAN_0527-2','CAN_0819','CAN_9307','CAN_9478','CAN_9577','CAN_9803','CAN_9981','CAN_9999','CAN_mesa-redonda-dupla','DSC04607','DSC09735','OB_A0001-63','PI_A0001-23','BAIXA_colaboradora-tela-nyse','BAIXA_time-mesa-campus'];
+const NB=' ';
+
+// ---------- telas padrão (frame style v1 + respiro só com logo da Semana)
+const rect=(id,nome,x,y,w,h,cor,extra={})=>({id,nome,tipo:'modulo',x,y,w,h,cor,textura:false,...extra});
+const cac=(id,nome,x,y,w,h,ix,iy,iw,variante='medio',flip=false)=>({id,nome,tipo:'cacos',x,y,w,h,ix,iy,iw,variante,flip});
+const txt=(id,nome,x,y,w,h,size,peso,cor,html,extra={})=>({id,nome,tipo:'texto',x,y,w,h,size,peso,cor,html,valign:'top',align:'left',...extra});
+const timer=(id,x,y,w,h,size,fundo='escuro',valor='14:12')=>({id,nome:'Timer',tipo:'timer',x,y,w,h,size,fundo,cor:'branco',valor});
+const img=(id,nome,src,x,y,w,h)=>({id,nome,tipo:'imagem',src,x,y,w,h});
+const foto=(id,src,x,y,w,h,px=50,py=50,zoom=100)=>({id,nome:'Foto',tipo:'foto',src,x,y,w,h,px,py,zoom});
+const op=(id,nome,x,y,simbolo)=>({id,nome,tipo:'operador',x,y,w:84,h:84,size:64,simbolo});
+const LOGOS={viver:'assets/viver_pelo_cliente_negativo.svg',agir:'assets/agirc_como_empreendedor_negativo.svg',crescer:'assets/crescer_na_jornada_negativo.svg'};
+const LOGO_RATIO={viver:1589.53/498.06,agir:1758.5/498.06,crescer:1505.1/498.1};
+const SEMANA='assets/logo-semana-do-jeito-agi-positivo.svg', SEMANA_R=699.944/714.422;
+
+function pilar({id,nome,logo,rep,bul,acento,acTxt,fotoSrc,px,py,lado,valor}){
+  const dir=lado==='dir', topoX=dir?0:2*C, topoW=dir?3*C:2*C, fx=dir?3*C:0, tx=dir?0:2*C;
+  const H=160, lw=Math.round(H*LOGO_RATIO[logo]);
+  const els=[rect('fundo','Fundo',0,0,1920,1080,'branco'),
+    rect('modulo-topo','Módulo do título',topoX,0,topoW,R,'azul')];
+  if(dir) els.push(rect('modulo-cacos','Módulo dos cacos',3*C,0,C,R,'branco'),cac('cacos-1','Cacos',3*C,0,C,R,-60,-120,560,'medio'));
+  else els.push(rect('modulo-cacos','Módulo dos cacos',0,0,2*C,R,'branco'),cac('cacos-1','Cacos 1',0,0,2*C,R,-120,-160,640,'medio'),cac('cacos-2','Cacos 2',0,0,2*C,R,380,-60,560,'medio',true));
+  els.push(img('logo-pilar','Logo do pilar',LOGOS[logo],topoX+80,64,lw,H),
+    txt('texto-representa','Representa…',topoX+86,262,900,60,44,300,'branco',rep),
+    timer('timer',4*C,0,C,R,112,'escuro',valor),
+    foto('foto',fotoSrc,fx,R,2*C,2*R,px,py));
+  const rows=[['escuro','branco'],[acento,acTxt],['azul','branco']];
+  const tracoCor=[acento==='medio'?'medio':acento, acento==='medio'?'branco':'escuro', acento==='medio'?'medio':acento];
+  rows.forEach(([f,t],i)=>{const y=R+i*240;
+    els.push(rect('bullet-'+(i+1),'Bullet '+(i+1)+' · módulo',tx,y,3*C,240,f),
+      rect('traco-'+(i+1),'Bullet '+(i+1)+' · traço',tx+72,y+76,10,88,tracoCor[i],{raio:5}),
+      txt('texto-bullet-'+(i+1),'Bullet '+(i+1)+' · texto',tx+120,y,3*C-190,240,46,400,t,bul[i],{valign:'center'}));});
+  return {id,nome,els};
+}
+function respiro(id,nome,fundo,modTimer,acento,valor,variante){
+  const lw=300,lh=Math.round(lw/SEMANA_R);
+  return {id,nome,els:[rect('fundo','Fundo',0,0,1920,1080,fundo),
+    cac('cacos-esq-1','Cacos esquerda 1',0,0,C,1080,-380,-20,720,variante),
+    cac('cacos-esq-2','Cacos esquerda 2',0,0,C,1080,-380,700,720,variante),
+    rect('modulo-timer','Módulo do timer',C,0,3*C,2*R,modTimer),
+    timer('timer',C,0,3*C,2*R,330,modTimer,valor),
+    rect('modulo-logo','Módulo do logo',C,2*R,3*C,R,'branco'),
+    img('logo-semana','Logo da Semana',SEMANA,960-lw/2,2*R+(R-lh)/2,lw,lh),
+    rect('modulo-acento','Módulo de acento',4*C,0,C,R,acento),
+    cac('cacos-dir','Cacos direita',4*C,R,C,2*R,20,0,640,variante)]};
+}
+const DEFAULTS=[
+ {id:'t01',nome:'T01 · Equação',els:[
+  rect('fundo','Fundo',0,0,1920,1080,'branco'),
+  img('logo-semana','Logo da Semana',SEMANA,66,50,252,Math.round(252/SEMANA_R)),
+  rect('modulo-cacos-topo','Módulo cacos (topo)',C,0,2*C,R,'azul'),
+  cac('cacos-topo-1','Cacos topo 1',C,0,2*C,R,0,150,620,'escuro'),
+  cac('cacos-topo-2','Cacos topo 2',C,0,2*C,R,560,120,620,'escuro',true),
+  rect('modulo-textura','Módulo textura',3*C,0,C,R,'verde',{textura:true}),
+  timer('timer',4*C,0,C,R,112,'escuro','14:12'),
+  rect('modulo-proposito','Módulo Propósito',0,R,C,R,'medio'),
+  txt('texto-proposito','Texto Propósito',56,R,320,R,58,500,'branco','Propósito',{valign:'center'}),
+  rect('modulo-pilares','Módulo pilares',C,R,C,R,'azul'),
+  txt('texto-pilares','Texto pilares',C+70,R,300,R,58,500,'branco','pilares',{valign:'center'}),
+  rect('modulo-respeito','Módulo respeito',2*C,R,C,R,'escuro'),
+  txt('texto-respeito','Texto respeito e meritocracia',2*C+60,R,310,R,46,500,'branco','respeito<br>e'+NB+'meritocracia',{valign:'center'}),
+  op('op-mais-1','Operador + (1)',C-42,R+138,'+'),
+  op('op-mais-2','Operador + (2)',2*C-42,R+138,'+'),
+  rect('modulo-resultado','Módulo resultado',0,2*R,3*C,R,'azul'),
+  txt('texto-resultado','Texto resultado',170,2*R,1000,R,80,700,'branco','uma cultura forte,<br><span class="vc">do nosso jeito</span>',{valign:'center'}),
+  op('op-igual','Operador =',44,2*R+138,'='),
+  rect('modulo-amarelo','Módulo amarelo',3*C,2*R,C,R,'amarelo'),
+  rect('modulo-cacos-dir','Módulo cacos (dir.)',4*C,2*R,C,R,'azul'),
+  cac('cacos-dir','Cacos direita',4*C,2*R,C,R,-40,120,560,'escuro'),
+  img('pessoa','Pessoa recortada (KV)','assets/pessoa-principal.png',3*C+20,R-20,Math.round(740*800/837),740)]},
+ pilar({id:'t02',nome:'T02 · Viver pelo cliente',logo:'viver',rep:'Representa quem atendemos',acento:'medio',acTxt:'branco',lado:'dir',valor:'13:40',fotoSrc:'CAN_0024',px:55,py:40,
+   bul:['A dor do cliente é a'+NB+'nossa'+NB+'dor','Conhecemos e'+NB+'utilizamos os'+NB+'produtos e'+NB+'experiências que'+NB+'oferecemos','Superamos as'+NB+'expectativas dos'+NB+'nossos'+NB+'clientes']}),
+ pilar({id:'t03',nome:'T03 · Agir como empreendedor',logo:'agir',rep:'Representa os acionistas',acento:'verde',acTxt:'escuro',lado:'esq',valor:'13:22',fotoSrc:'CAN_0504',px:45,py:30,
+   bul:['Temos responsabilidade total com os'+NB+'resultados e'+NB+'a'+NB+'perenidade da'+NB+'empresa','Nos destacamos no'+NB+'mercado por'+NB+'excelência e'+NB+'inovação','Usamos a'+NB+'força do'+NB+'grupo para'+NB+'encontrar os'+NB+'melhores'+NB+'caminhos']}),
+ pilar({id:'t04',nome:'T04 · Crescer na jornada',logo:'crescer',rep:'Representa os colaboradores',acento:'amarelo',acTxt:'escuro',lado:'dir',valor:'12:58',fotoSrc:'BAIXA_time-mesa-campus',px:38,py:45,
+   bul:['Temos mentalidade de'+NB+'crescimento','Comunicamos com franqueza'+NB+'radical','Somos fanáticos por'+NB+'resultados']}),
+ {id:'t05',nome:'T05 · Respeito e meritocracia',els:[
+  rect('fundo','Fundo',0,0,1920,1080,'branco'),
+  foto('foto','CAN_0009',0,0,4*C,2*R,50,62),
+  timer('timer',4*C,0,C,R,112,'escuro','12:31'),
+  rect('modulo-textura','Módulo textura',4*C,R,C,R,'verde',{textura:true}),
+  rect('modulo-frase-1','Módulo frase 1',0,2*R,3*C,R,'azul'),
+  txt('texto-frase-1','Texto frase 1',90,2*R,1000,R,62,300,'branco','Pra gente, <b>respeitar</b> todas as'+NB+'pessoas é'+NB+'inegociável.',{valign:'center'}),
+  rect('modulo-frase-2','Módulo frase 2',3*C,2*R,2*C,R,'escuro'),
+  txt('texto-frase-2','Texto frase 2',3*C+70,2*R,640,R,62,300,'branco','E a'+NB+'<b class="vc">meritocracia</b> é'+NB+'uma crença real.',{valign:'center'})]},
+ respiro('r1','Respiro 1','escuro','azul','medio','13:55','medio'),
+ respiro('r2','Respiro 2','azul','escuro','verde','12:47','escuro'),
+ respiro('r3','Respiro 3','medio','azul','amarelo','11:39','escuro'),
+ {id:'buffer',nome:'Buffer (5 min)',els:[
+  rect('fundo','Fundo',0,0,1920,1080,'azul'),
+  rect('modulo-logo','Módulo do logo',C,0,3*C,3*R,'branco'),
+  img('logo-semana','Logo da Semana',SEMANA,960-280,540-Math.round(560/SEMANA_R)/2,560,Math.round(560/SEMANA_R)),
+  cac('cacos-esq','Cacos esquerda',0,0,C,2*R,-300,-40,640,'escuro'),
+  rect('modulo-amarelo','Módulo amarelo',0,2*R,C,R,'amarelo'),
+  rect('modulo-textura','Módulo textura',4*C,0,C,R,'verde',{textura:true}),
+  rect('modulo-cacos-dir','Módulo cacos (dir.)',4*C,R,C,2*R,'escuro'),
+  cac('cacos-dir','Cacos direita',4*C,R,C,2*R,20,0,640,'medio')]},
+];
+
+// ---------- estado
+const clone=o=>JSON.parse(JSON.stringify(o));
+const EDITAVEIS={modulo:['x','y','w','h','cor','textura','oculto','raio'],cacos:['x','y','w','h','ix','iy','iw','variante','flip','oculto'],
+  texto:['x','y','w','h','size','peso','cor','valign','align','oculto'],timer:['x','y','w','h','size','fundo','cor','oculto'],
+  imagem:['x','y','w','h','oculto'],foto:['x','y','w','h','src','px','py','zoom','oculto'],operador:['x','y','w','h','size','oculto']};
+const ENUM={cor:Object.keys(COR),fundo:Object.keys(COR),variante:['medio','escuro'],valign:['top','center','bottom'],align:['left','center','right'],src:FOTOS};
+let telas=clone(DEFAULTS).map(t=>({...t,nota:'',ordem:t.els.map(e=>e.id),alterada:false}));
+let atual=0, selId=null, db=null;
+const $=id=>document.getElementById(id);
+const tela=()=>telas[atual];
+const el=id=>tela().els.find(e=>e.id===id);
+
+// mescla o que veio do banco: só propriedades permitidas, com tipo checado (o texto nunca vem do banco)
+function aplicarSalvo(t,doc){
+  if(!doc||typeof doc!=='object') return;
+  if(typeof doc.nota==='string') t.nota=doc.nota.slice(0,4000);
+  const salvos=doc.elementos&&typeof doc.elementos==='object'?doc.elementos:{};
+  for(const e of t.els){const s=salvos[e.id]; if(!s||typeof s!=='object') continue;
+    for(const k of EDITAVEIS[e.tipo]){ if(!(k in s)) continue; const v=s[k];
+      if(ENUM[k]){ if(ENUM[k].includes(v)) e[k]=v; }
+      else if(k==='textura'||k==='flip'||k==='oculto'){ e[k]=!!v; }
+      else if(typeof v==='number'&&isFinite(v)) e[k]=Math.round(v*10)/10; } }
+  if(Array.isArray(doc.ordem)){const ids=t.els.map(e=>e.id); const ok=doc.ordem.filter(i=>ids.includes(i));
+    if(ok.length===ids.length){t.els.sort((a,b)=>ok.indexOf(a.id)-ok.indexOf(b.id));}}
+  t.alterada=true;
+}
+function serializar(t){const elementos={};for(const e of t.els){const o={};for(const k of EDITAVEIS[e.tipo]) if(e[k]!==undefined) o[k]=e[k];o.nome=e.nome;o.tipo=e.tipo;elementos[e.id]=o;}
+  return {tela:t.id,nome:t.nome,nota:t.nota,ordem:t.els.map(e=>e.id),elementos,palco:{largura:1920,altura:1080,grade:{colunas:5,linhas:3,celula:[C,R]}}};}
+
+// ---------- render
+function renderEl(e){
+  const d=document.createElement('div'); d.className='el'; d.dataset.id=e.id;
+  Object.assign(d.style,{left:e.x+'px',top:e.y+'px',width:e.w+'px',height:e.h+'px'});
+  if(e.oculto) d.style.display='none';
+  if(e.tipo==='modulo'){d.style.background=COR[e.cor]; if(e.raio) d.style.borderRadius=e.raio+'px'; d.style.overflow='hidden';
+    if(e.textura) for(let i=0;i<Math.ceil(e.h/61)+1;i++){const g=document.createElement('div');g.className='ghost';g.style.top=(-6+i*61)+'px';g.textContent='O Jeito Agi';d.appendChild(g);} }
+  else if(e.tipo==='cacos'){d.style.overflow='hidden';const i=document.createElement('img');i.src=e.variante==='escuro'?'assets/cacos-escuro.svg':'assets/cacos.svg';i.alt='';i.draggable=false;
+    Object.assign(i.style,{position:'absolute',left:e.ix+'px',top:e.iy+'px',width:e.iw+'px',maxWidth:'none',transform:e.flip?'scaleX(-1)':'none'});d.appendChild(i);}
+  else if(e.tipo==='texto'){d.classList.add('txt');d.style.alignItems={top:'flex-start',center:'center',bottom:'flex-end'}[e.valign];
+    const t=document.createElement('div');t.className='conteudo';t.innerHTML=e.html; // conteúdo fixo da redação (vem deste arquivo, nunca do banco)
+    Object.assign(t.style,{color:COR[e.cor],fontSize:e.size+'px',fontWeight:e.peso,textAlign:e.align});d.appendChild(t);
+    t.querySelectorAll('b').forEach(b=>b.style.fontWeight=700);}
+  else if(e.tipo==='timer'){d.style.background=COR[e.fundo];d.style.display=e.oculto?'none':'flex';d.style.alignItems='center';d.style.justifyContent='center';
+    const t=document.createElement('div');t.textContent=e.valor;Object.assign(t.style,{color:COR[e.cor],fontSize:e.size+'px',fontWeight:700,fontVariantNumeric:'tabular-nums',lineHeight:1,letterSpacing:'-.01em'});d.appendChild(t);}
+  else if(e.tipo==='imagem'){const i=document.createElement('img');i.src=e.src;i.alt='';i.draggable=false;Object.assign(i.style,{width:'100%',height:'100%',display:'block',maxWidth:'none'});d.appendChild(i);}
+  else if(e.tipo==='foto'){d.style.overflow='hidden';d.style.background='#333';const i=document.createElement('img');i.src='fotos/'+e.src+'.jpg';i.alt='';i.draggable=false;
+    Object.assign(i.style,{width:'100%',height:'100%',objectFit:'cover',objectPosition:`${e.px}% ${e.py}%`,transform:`scale(${e.zoom/100})`,transformOrigin:`${e.px}% ${e.py}%`,display:'block',maxWidth:'none'});d.appendChild(i);}
+  else if(e.tipo==='operador'){d.classList.add('op');d.style.fontSize=e.size+'px';d.textContent=e.simbolo;}
+  if(e.id===selId){d.classList.add('sel');const h=document.createElement('div');h.className='handle';h.dataset.handle='1';d.appendChild(h);}
+  return d;
+}
+function render(){
+  const st=$('stage'); st.textContent='';
+  for(const e of tela().els) st.appendChild(renderEl(e));
+  if($('optGrade').checked){const g=document.createElement('div');g.className='grid';st.appendChild(g);}
+  escala(); renderLista(); renderPainel(); renderTabs(); $('nota').value=tela().nota;
+}
+function escala(){const box=$('stagebox');$('stage').style.transform=`scale(${box.clientWidth/1920})`;}
+new ResizeObserver(escala).observe($('stagebox'));
+
+function renderTabs(){const nav=$('tabs');nav.textContent='';
+  telas.forEach((t,i)=>{const b=document.createElement('button');b.type='button';b.className='tab';b.setAttribute('aria-current',i===atual?'true':'false');
+    const mini=document.createElement('div');mini.className='mini';mini.style.position='relative';mini.style.overflow='hidden';
+    const s=document.createElement('div');Object.assign(s.style,{position:'absolute',left:0,top:0,width:'1920px',height:'1080px',transform:'scale(0.0667)',transformOrigin:'0 0',fontFamily:'AS,Arial,sans-serif'});
+    const prevSel=selId;selId=null;for(const e of t.els) s.appendChild(renderEl(e));selId=prevSel;mini.appendChild(s);
+    const l=document.createElement('span');l.textContent=t.nome;if(t.alterada){const d=document.createElement('span');d.className='dot';d.title='Tem ajustes salvos';l.appendChild(d);}
+    b.append(mini,l);b.onclick=()=>{atual=i;selId=null;render();};nav.appendChild(b);});}
+
+function renderLista(){const L=$('lista');L.textContent='';
+  [...tela().els].reverse().forEach(e=>{const b=document.createElement('button');b.type='button';b.setAttribute('aria-current',e.id===selId?'true':'false');
+    const n=document.createElement('span');n.textContent=e.nome+(e.oculto?' (oculto)':'');const k=document.createElement('span');k.className='k';k.textContent=e.tipo;
+    b.append(n,k);b.onclick=()=>{selId=e.id;render();};L.appendChild(b);});}
+
+// ---------- painel
+function campoNum(e,k,rot,min,max,step=1){const f=document.createElement('label');f.className='f';f.textContent=rot;const i=document.createElement('input');i.type='number';i.value=e[k];if(min!=null)i.min=min;if(max!=null)i.max=max;i.step=step;i.id='p-'+k;
+  i.onchange=()=>{const v=parseFloat(i.value);if(isFinite(v)){e[k]=v;mudou();}};f.appendChild(i);return f;}
+function campoSel(e,k,rot,opts){const f=document.createElement('label');f.className='f';f.textContent=rot;const s=document.createElement('select');s.id='p-'+k;
+  opts.forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o.textContent=t;if(e[k]===v)o.selected=true;s.appendChild(o);});
+  s.onchange=()=>{e[k]=s.value;mudou();};f.appendChild(s);return f;}
+function campoChk(e,k,rot){const f=document.createElement('label');f.className='f';f.style.flexDirection='row';f.style.alignItems='center';f.style.gap='6px';const i=document.createElement('input');i.type='checkbox';i.checked=!!e[k];i.id='p-'+k;
+  i.onchange=()=>{e[k]=i.checked;mudou();};f.append(i,document.createTextNode(rot));return f;}
+function campoRange(e,k,rot,min,max){const f=document.createElement('label');f.className='f';const sp=document.createElement('span');sp.textContent=`${rot}: ${e[k]}`;const i=document.createElement('input');i.type='range';i.min=min;i.max=max;i.value=e[k];i.id='p-'+k;
+  i.oninput=()=>{e[k]=+i.value;sp.textContent=`${rot}: ${e[k]}`;renderStageSo();};i.onchange=()=>mudou();f.append(sp,i);return f;}
+function swatches(e,k,rot,permitidas=Object.keys(COR)){const w=document.createElement('div');const h=document.createElement('div');h.className='f';h.textContent=rot;
+  const g=document.createElement('div');g.className='swatches';permitidas.forEach(c=>{const b=document.createElement('button');b.type='button';b.className='sw';b.style.background=COR[c];b.title=NOMECOR[c];b.setAttribute('aria-label',NOMECOR[c]);b.setAttribute('aria-pressed',e[k]===c?'true':'false');
+    b.onclick=()=>{e[k]=c;mudou();};g.appendChild(b);});w.append(h,g);return w;}
+function renderPainel(){const P=$('pCampos'),N=$('pNome');P.textContent='';P.className='';
+  const e=selId&&el(selId); if(!e){N.textContent='Nenhum selecionado';P.className='hint';P.textContent='Clique num elemento do palco ou da lista de camadas.';return;}
+  N.textContent=e.nome; const col=document.createElement('div');col.style.display='flex';col.style.flexDirection='column';col.style.gap='10px';
+  const pos=document.createElement('div');pos.className='row';pos.append(campoNum(e,'x','X'),campoNum(e,'y','Y'),campoNum(e,'w','Largura',1),campoNum(e,'h','Altura',1));col.appendChild(pos);
+  if(e.tipo==='modulo'){col.appendChild(swatches(e,'cor','Cor do módulo'));col.appendChild(campoChk(e,'textura','Textura “O Jeito Agi”'));}
+  if(e.tipo==='cacos'){const r=document.createElement('div');r.className='row';r.append(campoNum(e,'ix','Desloc. X'),campoNum(e,'iy','Desloc. Y'),campoNum(e,'iw','Tamanho',50));col.appendChild(r);
+    const r2=document.createElement('div');r2.className='row2';r2.append(campoSel(e,'variante','Cor dos cacos',[['medio','Azul médio'],['escuro','Azul escuro']]),campoChk(e,'flip','Espelhar'));col.appendChild(r2);
+    const h=document.createElement('div');h.className='hint';h.textContent='X/Y/Largura/Altura = janela onde os cacos aparecem. Deslocamento e tamanho = o desenho dos cacos dentro dela.';col.appendChild(h);}
+  if(e.tipo==='texto'){const c=document.createElement('div');c.className='copy';c.textContent='Texto da redação (fixo): '+e.html.replace(/<br>/g,' / ').replace(/<[^>]+>/g,'');col.appendChild(c);
+    const r=document.createElement('div');r.className='row2';r.append(campoNum(e,'size','Tamanho (px)',12,400),campoSel(e,'peso','Peso',[['300','Light'],['400','Regular'],['500','Medium'],['700','Bold']].map(([v,t])=>[+v,t])));col.appendChild(r);
+    r.querySelector('select').onchange=ev=>{e.peso=+ev.target.value;mudou();};
+    const r2=document.createElement('div');r2.className='row2';r2.append(campoSel(e,'valign','Vertical',[['top','Topo'],['center','Centro'],['bottom','Base']]),campoSel(e,'align','Alinhamento',[['left','Esquerda'],['center','Centro'],['right','Direita']]));col.appendChild(r2);
+    col.appendChild(swatches(e,'cor','Cor do texto',['branco','escuro','azul','vclaro']));
+    const h=document.createElement('div');h.className='hint';h.textContent='A quebra de linha muda com a largura da caixa. O conteúdo não é editável aqui: copy só pela redação.';col.appendChild(h);}
+  if(e.tipo==='timer'){const r=document.createElement('div');r.className='row2';r.append(campoNum(e,'size','Tamanho do número',20,600));col.appendChild(r);col.appendChild(swatches(e,'fundo','Fundo do timer'));col.appendChild(swatches(e,'cor','Cor do número',['branco','escuro','azul','vclaro']));}
+  if(e.tipo==='foto'){col.appendChild(campoSel(e,'src','Foto',FOTOS.map(f=>[f,f])));col.appendChild(campoRange(e,'px','Enquadramento horizontal (%)',0,100));col.appendChild(campoRange(e,'py','Enquadramento vertical (%)',0,100));col.appendChild(campoRange(e,'zoom','Zoom (%)',100,250));}
+  if(e.tipo==='operador'){col.appendChild(campoNum(e,'size','Tamanho do símbolo',20,200));}
+  const z=document.createElement('div');z.className='row2';const up=document.createElement('button');up.type='button';up.textContent='Trazer p/ frente';up.onclick=()=>mover(1);
+  const dn=document.createElement('button');dn.type='button';dn.textContent='Enviar p/ trás';dn.onclick=()=>mover(-1);z.append(up,dn);col.appendChild(z);
+  col.appendChild(campoChk(e,'oculto','Ocultar este elemento'));
+  P.appendChild(col);}
+function mover(dir){const els=tela().els,i=els.findIndex(e=>e.id===selId),j=i+dir;if(j<0||j>=els.length)return;[els[i],els[j]]=[els[j],els[i]];mudou();}
+function renderStageSo(){const st=$('stage');const keep=st.querySelector('.grid');st.textContent='';for(const e of tela().els) st.appendChild(renderEl(e));if(keep)st.appendChild(keep);}
+
+// ---------- arrastar / redimensionar
+let drag=null;
+const ptr=ev=>{const r=$('stagebox').getBoundingClientRect(),s=r.width/1920;return{x:(ev.clientX-r.left)/s,y:(ev.clientY-r.top)/s};};
+function snap(v,ev,passo){if(ev.altKey||!$('optIma').checked) return Math.round(v);const g=Math.round(v/passo)*passo;return Math.abs(g-v)<=22?g:Math.round(v/8)*8;}
+$('stagebox').addEventListener('pointerdown',ev=>{
+  const alvo=ev.target.closest('.el'); const p=ptr(ev);
+  if(ev.target.dataset.handle){const e=el(selId);drag={modo:'res',e,ox:p.x,oy:p.y,w:e.w,h:e.h};}
+  else if(alvo){selId=alvo.dataset.id;const e=el(selId);drag={modo:'mov',e,ox:p.x,oy:p.y,x:e.x,y:e.y,w:e.w,h:e.h};render();}
+  else{selId=null;render();return;}
+  $('stagebox').setPointerCapture(ev.pointerId);ev.preventDefault();});
+$('stagebox').addEventListener('pointermove',ev=>{if(!drag)return;const p=ptr(ev),e=drag.e;
+  if(drag.modo==='mov'){e.x=snap(drag.x+p.x-drag.ox,ev,C);e.y=snap(drag.y+p.y-drag.oy,ev,R);}
+  else{const nx=snap(e.x+drag.w+p.x-drag.ox,ev,C)-e.x,ny=snap(e.y+drag.h+p.y-drag.oy,ev,R)-e.y;e.w=Math.max(8,nx);e.h=Math.max(8,ny);
+    if(e.tipo==='imagem'&&!ev.shiftKey){const r=drag.w/drag.h;e.h=Math.round(e.w/r);}}
+  renderStageSo();});
+$('stagebox').addEventListener('pointerup',()=>{if(drag){const e=drag.e,mexeu=drag.modo==='mov'?(e.x!==drag.x||e.y!==drag.y):(e.w!==drag.w||e.h!==drag.h);drag=null;if(mexeu)mudou();}});
+document.addEventListener('keydown',ev=>{if(!selId||/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;const e=el(selId);const d=ev.shiftKey?10:1;
+  const m={ArrowLeft:[-d,0],ArrowRight:[d,0],ArrowUp:[0,-d],ArrowDown:[0,d]}[ev.key];if(!m)return;ev.preventDefault();e.x+=m[0];e.y+=m[1];mudou();});
+$('optGrade').onchange=render;
+$('nota').addEventListener('input',()=>{tela().nota=$('nota').value;agendar();});
+
+// ---------- salvar
+let timerSalvar=null;
+function status(cls,txt){$('status').className='status '+cls;$('statusTxt').textContent=txt;}
+function mudou(){tela().alterada=true;render();agendar();}
+function agendar(){if(!db){status('err','Sem banco: use “Copiar JSON da tela”');return;}status('pend','Alterações não salvas…');clearTimeout(timerSalvar);const t=tela();timerSalvar=setTimeout(()=>salvar(t),1200);}
+let salvando=Promise.resolve();
+function salvar(t){salvando=salvando.then(async()=>{try{await db.doc('ajustes/'+t.id).set({...serializar(t),salvoEm:new Date().toISOString()});status('ok','Salvo');}
+  catch(err){status('err','Não salvou ('+(err&&err.code||'erro')+'). Use “Copiar JSON da tela”.');}});}
+$('btnCopiar').onclick=()=>{const s=JSON.stringify(serializar(tela()),null,1);
+  navigator.clipboard.writeText(s).then(()=>status(db?'ok':'pend','JSON copiado: cole no chat')).catch(()=>{const ta=document.createElement('textarea');ta.value=s;ta.readOnly=true;ta.style.minHeight='160px';$('pCampos').prepend(ta);ta.select();status('pend','Selecionei o JSON no painel: copie com Ctrl+C');});};
+function resetBotao(){const box=$('resetBox');box.textContent='';const b=document.createElement('button');b.type='button';b.textContent='Restaurar esta tela';b.onclick=resetPergunta;box.appendChild(b);}
+function resetPergunta(){const box=$('resetBox');box.textContent='';const s=document.createElement('span');s.textContent='Voltar esta tela ao frame style v1?';
+  const sim=document.createElement('button');sim.type='button';sim.className='prim';sim.textContent='Restaurar';const nao=document.createElement('button');nao.type='button';nao.textContent='Cancelar';
+  sim.onclick=()=>{const d=clone(DEFAULTS[atual]);telas[atual]={...d,nota:tela().nota,alterada:true};selId=null;resetBotao();mudou();};nao.onclick=resetBotao;box.append(s,sim,nao);}
+resetBotao();
+
+// ---------- início
+render();
+(async()=>{
+  const c=window.claude; if(!c||!c.use){status('err','Abra no claude.ai para salvar. Use “Copiar JSON da tela”.');return;}
+  const tempo=setTimeout(()=>status('err','Banco não respondeu: use “Copiar JSON da tela”'),10000);
+  try{db=await c.use('db');}catch{db=null;}
+  if(!db){clearTimeout(tempo);status('err','Sem banco: use “Copiar JSON da tela”');return;}
+  try{const snap=await db.collection('ajustes').get();clearTimeout(tempo);
+    const docs=snap&&snap.docs?snap.docs:[];for(const d of docs){const data=typeof d.data==='function'?d.data():d.data;const t=telas.find(x=>x.id===(d.id||'').split('/').pop());if(t)aplicarSalvo(t,data);}
+    status('ok',docs.length?'Ajustes carregados':'Pronto · nada salvo ainda');render();}
+  catch(err){clearTimeout(tempo);status('pend','Não li os ajustes salvos ('+(err&&err.code||'erro')+')');}
+})();
+})();
+</script>
