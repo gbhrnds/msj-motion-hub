@@ -150,7 +150,7 @@ function pilar({id,nome,logo,rep,bul,ys,hs,acento,txtCor,bolaCor,foto:fo,lado,va
     timer('timer',4*C,0,C,R,112,'escuro',valor),
     rect('modulo-pessoa','Módulo atrás da foto',fx,R,fw,2*R,'azul'),
     rect('modulo-bullets','Módulo dos bullets',bx,R,bw,2*R,acento)];
-  const dX=bw<3*C?80:95, tX=bw<3*C?128:152, tW=bw<3*C?bw-160:880;
+  const dX=bw<3*C?70:95, tX=bw<3*C?112:152, tW=bw<3*C?820:880;
   bul.forEach((t,i)=>els.push(bola('bolinha-'+(i+1),'Bullet '+(i+1)+' · bolinha',bx+dX,ys[i]+17,bolaCor),
     txt('texto-bullet-'+(i+1),'Bullet '+(i+1)+' · texto',bx+tX,ys[i],tW,hs[i],46,400,txtCor,t)));
   const [ff,rc]=fotoPar(fo.src,fx,R,fw,2*R,fo.k,fo.ix,fo.iy);
@@ -199,7 +199,7 @@ const DEFAULTS=[
    foto:{src:'CAN_0024',k:0.8,ix:-203,iy:-131},ys:[533,641,802],hs:[56,108,108],
    bul:['A dor do cliente é a'+NB+'nossa'+NB+'dor','Conhecemos e'+NB+'utilizamos os'+NB+'produtos e'+NB+'experiências que'+NB+'oferecemos','Superamos as'+NB+'expectativas dos'+NB+'nossos'+NB+'clientes']}),
  pilar({id:'t03',nome:'T03 · Agir como empreendedor',logo:'agir',rep:'Representa os acionistas',acento:'verde',txtCor:'escuro',bolaCor:'escuro',lado:'esq',valor:'13:22',
-   fw:900,foto:{src:'CAN_0504',k:0.627,ix:0,iy:52},ys:[506,667,828],hs:[108,108,108],
+   fw:960,foto:{src:'CAN_0504',k:0.675,ix:-50,iy:0},ys:[480,693,854],hs:[160,108,108],
    bul:['Temos responsabilidade total com os'+NB+'resultados e'+NB+'a'+NB+'perenidade da'+NB+'empresa','Nos destacamos no'+NB+'mercado por'+NB+'excelência e'+NB+'inovação','Usamos a'+NB+'força do'+NB+'grupo para'+NB+'encontrar os'+NB+'melhores'+NB+'caminhos']}),
  pilar({id:'t04',nome:'T04 · Crescer na jornada',logo:'crescer',rep:'Representa os colaboradores',acento:'amarelo',txtCor:'escuro',bolaCor:'escuro',lado:'dir',valor:'12:58',
    foto:{src:'PI_A0001-23',k:0.8,ix:-420,iy:-133},ys:[585,693,801],hs:[56,56,56],
@@ -461,6 +461,7 @@ function resetPergunta(){const box=$('resetBox');box.textContent='';const s=docu
 resetBotao();
 
 // ---------- início
+window.__exportarLayout=()=>JSON.parse(JSON.stringify(telas.map(t=>({id:t.id,nome:t.nome,els:t.els.filter(e=>!e.excluido&&!e.oculto)}))));
 render();
 (async()=>{
   const c=window.claude; if(!c||!c.use){status('err','Abra no claude.ai para salvar. Use “Copiar JSON da tela”.');return;}
