@@ -116,3 +116,17 @@ Pedidos do usuário: bullets um de cada vez; KV animado assim que a regressiva a
   `cacos-loop.svg` / `cacos-escuro-loop.svg`, o mosaico sem as 16 peças cortadas na borda do SVG, empilhado
   a cada 706 unidades. Esse é o menor passo sem peças encostando (medido no raster, vão de 6px). O loop é
   perfeito e não tem emenda reta, inclusive nos 5 min de buffer. O wiggle horizontal continua.
+
+### Ajustes da rodada 3 (revisão do usuário)
+
+- **Respiros:** os dois mosaicos de cacos do mesmo módulo ficavam um sobre o outro depois do loop.
+  Agora fica só o primeiro (regra geral: mosaico sobreposto a outro já renderizado é descartado).
+- **KV final, encaixe aprovado (JPG do usuário):**
+  - KV em escala 1, deslocado (-34, -15), sangrando nas 4 bordas;
+  - textos com tracking de -0,028em;
+  - logo de 263px;
+  - texto 2 atualizado: "Lutamos pelo nosso propósito de uma forma que todos crescem: **clientes, acionistas e colaboradores**".
+
+  A câmera começa 6% mais perto e recua até esse enquadramento exato em ~5s.
+- **Fim da vinheta:** o KV fica no ar até o fim da Fase 2. Não existe mais a tela só com o logo
+  (o layout `buffer` deixa de ser usado no render).

@@ -164,38 +164,21 @@ export const Fase1: React.FC<{ total: number }> = ({ total }) => {
   );
 };
 
-/** Duração do KV animado que fecha a regressiva (s). */
-const SEG_KV = 12;
-export const framesKv = (fps: number) => Math.round(SEG_KV * fps);
-
 /**
- * Fase 2 (5 min): o relógio chegou a 00:00 -> o KV animado entra pela onda de células,
- * se monta e fica no ar por ~12s; depois a onda abre o buffer só com o logo (cacos respirando).
+ * Fase 2 (5 min): o relógio chegou a 00:00 -> o KV animado entra pela onda de células, se monta
+ * e fica no ar até o fim da vinheta (aprovado: sem tela final só com o logo).
  */
-export const Fase2: React.FC<{ total: number }> = ({ total }) => {
+export const Fase2: React.FC<{ total: number }> = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const kv = framesKv(fps);
-  const fim = TELAS.r1;
-  const telaKv = (t: number) => <KvAnimado t={t} fps={fps} dur={kv + DUR.A} />;
-  if (frame < DUR.A)
-    return (
-      <AbsoluteFill>
-        <Tela tela={fim} t={9999} dur={9999} fps={fps} restante={0} />
-        <OndaDeCelulas t={frame}>{telaKv(frame)}</OndaDeCelulas>
-      </AbsoluteFill>
-    );
-  const tb = frame - kv;
-  const buffer = <Tela tela={TELAS.buffer} t={tb + 40} dur={total} fps={fps} restante={0} />;
-  if (tb < 0) return <AbsoluteFill>{telaKv(frame)}</AbsoluteFill>;
-  if (tb < DUR.A)
-    return (
-      <AbsoluteFill>
-        {telaKv(frame)}
-        <OndaDeCelulas t={tb}>{buffer}</OndaDeCelulas>
-      </AbsoluteFill>
-    );
-  return <AbsoluteFill>{buffer}</AbsoluteFill>;
+  const kv = <KvAnimado t={frame} fps={fps} />;
+  if (frame >= DUR.A) return <AbsoluteFill>{kv}</AbsoluteFill>;
+  return (
+    <AbsoluteFill>
+      <Tela tela={TELAS.r1} t={9999} dur={9999} fps={fps} restante={0} />
+      <OndaDeCelulas t={frame}>{kv}</OndaDeCelulas>
+    </AbsoluteFill>
+  );
 };
 
 export const VinhetaSemana: React.FC = () => {
@@ -234,7 +217,7 @@ export const PreviaVolta: React.FC = () => {
   );
 };
 
-/** Prévia do fechamento: últimos 20s da Fase 1 + KV animado + entrada do buffer. */
+/** Prévia do fechamento: últimos 20s da Fase 1 + KV animado (que fica até o fim). */
 export const PreviaFechamento: React.FC = () => {
   const { fps } = useVideoConfig();
   const f1 = framesFase1(fps);

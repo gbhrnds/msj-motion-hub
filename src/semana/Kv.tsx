@@ -8,7 +8,7 @@ import { Desfoque, Ghost, TextoAnimado } from "./Tela";
 /**
  * KV da Semana do Jeito Agi animado: fecha a regressiva (entra quando o relógio chega a 00:00)
  * e abre o buffer. Reconstruído camada a camada a partir do PSD oficial, nas posições do PSD
- * (1957x1296), escalado para caber na altura de 1080 sobre branco (o fundo do próprio KV).
+ * (1957x1296), em escala 1 e deslocado para encaixar exatamente nos 1920x1080.
  *
  * Coreografia (skill choreograph):
  * - static → os 11 módulos encaixam numa onda que nasce no logo (canto superior esquerdo),
@@ -16,18 +16,20 @@ import { Desfoque, Ghost, TextoAnimado } from "./Tela";
  * - lead → logo da Semana, em foco (desfocado -> nítido), assim que o módulo dele assenta;
  * - support → pessoas sobem de dentro dos módulos com bounce; depois os dois textos do KV, palavra a palavra;
  * - decoration → os 208 cacos se montam peça a peça (onda radial), a textura "O Jeito Agi" sobe sem parar.
- * Tudo sob um push-in lento de câmera (1 -> 1,03), como nas keynotes.
+ * Câmera: começa 6% mais perto e recua até o enquadramento exato (o KV encaixado na tela, como no JPG aprovado).
+ * É a tela final da vinheta: fica no ar até o fim dos 5 min, com a textura subindo.
  */
 
 const RA = "projects/semana-jeito-agi/render-assets/";
 const SAIDA = Easing.bezier(0.23, 1, 0.32, 1);
-const MEIO = Easing.bezier(0.65, 0, 0.35, 1);
 const cl = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const BOUNCE = { damping: 11, stiffness: 150, mass: 0.7 } as const;
 
 export const KV_W = 1957;
 export const KV_H = 1296;
-const ESC = 1080 / KV_H;
+/** Enquadramento aprovado (JPG do usuário, 2026-11-27): KV em escala 1, deslocado (-34, -15), sangrando nas 4 bordas. */
+const DX = -34;
+const DY = -15;
 const ORIGEM = { x: 290, y: 205 }; // centro do logo: a onda nasce dele
 
 /** Módulos do PSD, na ordem de empilhamento (de baixo para cima). */
@@ -104,23 +106,25 @@ const Pessoa: React.FC<{ src: string; x: number; y: number; w: number; h: number
 
 /** Os dois textos do KV (copy oficial da peça, com quebras e pesos do PSD). */
 const TEXTO_1 = "A semana<br>de <b>Cultura</b><br>do Agibank";
-const TEXTO_2 = 'Lutamos pelo nosso<br>propósito de uma<br>forma que todos<br>crescem: <b><span class="vd">acionistas,</span></b><br><b><span class="vd">clientes e Agilizados</span></b>';
+// texto 2 conforme a versão final do KV enviada pelo usuário (JPG de 2026-11-27)
+const TEXTO_2 = 'Lutamos pelo nosso<br>propósito de uma forma<br>que todos crescem:<br><b><span class="vd">clientes, acionistas</span></b><br><b><span class="vd">e colaboradores</span></b>';
 
-export const KvAnimado: React.FC<{ t: number; fps: number; dur: number }> = ({ t, fps, dur }) => {
-  const camera = interpolate(t, [0, dur], [1, 1.03], { ...cl, easing: MEIO });
+export const KvAnimado: React.FC<{ t: number; fps: number }> = ({ t, fps }) => {
+  // câmera: começa 6% mais perto e recua até assentar no enquadramento exato do KV (~5s); depois fica parada
+  const camera = interpolate(t, [0, 120], [1.06, 1], { ...cl, easing: Easing.bezier(0.33, 0, 0.15, 1) });
   const dMod = (m: Mod) => 2 + atrasoOnda((m.x0 + m.x1) / 2, (m.y0 + m.y1) / 2);
   const logo = interpolate(t, [10, 32], [0, 1], { ...cl, easing: SAIDA });
   const texturaOp = interpolate(t, [dMod(MODULOS[0]) + 8, dMod(MODULOS[0]) + 26], [0, 1], cl);
   return (
     <div style={{ position: "absolute", inset: 0, background: "#fff", overflow: "hidden", fontFamily }}>
-      <div style={{ position: "absolute", left: (1920 - KV_W * ESC) / 2, top: 0, width: KV_W, height: KV_H, transformOrigin: "0 0", scale: String(ESC), overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, transformOrigin: `${KV_W / 2}px ${KV_H / 2}px`, scale: String(camera) }}>
+      <div style={{ position: "absolute", inset: 0, transformOrigin: "960px 540px", scale: String(camera) }}>
+        <div style={{ position: "absolute", left: DX, top: DY, width: KV_W, height: KV_H }}>
           {MODULOS.map((m, i) => (
             <Modulo key={i} m={m} t={t} d={dMod(m)}>
               {i === 0 ? (
                 <div style={{ position: "absolute", inset: 0, opacity: texturaOp }}>
                   {/* textura do PSD: Light 59,8px, branco a 41% x grupo a 73%, linhas a cada 61px */}
-                  <Ghost h={m.y1 - m.y0} t={t} fps={fps} left={22} size={50} passo={61} opacidade={0.41 * 0.73} />
+                  <Ghost h={m.y1 - m.y0} t={t} fps={fps} left={20} size={59.8} passo={61} opacidade={0.41 * 0.73} />
                 </div>
               ) : null}
             </Modulo>
@@ -138,16 +142,16 @@ export const KvAnimado: React.FC<{ t: number; fps: number; dur: number }> = ({ t
           <Pessoa id="02" src="pessoa-02.png" x={826} y={153} w={530} h={608} t={t} d={29} fps={fps} />
           <Pessoa id="principal" src="pessoa-principal.png" x={1107} y={286} w={800} h={837} t={t} d={20} fps={fps} />
 
-          <div style={{ position: "absolute", left: 544, top: 469, color: "#fff", fontSize: 55.4, fontWeight: 300, lineHeight: 1.2, whiteSpace: "nowrap" }}>
+          <div style={{ position: "absolute", left: 544, top: 466, color: "#fff", fontSize: 55.4, fontWeight: 300, lineHeight: 1.2, letterSpacing: "-0.028em", whiteSpace: "nowrap" }}>
             <TextoAnimado id="kv-t1" html={TEXTO_1} t={t} d={42} size={55.4} />
           </div>
-          <div style={{ position: "absolute", left: 1336, top: 112, color: "#fff", fontSize: 27.6, fontWeight: 300, lineHeight: 1.2, whiteSpace: "nowrap" }}>
+          <div style={{ position: "absolute", left: 1336, top: 111, color: "#fff", fontSize: 27.6, fontWeight: 300, lineHeight: 1.2, letterSpacing: "-0.028em", whiteSpace: "nowrap" }}>
             <TextoAnimado id="kv-t2" html={TEXTO_2} t={t} d={54} size={27.6} />
           </div>
 
           <Img
             src={staticFile(`${RA}logo-semana-do-jeito-agi-positivo.svg`)}
-            style={{ position: "absolute", left: 163, top: 77, width: 256, height: 256, objectFit: "contain", opacity: Math.min(1, logo * 1.6), scale: String(0.94 + 0.06 * logo), filter: logo < 1 ? `blur(${((1 - logo) * 12).toFixed(2)}px)` : undefined }}
+            style={{ position: "absolute", left: 159, top: 68, width: 263, height: 263, objectFit: "contain", opacity: Math.min(1, logo * 1.6), scale: String(0.94 + 0.06 * logo), filter: logo < 1 ? `blur(${((1 - logo) * 12).toFixed(2)}px)` : undefined }}
           />
         </div>
       </div>

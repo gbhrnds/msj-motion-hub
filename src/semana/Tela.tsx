@@ -241,6 +241,12 @@ export const Tela: React.FC<Props> = ({ tela, t, dur, fps, restante, ocultarRelo
         );
       }
       case "cacos": {
+        // Com o mosaico em loop, um módulo de cacos já cobre a coluna inteira: um segundo mosaico
+        // sobreposto ao mesmo espaço (caso dos respiros) viraria duas texturas cruzadas. Fica só o primeiro.
+        const anterior = tela.els.slice(0, tela.els.indexOf(el)).find(
+          (o) => o.tipo === "cacos" && o.x < el.x + el.w && el.x < o.x + o.w && o.y < el.y + el.h && el.y < o.y + o.h,
+        );
+        if (anterior) return null;
         const p = entrada(t, d, 24);
         const respiro = Math.sin((t / fps) * 2 * Math.PI * 0.15) * 4; // wiggle contínuo (tokens: 4px, 0.15 ciclo/s)
         // Os cacos sobem devagar, como a textura "O Jeito Agi" (rodada 3). Versão "-loop" do mosaico:
