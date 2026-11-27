@@ -100,7 +100,7 @@ export const RemotionRoot: React.FC = () => {
           {/* Semana do Jeito Agi (projects/semana-jeito-agi): vinheta das 3 lives */}
       <Composition id="SJA-Vinheta-Completa" component={VinhetaSemana} durationInFrames={sjaF1(fps) + sjaF2(fps)} fps={fps} width={1920} height={1080} />
       <Composition id="SJA-Previa-Uma-Volta" component={PreviaVolta} durationInFrames={duracaoVolta(fps)} fps={fps} width={1920} height={1080} />
-      <Composition id="SJA-Previa-Fechamento" component={PreviaFechamento} durationInFrames={Math.round(30 * fps)} fps={fps} width={1920} height={1080} />
+      <Composition id="SJA-Previa-Fechamento" component={PreviaFechamento} durationInFrames={Math.round(38 * fps)} fps={fps} width={1920} height={1080} />
     </>
   );
 };

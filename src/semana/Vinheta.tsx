@@ -4,6 +4,7 @@ import { fontFamily } from "../fonts";
 import tokens from "../../brand/tokens.json";
 import { COR, Elemento, TELAS, TelaLayout } from "./layout";
 import { Desfoque, EstiloTexto, Relogio, Tela } from "./Tela";
+import { KvAnimado } from "./Kv";
 
 /**
  * Vinheta pré-live da Semana do Jeito Agi (um mp4 para as 3 lives).
@@ -78,7 +79,8 @@ const OndaDeCelulas: React.FC<{ t: number; children: React.ReactNode }> = ({ t, 
       // a célula cresce a partir da borda virada para a origem da onda (direita/topo)
       celulas.push(
         <div key={`${r}-${c}`} style={{ position: "absolute", left: x, top: y, width: 384, height: 360, overflow: "hidden", clipPath: `inset(0 0 ${(1 - p) * 100}% ${(1 - p) * 100}%)` }}>
-          <div style={{ position: "absolute", left: -x, top: -y, width: 1920, height: 1080 }}>{children}</div>
+          {/* o conteúdo de cada célula assenta de 1,05 para 1 enquanto ela abre (profundidade, como peças encaixando) */}
+          <div style={{ position: "absolute", left: -x, top: -y, width: 1920, height: 1080, transformOrigin: `${x + 192}px ${y + 180}px`, scale: String(1 + 0.05 * (1 - p)) }}>{children}</div>
         </div>,
       );
     }
@@ -162,20 +164,38 @@ export const Fase1: React.FC<{ total: number }> = ({ total }) => {
   );
 };
 
-/** Fase 2: 5 min só com o logo; a tela de buffer entra pela onda de células e os cacos respiram. */
+/** Duração do KV animado que fecha a regressiva (s). */
+const SEG_KV = 12;
+export const framesKv = (fps: number) => Math.round(SEG_KV * fps);
+
+/**
+ * Fase 2 (5 min): o relógio chegou a 00:00 -> o KV animado entra pela onda de células,
+ * se monta e fica no ar por ~12s; depois a onda abre o buffer só com o logo (cacos respirando).
+ */
 export const Fase2: React.FC<{ total: number }> = ({ total }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const buffer = TELAS.buffer;
+  const kv = framesKv(fps);
   const fim = TELAS.r1;
-  const nova = <Tela tela={buffer} t={frame + 40} dur={total} fps={fps} restante={0} />;
-  if (frame >= DUR.A) return <AbsoluteFill>{nova}</AbsoluteFill>;
-  return (
-    <AbsoluteFill>
-      <Tela tela={fim} t={9999} dur={9999} fps={fps} restante={0} />
-      <OndaDeCelulas t={frame}>{nova}</OndaDeCelulas>
-    </AbsoluteFill>
-  );
+  const telaKv = (t: number) => <KvAnimado t={t} fps={fps} dur={kv + DUR.A} />;
+  if (frame < DUR.A)
+    return (
+      <AbsoluteFill>
+        <Tela tela={fim} t={9999} dur={9999} fps={fps} restante={0} />
+        <OndaDeCelulas t={frame}>{telaKv(frame)}</OndaDeCelulas>
+      </AbsoluteFill>
+    );
+  const tb = frame - kv;
+  const buffer = <Tela tela={TELAS.buffer} t={tb + 40} dur={total} fps={fps} restante={0} />;
+  if (tb < 0) return <AbsoluteFill>{telaKv(frame)}</AbsoluteFill>;
+  if (tb < DUR.A)
+    return (
+      <AbsoluteFill>
+        {telaKv(frame)}
+        <OndaDeCelulas t={tb}>{buffer}</OndaDeCelulas>
+      </AbsoluteFill>
+    );
+  return <AbsoluteFill>{buffer}</AbsoluteFill>;
 };
 
 export const VinhetaSemana: React.FC = () => {
@@ -214,7 +234,7 @@ export const PreviaVolta: React.FC = () => {
   );
 };
 
-/** Prévia do fechamento: últimos 20s da Fase 1 + 10s do buffer. */
+/** Prévia do fechamento: últimos 20s da Fase 1 + KV animado + entrada do buffer. */
 export const PreviaFechamento: React.FC = () => {
   const { fps } = useVideoConfig();
   const f1 = framesFase1(fps);

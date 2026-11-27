@@ -79,3 +79,34 @@ Pendente: mês/ano das lives para o nome do arquivo (`AAAA-MM`).
 - **Bounce:** spring (damping 9, stiffness 140, massa 0,7) nos elementos que entram em escala:
   operadores `+`/`=`, bolinhas dos bullets e recorte (0,9 → 1).
   Isso substitui a regra antiga "escala nunca parte de menos de 0,95" para esses elementos (pedido explícito do usuário).
+
+## Rodada de motion 3 (2026-11-27): refino e KV final
+
+Pedidos do usuário: bullets um de cada vez; KV animado assim que a regressiva acaba; textura
+"O Jeito Agi" subindo; refinar tudo para um acabamento "Apple / Itaú" (skills `animate` e `choreograph`).
+
+- **Bullets um de cada vez:** a bolinha pula e 3 frames depois o texto entra palavra a palavra,
+  deslizando 28px a partir da bolinha. Intervalo de ~1,75s entre bullets (frames 24 / 66 / 108),
+  o ritmo de leitura de uma linha. A tela deixa de ficar parada depois do primeiro segundo.
+- **Textura "O Jeito Agi":** as linhas sobem a 16px/s durante toda a tela, em loop perfeito (passo de 61px).
+  Vale para os módulos com textura das telas e para o KV.
+- **KV animado (Fase 2, 0–12s):** reconstruído camada a camada a partir do PSD, nas posições originais
+  (`render-assets/kv/`: pessoas, cunha e 208 cacos vetorizados em `cacos-kv.json`). Ordem:
+  - entrada pela onda de células sobre a tela 00:00;
+  - os 11 módulos encaixam numa onda que nasce no logo, cada um crescendo pela borda virada para ele;
+  - os cacos se montam peça a peça (escala 0,6 → 1, giro de 14° → 0, spring), em onda radial com variação fixa;
+  - logo em foco (desfocado → nítido, 0,94 → 1);
+  - pessoas sobem de dentro dos módulos com bounce e motion blur (principal, depois 04, 02, 03);
+  - os dois textos do KV entram palavra a palavra;
+  - push-in de câmera de 1 → 1,03 em todo o KV.
+
+  Depois de 12s, a onda de células abre o buffer. Os textos do KV são o copy oficial da peça, não vêm da redação.
+- **Refino geral:**
+  - **Texto:** entra com "rack focus" (desfoque que some ao assentar), que se soma ao motion blur
+    de velocidade. A subida caiu de 0,75em para 0,5em, com 18 frames por palavra: menos pulo, mais elegância.
+  - **Logos dos pilares:** entram em foco, sem deslizar.
+  - **Onda de células (transição A):** o conteúdo de cada célula assenta de 1,05 → 1 enquanto ela abre,
+    o que dá profundidade de peça encaixando.
+  - **Relógio:** blur vertical leve enquanto o dígito rola.
+  - **Bounce:** spring mais assentado (damping 11, stiffness 150). Ainda tem overshoot, mas assenta em ~0,5s.
+- `SJA-Previa-Fechamento` agora tem 38s: últimos 20s da regressiva + KV + entrada do buffer.
