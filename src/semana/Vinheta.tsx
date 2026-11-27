@@ -92,8 +92,8 @@ const FaixaCacos: React.FC<{ x: number; v: number }> = ({ x, v }) => (
   <div style={{ position: "absolute", left: x - 360, top: 0, width: 720, height: 1080, zIndex: 80 }}>
    <Desfoque id="faixa" x={v} bloco>
    <div style={{ position: "relative", width: 720, height: 1080, background: COR.medio, overflow: "hidden" }}>
-    <Img src={staticFile("projects/semana-jeito-agi/render-assets/cacos-escuro.svg")} style={{ position: "absolute", left: -20, top: -40, width: 760, maxWidth: "none" }} />
-    <Img src={staticFile("projects/semana-jeito-agi/render-assets/cacos-escuro.svg")} style={{ position: "absolute", left: -20, top: 700, width: 760, maxWidth: "none", scale: "1 -1" }} />
+    <Img maxRetries={6} src={staticFile("projects/semana-jeito-agi/render-assets/cacos-escuro.svg")} style={{ position: "absolute", left: -20, top: -40, width: 760, maxWidth: "none" }} />
+    <Img maxRetries={6} src={staticFile("projects/semana-jeito-agi/render-assets/cacos-escuro.svg")} style={{ position: "absolute", left: -20, top: 700, width: 760, maxWidth: "none", scale: "1 -1" }} />
    </div>
    </Desfoque>
   </div>

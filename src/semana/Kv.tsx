@@ -98,7 +98,7 @@ const Pessoa: React.FC<{ src: string; x: number; y: number; w: number; h: number
   return (
     <div style={{ position: "absolute", left: x, top: y, width: w, height: h, opacity: Math.min(1, s * 2.5), translate: `0 ${sobe}px` }}>
       <Desfoque id={`kv-${id}`} y={v} bloco>
-        <Img src={staticFile(`${RA}kv/${src}`)} style={{ width: "100%", height: "100%", display: "block" }} />
+        <Img maxRetries={6} src={staticFile(`${RA}kv/${src}`)} style={{ width: "100%", height: "100%", display: "block" }} />
       </Desfoque>
     </div>
   );
@@ -135,7 +135,7 @@ export const KvAnimado: React.FC<{ t: number; fps: number }> = ({ t, fps }) => {
             <Modulo key={`topo-${i}`} m={m} t={t} d={dMod(m)} />
           ))}
           {/* cunha branca: a única diagonal do KV, chega com o módulo azul */}
-          <Img src={staticFile(`${RA}kv/cunha.png`)} style={{ position: "absolute", left: 454, top: 364, width: 58, height: 96, opacity: interpolate(t, [dMod(MODULOS[6]) + 6, dMod(MODULOS[6]) + 14], [0, 1], cl) }} />
+          <Img maxRetries={6} src={staticFile(`${RA}kv/cunha.png`)} style={{ position: "absolute", left: 454, top: 364, width: 58, height: 96, opacity: interpolate(t, [dMod(MODULOS[6]) + 6, dMod(MODULOS[6]) + 14], [0, 1], cl) }} />
 
           <Pessoa id="04" src="pessoa-04.png" x={516} y={0} w={436} h={666} t={t} d={24} fps={fps} />
           <Pessoa id="03" src="pessoa-03.png" x={153} y={458} w={483} h={699} t={t} d={34} fps={fps} />

@@ -261,7 +261,7 @@ export const Tela: React.FC<Props> = ({ tela, t, dur, fps, restante, ocultarRelo
           <div key={el.id} style={{ ...caixa, overflow: "hidden" }}>
             <div style={{ position: "absolute", inset: 0, opacity: p, translate: `${(1 - p) * 30 + respiro}px ${(1 - p) * 18 - sobe}px` }}>
               {Array.from({ length: n }, (_, j) => (
-                <Img key={j} src={src} style={{ position: "absolute", left: el.ix, top: el.iy + j * periodo, width: el.iw, height: ih, maxWidth: "none", scale: el.flip ? "-1 1" : undefined }} />
+                <Img maxRetries={6} key={j} src={src} style={{ position: "absolute", left: el.ix, top: el.iy + j * periodo, width: el.iw, height: ih, maxWidth: "none", scale: el.flip ? "-1 1" : undefined }} />
               ))}
             </div>
           </div>
@@ -289,7 +289,7 @@ export const Tela: React.FC<Props> = ({ tela, t, dur, fps, restante, ocultarRelo
       case "imagem": {
         // logos: entrada em foco (desfocado -> nítido) com aproximação curta, sem pular
         const p = entrada(t, d, 22);
-        return <Img key={el.id} src={arquivo(el)} style={{ ...caixa, opacity: Math.min(1, p * 1.6), translate: `0 ${(1 - p) * 16}px`, scale: String(0.96 + 0.04 * p), filter: p < 1 ? `blur(${((1 - p) * 10).toFixed(2)}px)` : undefined }} />;
+        return <Img maxRetries={6} key={el.id} src={arquivo(el)} style={{ ...caixa, opacity: Math.min(1, p * 1.6), translate: `0 ${(1 - p) * 16}px`, scale: String(0.96 + 0.04 * p), filter: p < 1 ? `blur(${((1 - p) * 10).toFixed(2)}px)` : undefined }} />;
       }
       case "operador": {
         const s = pula(t, d, fps);
@@ -332,7 +332,7 @@ export const Tela: React.FC<Props> = ({ tela, t, dur, fps, restante, ocultarRelo
         return (
           <div key={el.id} style={{ ...caixa, opacity: Math.min(1, s * 2.5), translate: `0 ${sobe}px` }}>
             <Desfoque id={`${tela.id}-rec`} y={v} bloco>
-              <Img src={arquivo(el)} style={{ width: "100%", height: "100%", display: "block", transformOrigin: `${ox}px ${oy}px`, scale: String(esc * interpolate(s, [0, 1], [0.9, 1])) }} />
+              <Img maxRetries={6} src={arquivo(el)} style={{ width: "100%", height: "100%", display: "block", transformOrigin: `${ox}px ${oy}px`, scale: String(esc * interpolate(s, [0, 1], [0.9, 1])) }} />
             </Desfoque>
           </div>
         );
