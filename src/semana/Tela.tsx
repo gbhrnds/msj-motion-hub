@@ -21,7 +21,8 @@ import { COR, Elemento, TelaLayout, arquivo } from "./layout";
 const SAIDA = Easing.bezier(0.23, 1, 0.32, 1); // entrada: ease-out forte (tokens / agente 05)
 const MEIO = Easing.bezier(0.65, 0, 0.35, 1); // movimento em tela: ease-in-out
 const cl = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
-const BASE = 8; // a coreografia começa depois que a transição já revelou os módulos
+const BASE = 8;
+const PAUSA_LEITURA = 16; // frames com a frase completa antes do próximo bullet // a coreografia começa depois que a transição já revelou os módulos
 // bounce com assentamento mais curto (rodada 3: refino "Apple/Itaú" — ainda pula, mas assenta em ~0,5s)
 const BOUNCE = { damping: 11, stiffness: 150, mass: 0.7 } as const;
 const BLUR = 0.55; // px de desfoque por px/frame de velocidade
@@ -68,6 +69,8 @@ export const Desfoque: React.FC<{ id: string; x?: number; y?: number; foco?: num
 };
 
 /** Textura "O Jeito Agi": as linhas sobem devagar e sem parar durante a tela (loop perfeito a cada 61px). */
+const CACOS_PROP = 756.163 / 695.216; // altura/largura do cacos.svg
+const CACOS_LOOP = 706 / 695.216; // passo vertical do mosaico "-loop" (medido: menor passo sem encostar peças, vão de 6px)
 export const VELOC_TEXTURA = 16; // px por segundo: lento o bastante para ser textura, não leitura
 export const Ghost: React.FC<{ h: number; t: number; fps: number; left?: number; size?: number; passo?: number; opacidade?: number }> = ({ h, t, fps, left = 16, size = 58, passo = 61, opacidade = 0.41 }) => {
   const sobe = ((t / fps) * VELOC_TEXTURA) % passo;
@@ -138,16 +141,27 @@ const pecas = (html: string): Peca[] => {
 /** Posição (em em) de uma unidade que sobe: usada para o deslocamento e para a velocidade (motion blur). */
 const subida = (t: number, d: number, dur: number) => (1 - interpolate(t, [d, d + dur], [0, 1], { ...cl, easing: SAIDA })) * 0.5;
 
+const passoTexto = (letraALetra: boolean, k: number) => (letraALetra ? 1.4 : Math.max(1.6, 3 - k * 0.12)); // cascata decrescente
+
+/** Frames até a última palavra (ou letra) de um texto assentar. */
+export const duracaoTexto = (html: string): number => {
+  const ps = pecas(html).filter((p) => p.tipo === "pal") as Extract<Peca, { tipo: "pal" }>[];
+  const letraALetra = ps.length === 1;
+  const unidades = letraALetra ? Array.from(ps[0].texto).length : ps.length;
+  let acc = 0;
+  for (let k = 0; k < unidades - 1; k++) acc += passoTexto(letraALetra, k);
+  return acc + (letraALetra ? 14 : 18);
+};
+
 export const TextoAnimado: React.FC<{ id: string; html: string; t: number; d: number; size: number }> = ({ id, html, t, d, size }) => {
   const ps = pecas(html);
   const palavras = ps.filter((p) => p.tipo === "pal").length;
   const letraALetra = palavras === 1;
   let n = 0; // índice da unidade (palavra ou letra) na ordem de leitura
-  const passo = (k: number) => (letraALetra ? 1.4 : Math.max(1.6, 3 - k * 0.12)); // cascata decrescente
   let acc = 0;
   const atrasoDe = () => {
     const a = acc;
-    acc += passo(n);
+    acc += passoTexto(letraALetra, n);
     n++;
     return d + a;
   };
@@ -200,9 +214,22 @@ export const Tela: React.FC<Props> = ({ tela, t, dur, fps, restante, ocultarRelo
   const rec = tela.els.find((e) => e.tipo === "recorte") as Extract<Elemento, { tipo: "recorte" }> | undefined;
   const esc = pushIn(t, dur);
 
+  // Bullets em sequência (rodada 3): o próximo só começa quando a frase anterior terminou de entrar
+  // e ficou ~0,7s parada para leitura. A bolinha pula 3 frames antes do seu texto.
+  const atrasoBullets: Record<string, number> = {};
+  {
+    let cursor = atraso(tela.id, "texto-bullet-1");
+    for (let i = 1; tela.els.some((e) => e.id === `texto-bullet-${i}`); i++) {
+      const tx = tela.els.find((e) => e.id === `texto-bullet-${i}`) as Extract<Elemento, { tipo: "texto" }>;
+      atrasoBullets[`texto-bullet-${i}`] = cursor;
+      atrasoBullets[`bolinha-${i}`] = cursor - 3;
+      cursor += duracaoTexto(tx.html) + PAUSA_LEITURA;
+    }
+  }
+
   const render = (el: Elemento) => {
     const caixa: React.CSSProperties = { position: "absolute", left: el.x, top: el.y, width: el.w, height: el.h };
-    const d = atraso(tela.id, el.id);
+    const d = atrasoBullets[el.id] ?? atraso(tela.id, el.id);
     switch (el.tipo) {
       case "modulo": {
         const bolinha = !!el.raio && el.w <= 24;
@@ -216,9 +243,21 @@ export const Tela: React.FC<Props> = ({ tela, t, dur, fps, restante, ocultarRelo
       case "cacos": {
         const p = entrada(t, d, 24);
         const respiro = Math.sin((t / fps) * 2 * Math.PI * 0.15) * 4; // wiggle contínuo (tokens: 4px, 0.15 ciclo/s)
+        // Os cacos sobem devagar, como a textura "O Jeito Agi" (rodada 3). Versão "-loop" do mosaico:
+        // sem as peças cortadas na borda do SVG, empilhada a cada 706 unidades (encaixe com o mesmo
+        // vão do mosaico, sem emenda reta). Loop perfeito, inclusive nos 5 min de buffer.
+        const ih = el.iw * CACOS_PROP;
+        const periodo = el.iw * CACOS_LOOP;
+        const sobe = ((t / fps) * VELOC_TEXTURA) % periodo;
+        const n = Math.ceil((el.h - el.iy + periodo) / periodo) + 1;
+        const src = arquivo(el).replace(".svg", "-loop.svg");
         return (
           <div key={el.id} style={{ ...caixa, overflow: "hidden" }}>
-            <Img src={arquivo(el)} style={{ position: "absolute", left: el.ix, top: el.iy, width: el.iw, maxWidth: "none", opacity: p, scale: el.flip ? "-1 1" : undefined, translate: `${(1 - p) * 30 + respiro}px ${(1 - p) * 18}px` }} />
+            <div style={{ position: "absolute", inset: 0, opacity: p, translate: `${(1 - p) * 30 + respiro}px ${(1 - p) * 18 - sobe}px` }}>
+              {Array.from({ length: n }, (_, j) => (
+                <Img key={j} src={src} style={{ position: "absolute", left: el.ix, top: el.iy + j * periodo, width: el.iw, height: ih, maxWidth: "none", scale: el.flip ? "-1 1" : undefined }} />
+              ))}
+            </div>
           </div>
         );
       }

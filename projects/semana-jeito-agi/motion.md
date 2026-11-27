@@ -86,6 +86,8 @@ Pedidos do usuário: bullets um de cada vez; KV animado assim que a regressiva a
 "O Jeito Agi" subindo; refinar tudo para um acabamento "Apple / Itaú" (skills `animate` e `choreograph`).
 
 - **Bullets um de cada vez:** a bolinha pula e 3 frames depois o texto entra palavra a palavra,
+  (ajuste: o próximo bullet só começa quando a frase anterior terminou de entrar + 16 frames de leitura;
+  calculado pelo tamanho de cada frase em `duracaoTexto`)
   deslizando 28px a partir da bolinha. Intervalo de ~1,75s entre bullets (frames 24 / 66 / 108),
   o ritmo de leitura de uma linha. A tela deixa de ficar parada depois do primeiro segundo.
 - **Textura "O Jeito Agi":** as linhas sobem a 16px/s durante toda a tela, em loop perfeito (passo de 61px).
@@ -110,3 +112,7 @@ Pedidos do usuário: bullets um de cada vez; KV animado assim que a regressiva a
   - **Relógio:** blur vertical leve enquanto o dígito rola.
   - **Bounce:** spring mais assentado (damping 11, stiffness 150). Ainda tem overshoot, mas assenta em ~0,5s.
 - `SJA-Previa-Fechamento` agora tem 38s: últimos 20s da regressiva + KV + entrada do buffer.
+- **Cacos subindo (pedido do usuário):** os módulos de cacos sobem a 16px/s, como a textura. Eles usam
+  `cacos-loop.svg` / `cacos-escuro-loop.svg`, o mosaico sem as 16 peças cortadas na borda do SVG, empilhado
+  a cada 706 unidades. Esse é o menor passo sem peças encostando (medido no raster, vão de 6px). O loop é
+  perfeito e não tem emenda reta, inclusive nos 5 min de buffer. O wiggle horizontal continua.
