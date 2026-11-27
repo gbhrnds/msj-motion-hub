@@ -3,7 +3,7 @@ import { AbsoluteFill, Easing, Img, interpolate, Sequence, staticFile, useCurren
 import { fontFamily } from "../fonts";
 import tokens from "../../brand/tokens.json";
 import { COR, Elemento, TELAS, TelaLayout } from "./layout";
-import { EstiloTexto, Relogio, Tela } from "./Tela";
+import { Desfoque, EstiloTexto, Relogio, Tela } from "./Tela";
 
 /**
  * Vinheta pré-live da Semana do Jeito Agi (um mp4 para as 3 lives).
@@ -86,10 +86,14 @@ const OndaDeCelulas: React.FC<{ t: number; children: React.ReactNode }> = ({ t, 
 };
 
 /** B: faixa de cacos atravessando a tela; a tela nova fica do lado de trás da faixa. */
-const FaixaCacos: React.FC<{ x: number }> = ({ x }) => (
-  <div style={{ position: "absolute", left: x - 360, top: 0, width: 720, height: 1080, background: COR.medio, overflow: "hidden", zIndex: 80 }}>
+const FaixaCacos: React.FC<{ x: number; v: number }> = ({ x, v }) => (
+  <div style={{ position: "absolute", left: x - 360, top: 0, width: 720, height: 1080, zIndex: 80 }}>
+   <Desfoque id="faixa" x={v} bloco>
+   <div style={{ position: "relative", width: 720, height: 1080, background: COR.medio, overflow: "hidden" }}>
     <Img src={staticFile("projects/semana-jeito-agi/render-assets/cacos-escuro.svg")} style={{ position: "absolute", left: -20, top: -40, width: 760, maxWidth: "none" }} />
     <Img src={staticFile("projects/semana-jeito-agi/render-assets/cacos-escuro.svg")} style={{ position: "absolute", left: -20, top: 700, width: 760, maxWidth: "none", scale: "1 -1" }} />
+   </div>
+   </Desfoque>
   </div>
 );
 
@@ -145,12 +149,14 @@ export const Fase1: React.FC<{ total: number }> = ({ total }) => {
 
   // B + C
   const p = t / DUR.B;
-  const x = interpolate(p, [0, 1], [-400, 1920 + 400], { ...cl, easing: MEIO });
+  const faixa = (q: number) => interpolate(q, [0, 1], [-400, 1920 + 400], { ...cl, easing: MEIO });
+  const x = faixa(p);
+  const vx = x - faixa((t - 1) / DUR.B);
   return (
     <AbsoluteFill>
       {velha(true)}
       <AbsoluteFill style={{ clipPath: `inset(0 ${Math.max(0, 1920 - x)}px 0 0)` }}>{nova(true)}</AbsoluteFill>
-      <FaixaCacos x={x} />
+      <FaixaCacos x={x} v={vx} />
       {telaAnt ? <RelogioViajante de={telaAnt} para={telaAtual} p={p} restante={restante} fps={fps} /> : null}
     </AbsoluteFill>
   );

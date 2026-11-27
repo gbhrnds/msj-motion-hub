@@ -1,5 +1,5 @@
 {
- "gerado": "2026-11-27T00:00:27.062Z",
+ "gerado": "2026-11-27T00:13:56.592Z",
  "palco": {
   "w": 1920,
   "h": 1080
@@ -1078,7 +1078,7 @@
      "y": 0,
      "w": 1920,
      "h": 1080,
-     "cor": "azul",
+     "cor": "medio",
      "textura": false
     },
     {
@@ -1092,7 +1092,7 @@
      "ix": -380,
      "iy": -20,
      "iw": 720,
-     "variante": "medio",
+     "variante": "escuro",
      "flip": false
     },
     {
@@ -1106,7 +1106,7 @@
      "ix": -380,
      "iy": 700,
      "iw": 720,
-     "variante": "medio",
+     "variante": "escuro",
      "flip": false
     },
     {
@@ -1117,7 +1117,7 @@
      "y": 0,
      "w": 1152,
      "h": 720,
-     "cor": "azul",
+     "cor": "medio",
      "textura": false
     },
     {
@@ -1161,8 +1161,8 @@
      "x": 1536,
      "y": 0,
      "w": 384,
-     "h": 360,
-     "cor": "escuro",
+     "h": 584,
+     "cor": "verde",
      "textura": false
     }
    ]

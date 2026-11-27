@@ -59,3 +59,23 @@ npx remotion render src/index.ts SJA-Vinheta-Completa projects/semana-jeito-agi/
 ```
 
 Pendente: mês/ano das lives para o nome do arquivo (`AAAA-MM`).
+
+## Rodada de motion 2 (2026-11-27, pedidos do usuário)
+
+- **Foto + recorte sem falha:**
+  - o recorte entra primeiro (sobe 90px com bounce);
+  - a foto com fundo se abre ~16 frames depois, num círculo que nasce no centro da pessoa;
+  - a pessoa nunca aparece cortada pela borda do módulo.
+- **Texto:**
+  - palavra a palavra nas frases (cascata 3 → 1,6 frames);
+  - letra a letra quando é uma palavra só (1,4 frame por letra);
+  - cada unidade sobe 0,75em com fade.
+- **Motion blur:** desfoque direcional (filtro SVG) proporcional à velocidade de cada frame, aplicado em:
+  - palavras e letras (vertical);
+  - recorte (vertical);
+  - faixa de cacos (horizontal).
+
+  É barato no render (não multiplica frames como o `CameraMotionBlur`).
+- **Bounce:** spring (damping 9, stiffness 140, massa 0,7) nos elementos que entram em escala:
+  operadores `+`/`=`, bolinhas dos bullets e recorte (0,9 → 1).
+  Isso substitui a regra antiga "escala nunca parte de menos de 0,95" para esses elementos (pedido explícito do usuário).
