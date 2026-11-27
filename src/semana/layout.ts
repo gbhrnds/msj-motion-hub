@@ -42,8 +42,8 @@ export const arquivo = (el: Elemento): string => {
   if (el.tipo === "recorte") return staticFile(`${RA}recorte-${el.src}.png`);
   if (el.tipo === "imagem") {
     const nome = el.src.replace("assets/", "");
-    if (nome.startsWith("logo-semana")) return staticFile(`${RA}${nome}`);
-    return staticFile(`brand/logos/${nome}`);
+    // tudo dentro do projeto: o render não depende do brand/ de quem clonar
+    return staticFile(`${RA}${nome}`);
   }
   if (el.tipo === "cacos") return staticFile(`${RA}${el.variante === "escuro" ? "cacos-escuro" : "cacos"}.svg`);
   return "";
